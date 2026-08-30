@@ -429,6 +429,8 @@ export const de = {
   "ats.notAnalysed": "Noch nicht analysiert",
   "ats.hint": "Fülle mindestens 50 % deines Lebenslaufs aus, um deinen ATS-Score zu sehen.",
   "ats.addMissing": "Fehlende Abschnitte hinzufügen",
+  "custom.palettes": "Tokyo-Farbpaletten",
+  "custom.palettesHint": "Wähle die Aquarell-Stimmung deiner Tokyo-Vorlage.",
 } as const;
 
 export type TranslationKey = keyof typeof de;
