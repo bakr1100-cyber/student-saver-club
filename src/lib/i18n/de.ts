@@ -400,6 +400,16 @@ export const de = {
   "ws.startDesc": "Trag deine Infos ein und bring deine Stärken auf den Punkt.",
   "ws.sections": "Abschnitte",
   "ws.backToEditor": "Weiter bearbeiten",
+  "custom.text": "Text",
+  "custom.style": "Stil",
+  "custom.size": "Größe",
+  "custom.spacing": "Abstand",
+  "custom.color": "Farbe",
+  "custom.templates": "Vorlagen",
+  "font.modern": "Modern",
+  "font.elegant": "Elegant",
+  "font.classic": "Klassisch",
+  "font.technical": "Technisch",
 } as const;
 
 export type TranslationKey = keyof typeof de;

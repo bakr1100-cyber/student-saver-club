@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { ResumePreview } from "./ResumePreview";
 import { ResumeScoreCard } from "./ResumeScoreCard";
-import { TemplateGallery } from "./TemplateGallery";
+import { CustomizePanel } from "./CustomizePanel";
 import { ExtraSectionsDialog } from "./ExtraSectionsDialog";
 import { PDFExportButton } from "./PDFExportButton";
 import { Button } from "@/components/ui/button";
@@ -139,7 +139,7 @@ export function ResumeWorkspace({ data, onChange, onEditStep }: Props) {
 
         {tab === "customize" && (
           <div className="p-5">
-            <TemplateGallery data={data} onChange={onChange} />
+            <CustomizePanel data={data} onChange={onChange} />
           </div>
         )}
 
