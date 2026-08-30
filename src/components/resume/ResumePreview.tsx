@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import type { ResumeData } from "@/lib/resume-types";
 import { getAccent } from "@/lib/resume-accents";
+import { getFontStack } from "@/lib/resume-typography";
 import { MinimalistTemplate } from "./templates/MinimalistTemplate";
 import { ModernTemplate } from "./templates/ModernTemplate";
 import { EuropeanTemplate } from "./templates/EuropeanTemplate";
@@ -16,6 +17,9 @@ interface ResumePreviewProps {
 export function ResumePreview({ data }: ResumePreviewProps) {
   const { t } = useI18n();
   const accent = getAccent(data.settings.accent);
+  const fontFamily = getFontStack(data.settings.fontStyle);
+  const fontScale = data.settings.fontScale ?? 1;
+  const lineSpacing = data.settings.lineSpacing ?? 1.5;
   const Template =
     data.settings.template === "minimalist"
       ? MinimalistTemplate
@@ -43,6 +47,9 @@ export function ResumePreview({ data }: ResumePreviewProps) {
             aspectRatio: "210 / 297",
             "--resume-accent": accent.color,
             "--resume-accent-soft": accent.soft,
+            fontFamily,
+            fontSize: `${fontScale * 100}%`,
+            lineHeight: lineSpacing,
           } as CSSProperties
         }
       >
