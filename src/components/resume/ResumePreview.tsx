@@ -12,9 +12,11 @@ import { isRtl } from "@/lib/i18n/locales";
 
 interface ResumePreviewProps {
   data: ResumeData;
+  /** Hides the "Live preview"/template caption (used for read-only share links). */
+  hideCaption?: boolean;
 }
 
-export function ResumePreview({ data }: ResumePreviewProps) {
+export function ResumePreview({ data, hideCaption = false }: ResumePreviewProps) {
   const { t } = useI18n();
   const accent = getAccent(data.settings.accent);
   const fontFamily = getFontStack(data.settings.fontStyle);
@@ -31,10 +33,12 @@ export function ResumePreview({ data }: ResumePreviewProps) {
 
   return (
     <div className="mx-auto max-w-[210mm]">
+      {!hideCaption && (
       <div className="mb-3 flex items-center justify-between px-1">
         <p className="text-xs text-muted-foreground">{t("editor.livePreview")}</p>
         <p className="text-xs text-muted-foreground">{t(`template.${data.settings.template}`)}</p>
       </div>
+      )}
       <div
         id="resume-preview-container"
         dir={isRtl(data.settings.language) ? "rtl" : "ltr"}

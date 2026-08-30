@@ -4,6 +4,8 @@ import { AtsCheckerPanel } from "./AtsCheckerPanel";
 import { CustomizePanel } from "./CustomizePanel";
 import { ExtraSectionsDialog } from "./ExtraSectionsDialog";
 import { PDFExportButton } from "./PDFExportButton";
+import { ShareLinkButton } from "./ShareLinkButton";
+
 import { Button } from "@/components/ui/button";
 import { calculateResumeScore } from "@/lib/resume-score";
 import type { ResumeData } from "@/lib/resume-types";
@@ -65,6 +67,8 @@ export function ResumeWorkspace({ data, onChange, onEditStep }: Props) {
           <h1 className="text-lg font-bold text-foreground">{t("ws.title")}</h1>
           <div className="mt-3">
             <PDFExportButton data={data} label={t("ws.download")} />
+            <ShareLinkButton data={data} className="mt-2 w-full" />
+
           </div>
         </div>
 
