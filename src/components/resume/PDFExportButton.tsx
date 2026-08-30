@@ -16,17 +16,14 @@ interface PDFExportButtonProps {
   data: ResumeData;
 }
 
-const UNLOCK_KEY = "resume-unlocked-v1";
-export const RESUME_PRICE = "9,99 €";
+export const RESUME_PRICE = STANDARD_PRICE;
 
 export function PDFExportButton({ data }: PDFExportButtonProps) {
   const [isExporting, setIsExporting] = useState(false);
-  const [isUnlocked, setIsUnlocked] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+  const { standard: isUnlocked, unlock } = useEntitlements();
+  void unlock;
 
-  useEffect(() => {
-    setIsUnlocked(window.localStorage.getItem(UNLOCK_KEY) === "true");
-  }, []);
 
   const exportPdf = async () => {
     const html2pdf = (await import("html2pdf.js")).default;
