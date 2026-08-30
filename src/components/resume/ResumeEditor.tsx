@@ -7,6 +7,7 @@ import { ResumeImportDialog } from "./ResumeImportDialog";
 import { ExtraSectionsDialog } from "./ExtraSectionsDialog";
 import { TemplateGallery } from "./TemplateGallery";
 import { StepExamples, type WizardStepId } from "./StepExamples";
+import { ResumeWorkspace } from "./ResumeWorkspace";
 
 import { defaultResumeData, type ResumeData } from "@/lib/resume-types";
 import { Button } from "@/components/ui/button";
@@ -243,7 +244,16 @@ export function ResumeEditor() {
                 {t("wizard.back")}
               </Button>
               {isLastStep ? (
-                <PDFExportButton data={data} label={t("wizard.finish")} />
+                <Button
+                  className="bg-brand font-semibold text-primary-foreground hover:bg-brand-dark"
+                  onClick={() => {
+                    setMode("workspace");
+                    if (typeof window !== "undefined") window.scrollTo({ top: 0 });
+                  }}
+                >
+                  {t("wizard.finish")}
+                  <ArrowRight className="ml-1.5 h-4 w-4" />
+                </Button>
               ) : (
                 <Button
                   className="bg-brand font-semibold text-primary-foreground hover:bg-brand-dark"
