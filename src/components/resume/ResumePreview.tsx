@@ -18,7 +18,12 @@ interface ResumePreviewProps {
 
 export function ResumePreview({ data, hideCaption = false }: ResumePreviewProps) {
   const { t } = useI18n();
-  const accent = getAccent(data.settings.accent);
+  // Tokyo lives from its watercolour washes – fall back to coral instead of the neutral default.
+  const accentId =
+    data.settings.template === "tokyo" && (!data.settings.accent || data.settings.accent === "slate")
+      ? "coral"
+      : data.settings.accent;
+  const accent = getAccent(accentId);
   const fontFamily = getFontStack(data.settings.fontStyle);
   const fontScale = data.settings.fontScale ?? 1;
   const lineSpacing = data.settings.lineSpacing ?? 1.5;
@@ -51,6 +56,7 @@ export function ResumePreview({ data, hideCaption = false }: ResumePreviewProps)
             aspectRatio: "210 / 297",
             "--resume-accent": accent.color,
             "--resume-accent-soft": accent.soft,
+            "--resume-accent-wash": accent.wash,
             fontFamily,
             fontSize: `${fontScale * 100}%`,
             lineHeight: lineSpacing,

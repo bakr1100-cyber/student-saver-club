@@ -27,20 +27,29 @@ export function TokyoTemplate({ data }: TemplateProps) {
       {/* Watercolour washes */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-[22mm] -top-[26mm] h-[95mm] w-[105mm] blur-[18px]"
+        className="pointer-events-none absolute -left-[26mm] -top-[30mm] h-[120mm] w-[130mm] blur-[26px]"
         style={{
-          opacity: 0.95,
+          opacity: 0.85,
           background:
-            "radial-gradient(55% 55% at 38% 42%, var(--resume-accent-soft) 0%, transparent 74%), radial-gradient(40% 48% at 68% 62%, var(--resume-accent-soft) 0%, transparent 72%), radial-gradient(35% 30% at 25% 72%, var(--resume-accent-soft) 0%, transparent 76%)",
+            "radial-gradient(52% 52% at 38% 42%, var(--resume-accent-wash, var(--resume-accent-soft)) 0%, transparent 72%), radial-gradient(42% 46% at 68% 60%, var(--resume-accent-wash, var(--resume-accent-soft)) 0%, transparent 70%), radial-gradient(34% 30% at 24% 74%, var(--resume-accent-wash, var(--resume-accent-soft)) 0%, transparent 74%)",
         }}
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-[28mm] -right-[22mm] h-[85mm] w-[95mm] blur-[18px]"
+        className="pointer-events-none absolute -bottom-[32mm] -right-[26mm] h-[110mm] w-[120mm] blur-[26px]"
         style={{
-          opacity: 0.95,
+          opacity: 0.85,
           background:
-            "radial-gradient(55% 55% at 62% 58%, var(--resume-accent-soft) 0%, transparent 74%), radial-gradient(38% 42% at 35% 78%, var(--resume-accent-soft) 0%, transparent 74%)",
+            "radial-gradient(52% 52% at 62% 56%, var(--resume-accent-wash, var(--resume-accent-soft)) 0%, transparent 72%), radial-gradient(38% 42% at 34% 78%, var(--resume-accent-wash, var(--resume-accent-soft)) 0%, transparent 72%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-[10mm] top-[86mm] h-[55mm] w-[60mm] blur-[24px]"
+        style={{
+          opacity: 0.45,
+          background:
+            "radial-gradient(50% 50% at 50% 50%, var(--resume-accent-wash, var(--resume-accent-soft)) 0%, transparent 72%)",
         }}
       />
 
