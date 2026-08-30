@@ -603,30 +603,35 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                   <p className="text-sm text-muted-foreground">{t("form.emptyLanguages")}</p>
                 )}
                 {data.languages.map((item) => (
-                  <div key={item.id} className="flex items-center gap-2">
-                    <Input
-                      value={item.name}
-                      onChange={(e) => updateLanguage(item.id, "name", e.target.value)}
-                      placeholder="z. B. Englisch"
-                      className="flex-1"
-                    />
-                    <Select value={item.level} onValueChange={(v) => updateLanguage(item.id, "level", v)}>
-                      <SelectTrigger className="w-[140px]">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {levelKeys.map((key) => (
-                          <SelectItem key={key} value={key}>
-                            {t(`level.${key}`)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <Button variant="ghost" size="icon" onClick={() => removeLanguage(item.id)}>
-                      <Trash2 className="h-4 w-4 text-destructive" />
-                    </Button>
+                  <div key={item.id} className="space-y-2 rounded-lg border p-3">
+                    <div className="flex items-center gap-2">
+                      <Input
+                        value={item.name}
+                        onChange={(e) => updateLanguage(item.id, "name", e.target.value)}
+                        placeholder="z. B. Englisch"
+                        className="flex-1"
+                      />
+                      <Button variant="ghost" size="icon" onClick={() => removeLanguage(item.id)}>
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+                      {levelKeys.map((key) => (
+                        <Button
+                          key={key}
+                          type="button"
+                          variant={item.level === key ? "default" : "outline"}
+                          size="sm"
+                          className="h-auto whitespace-normal py-2 text-xs"
+                          onClick={() => updateLanguage(item.id, "level", key)}
+                        >
+                          {t(`level.${key}`)}
+                        </Button>
+                      ))}
+                    </div>
                   </div>
                 ))}
+
               </CardContent>
             </Card>
           </TabsContent>
