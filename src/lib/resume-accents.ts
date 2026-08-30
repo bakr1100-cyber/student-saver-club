@@ -23,3 +23,12 @@ export const defaultAccentId = "slate";
 export function getAccent(id?: string): AccentPreset {
   return accentPresets.find((preset) => preset.id === id) ?? accentPresets[0]!;
 }
+
+/**
+ * Resolves the accent that is actually rendered for a template.
+ * Tokyo lives from its watercolour washes and falls back to coral.
+ */
+export function resolveAccentId(template?: string, accent?: string): string {
+  if (template === "tokyo" && (!accent || accent === "slate")) return "coral";
+  return accent ?? defaultAccentId;
+}
