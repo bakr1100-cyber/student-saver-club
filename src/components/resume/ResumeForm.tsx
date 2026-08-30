@@ -10,7 +10,11 @@ import { Plus, Trash2, Upload, Mic } from "lucide-react";
 import type { ResumeData, Education, WorkExperience, Skill, Language } from "@/lib/resume-types";
 import { languageLevelLabels, templateLabels } from "@/lib/resume-types";
 import { cn } from "@/lib/utils";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { AIAssistButton } from "./AIAssistButton";
+import { useServerFn } from "@tanstack/react-start";
+import { generateCoverLetter } from "@/lib/resume-ai.functions";
+import { toast } from "sonner";
 
 interface ResumeFormProps {
   data: ResumeData;
@@ -22,6 +26,7 @@ const steps = [
   { id: "experience", label: "Berufserfahrung" },
   { id: "education", label: "Ausbildung" },
   { id: "skills", label: "Fähigkeiten" },
+  { id: "cover-letter", label: "Anschreiben" },
   { id: "settings", label: "Einstellungen" },
 ];
 
