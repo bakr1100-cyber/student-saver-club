@@ -341,6 +341,21 @@ export const de = {
   "auth.checkEmail": "Bitte bestätige deine E-Mail-Adresse über den Link, den wir dir gesendet haben.",
   "auth.testimonial": "Intuitiv und benutzerfreundlich. Schnell aber gründlich. Deckt alle Punkte ab, die für einen erfolgreichen Lebenslauf wichtig sind.",
   "auth.testimonialAuthor": "Shannon · 4,6/5 Sterne",
+  "extra.title": "Zusätzliche Abschnitte",
+  "extra.desc": "Füge weitere Abschnitte hinzu, um dein Profil zu vervollständigen.",
+  "extra.empty": "Noch keine zusätzlichen Abschnitte. Wähle oben einen Vorschlag.",
+  "extra.sectionTitle": "Titel des Abschnitts",
+  "extra.content": "Inhalt",
+  "extra.remove": "Abschnitt entfernen",
+  "extra.contentPlaceholder": "Ein Punkt pro Zeile …",
+  "extra.preset.projects": "Projekte",
+  "extra.preset.certificates": "Zertifikate",
+  "extra.preset.awards": "Auszeichnungen",
+  "extra.preset.volunteering": "Ehrenamt",
+  "extra.preset.publications": "Publikationen",
+  "extra.preset.hobbies": "Hobbys",
+  "extra.preset.references": "Referenzen",
+  "extra.preset.custom": "Eigener Abschnitt",
 } as const;
 
 export type TranslationKey = keyof typeof de;
