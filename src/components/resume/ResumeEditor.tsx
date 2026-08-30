@@ -7,6 +7,7 @@ import { ResumeImportDialog } from "./ResumeImportDialog";
 import { ExtraSectionsDialog } from "./ExtraSectionsDialog";
 import { TemplateGallery } from "./TemplateGallery";
 import { StepExamples, type WizardStepId } from "./StepExamples";
+import { ResumeWorkspace } from "./ResumeWorkspace";
 
 import { defaultResumeData, type ResumeData } from "@/lib/resume-types";
 import { Button } from "@/components/ui/button";
@@ -51,6 +52,7 @@ export function ResumeEditor() {
   const [showPreview, setShowPreview] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
+  const [mode, setMode] = useState<"wizard" | "workspace">("wizard");
 
   const totalSteps = wizardSteps.length;
   const currentStep = wizardSteps[Math.min(stepIndex, totalSteps - 1)]!;
@@ -94,6 +96,36 @@ export function ResumeEditor() {
     setStepIndex(Math.max(0, Math.min(wizardSteps.length - 1, index)));
     if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
+
+  if (mode === "workspace") {
+    return (
+      <div className="min-h-screen bg-background">
+        <header className="sticky top-0 z-50 flex items-center justify-between border-b border-border bg-background/95 px-4 py-3 backdrop-blur-md">
+          <Link to="/" className="flex items-center gap-2 text-base font-bold tracking-tight text-foreground">
+            <FileText className="h-5 w-5 text-brand" />
+            <span className="hidden sm:inline">{t("brand.name")}</span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher />
+            <Button variant="outline" size="sm" onClick={() => setMode("wizard")}>
+              <ArrowLeft className="mr-1.5 h-4 w-4" />
+              {t("ws.backToEditor")}
+            </Button>
+          </div>
+        </header>
+        <ResumeWorkspace
+          data={data}
+          onChange={updateData}
+          onEditStep={(index) => {
+            setMode("wizard");
+            goTo(index);
+          }}
+        />
+      </div>
+    );
+  }
+
+
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -212,7 +244,16 @@ export function ResumeEditor() {
                 {t("wizard.back")}
               </Button>
               {isLastStep ? (
-                <PDFExportButton data={data} label={t("wizard.finish")} />
+                <Button
+                  className="bg-brand font-semibold text-primary-foreground hover:bg-brand-dark"
+                  onClick={() => {
+                    setMode("workspace");
+                    if (typeof window !== "undefined") window.scrollTo({ top: 0 });
+                  }}
+                >
+                  {t("wizard.finish")}
+                  <ArrowRight className="ml-1.5 h-4 w-4" />
+                </Button>
               ) : (
                 <Button
                   className="bg-brand font-semibold text-primary-foreground hover:bg-brand-dark"
