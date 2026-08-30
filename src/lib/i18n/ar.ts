@@ -186,8 +186,8 @@ export const ar = {
   "seo.home.title": "OnlineLebenslauf — سير ذاتية متوافقة مع ATS بالذكاء الاصطناعي",
   "seo.home.description": "أنشئ سيرة ذاتية وخطاب تغطية احترافيين ومتوافقين مع أنظمة ATS في دقائق. دفع لمرة واحدة وبدون اشتراك.",
   "seo.editor.title": "إنشاء سيرة ذاتية — OnlineLebenslauf",
-  "seo.editor.description": "أنشئ سيرتك الذاتية الاحترافية مع معاينة فورية وتصدير بصيغة PDF."
-} as const;  "form.personalTitle": "البيانات الشخصية",
+  "seo.editor.description": "أنشئ سيرتك الذاتية الاحترافية مع معاينة فورية وتصدير بصيغة PDF.",
+"form.personalTitle": "البيانات الشخصية",
   "form.photoLabel": "صورة الملف الشخصي",
   "form.entry": "إدخال",
   "form.period": "الفترة الزمنية",
@@ -199,4 +199,4 @@ export const ar = {
   "template.minimalistDesc": "بسيط ومنظم",
   "template.modernDesc": "عصري مع تركيز واضح",
   "template.europeanDesc": "التنسيق الأوروبي الكلاسيكي",
-
+} as const;

@@ -186,8 +186,8 @@ export const nl = {
   "seo.home.title": "OnlineLebenslauf — ATS-vriendelijke CV's met AI",
   "seo.home.description": "Maak binnen enkele minuten een professioneel, ATS-vriendelijk CV en motivatiebrief. Eenmalige betaling, geen abonnement.",
   "seo.editor.title": "CV maken — OnlineLebenslauf",
-  "seo.editor.description": "Maak je professionele CV met live voorbeeld en PDF-export."
-} as const;  "form.personalTitle": "Persoonlijke gegevens",
+  "seo.editor.description": "Maak je professionele CV met live voorbeeld en PDF-export.",
+"form.personalTitle": "Persoonlijke gegevens",
   "form.photoLabel": "Profielfoto",
   "form.entry": "Vermelding",
   "form.period": "Periode",
@@ -199,4 +199,4 @@ export const nl = {
   "template.minimalistDesc": "Eenvoudig en overzichtelijk",
   "template.modernDesc": "Eigentijds met een duidelijke focus",
   "template.europeanDesc": "Klassiek Europees formaat",
-
+} as const;

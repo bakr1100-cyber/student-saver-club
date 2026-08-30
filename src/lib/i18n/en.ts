@@ -186,8 +186,8 @@ export const en = {
   "seo.home.title": "OnlineLebenslauf — ATS-Friendly Resumes with AI",
   "seo.home.description": "Create a professional, ATS-friendly resume and cover letter in minutes. One-time payment, no subscription.",
   "seo.editor.title": "Create Resume — OnlineLebenslauf",
-  "seo.editor.description": "Build your professional resume with live preview and PDF export."
-} as const;  "form.personalTitle": "Personal Information",
+  "seo.editor.description": "Build your professional resume with live preview and PDF export.",
+"form.personalTitle": "Personal Information",
   "form.photoLabel": "Profile Photo",
   "form.entry": "Entry",
   "form.period": "Period",
@@ -199,4 +199,4 @@ export const en = {
   "template.minimalistDesc": "Simple and clear",
   "template.modernDesc": "Contemporary with a clear focus",
   "template.europeanDesc": "Classic European format",
-
+} as const;

@@ -186,8 +186,8 @@ export const es = {
   "seo.home.title": "OnlineLebenslauf — Currículums compatibles con ATS gracias a la IA",
   "seo.home.description": "Crea en minutos un currículum profesional y una carta de presentación optimizados para ATS. Pago único, sin suscripción.",
   "seo.editor.title": "Crear currículum — OnlineLebenslauf",
-  "seo.editor.description": "Crea tu currículum profesional con vista previa en directo y exportación a PDF."
-} as const;  "form.personalTitle": "Datos personales",
+  "seo.editor.description": "Crea tu currículum profesional con vista previa en directo y exportación a PDF.",
+"form.personalTitle": "Datos personales",
   "form.photoLabel": "Foto de perfil",
   "form.entry": "Entrada",
   "form.period": "Periodo",
@@ -199,4 +199,4 @@ export const es = {
   "template.minimalistDesc": "Sencillo y claro",
   "template.modernDesc": "Contemporáneo con un enfoque claro",
   "template.europeanDesc": "Formato europeo clásico",
-
+} as const;

@@ -186,8 +186,8 @@ export const it = {
   "seo.home.title": "OnlineLebenslauf — CV verificati per ATS con IA",
   "seo.home.description": "Crea in pochi minuti un curriculum e una lettera di presentazione professionali e ATS-friendly. Pagamento unico, nessun abbonamento.",
   "seo.editor.title": "Crea curriculum — OnlineLebenslauf",
-  "seo.editor.description": "Crea il tuo curriculum professionale con anteprima in tempo reale ed esportazione in PDF."
-} as const;  "form.personalTitle": "Dati personali",
+  "seo.editor.description": "Crea il tuo curriculum professionale con anteprima in tempo reale ed esportazione in PDF.",
+"form.personalTitle": "Dati personali",
   "form.photoLabel": "Foto del profilo",
   "form.entry": "Voce",
   "form.period": "Periodo",
@@ -199,4 +199,4 @@ export const it = {
   "template.minimalistDesc": "Semplice e chiaro",
   "template.modernDesc": "Contemporaneo con un focus preciso",
   "template.europeanDesc": "Formato classico europeo",
-
+} as const;
