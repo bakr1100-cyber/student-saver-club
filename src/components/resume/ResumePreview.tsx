@@ -32,7 +32,13 @@ export function ResumePreview({ data }: ResumePreviewProps) {
           "relative min-h-[297mm] w-full overflow-hidden bg-white p-[20mm] shadow-sm",
           "print:shadow-none print:p-0"
         )}
-        style={{ aspectRatio: "210 / 297" }}
+        style={
+          {
+            aspectRatio: "210 / 297",
+            "--resume-accent": accent.color,
+            "--resume-accent-soft": accent.soft,
+          } as React.CSSProperties
+        }
       >
         <Template data={data} />
       </div>
