@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Check, Download, Loader2, Lock } from "lucide-react";
+import { Check, Download, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import type { ResumeData } from "@/lib/resume-types";
 
@@ -70,13 +70,12 @@ export function PDFExportButton({ data }: PDFExportButtonProps) {
       <Button size="sm" onClick={handleClick} disabled={isExporting}>
         {isExporting ? (
           <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
-        ) : isUnlocked ? (
-          <Download className="mr-1.5 h-4 w-4" />
         ) : (
-          <Lock className="mr-1.5 h-4 w-4" />
+          <Download className="mr-1.5 h-4 w-4" />
         )}
-        {isUnlocked ? "PDF" : `PDF · ${RESUME_PRICE}`}
+        PDF herunterladen
       </Button>
+
 
       <Dialog open={showPaywall} onOpenChange={setShowPaywall}>
         <DialogContent className="sm:max-w-md">
