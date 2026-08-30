@@ -153,6 +153,11 @@ export function ResumeEditor() {
             </div>
             <ResumeForm data={data} onChange={updateData} step={step} />
 
+            <div className="px-4 pb-2 lg:px-6">
+              <ExtraSectionsDialog data={data} onChange={updateData} />
+            </div>
+
+
             {/* Step navigation */}
             <div className="sticky bottom-0 z-30 flex items-center justify-between gap-3 border-t border-border bg-background/95 px-4 py-3 backdrop-blur-md lg:px-6">
               <Button variant="outline" onClick={() => goTo(stepIndex - 1)} disabled={stepIndex === 0}>
