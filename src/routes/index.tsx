@@ -190,7 +190,7 @@ function LandingPage() {
             <a href="#kontakt" className="hidden text-sm text-primary-foreground/70 hover:text-primary-foreground lg:inline">
               {t("nav.contact")}
             </a>
-            <LanguageSwitcher />
+            <LanguageSwitcher className="text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground" />
             <Button
               size="sm"
               className="bg-cta font-bold uppercase tracking-wide text-cta-foreground shadow-sm transition-transform hover:scale-[1.03] hover:bg-cta/90"
