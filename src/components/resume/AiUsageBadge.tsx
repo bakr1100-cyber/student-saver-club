@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Sparkles } from "lucide-react";
 import { getAiUsage } from "@/lib/resume-ai.functions";
 import { useI18n } from "@/lib/i18n";
+import { hasAiSession } from "@/lib/ai-auth";
 
 interface Usage {
   tier: string;
@@ -19,13 +20,15 @@ export function AiUsageBadge({ className }: { className?: string }) {
 
   useEffect(() => {
     let active = true;
-    loadUsage()
-      .then((data) => {
-        if (active) setUsage(data as Usage);
-      })
-      .catch(() => {
-        /* signed out — nothing to show */
-      });
+    void (async () => {
+      if (!(await hasAiSession())) return;
+      try {
+        const data = (await loadUsage()) as Usage;
+        if (active) setUsage(data);
+      } catch {
+        /* quota info unavailable — badge stays hidden */
+      }
+    })();
     return () => {
       active = false;
     };
