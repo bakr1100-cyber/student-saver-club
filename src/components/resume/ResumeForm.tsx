@@ -25,9 +25,15 @@ import { toast } from "sonner";
 interface ResumeFormProps {
   data: ResumeData;
   onChange: (updater: (prev: ResumeData) => ResumeData) => void;
+  /** When provided, the form is driven by an external wizard and hides its own tab bar. */
+  step?: string;
 }
 
-const stepIds = ["personal", "experience", "education", "skills", "cover-letter", "settings"] as const;
+export const resumeStepIds = ["personal", "experience", "education", "skills", "cover-letter", "settings"] as const;
+export type ResumeStepId = (typeof resumeStepIds)[number];
+
+const stepIds = resumeStepIds;
+
 
 const stepLabelKeys = {
   personal: "tab.personal",
