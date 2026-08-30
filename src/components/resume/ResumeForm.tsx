@@ -29,7 +29,7 @@ interface ResumeFormProps {
   step?: string;
 }
 
-export const resumeStepIds = ["personal", "experience", "education", "skills", "cover-letter", "settings"] as const;
+export const resumeStepIds = ["personal", "experience", "education", "skills", "summary", "cover-letter", "settings"] as const;
 export type ResumeStepId = (typeof resumeStepIds)[number];
 
 const stepIds = resumeStepIds;
@@ -40,6 +40,7 @@ const stepLabelKeys = {
   experience: "tab.experience",
   education: "tab.education",
   skills: "tab.skills",
+  summary: "form.summary",
   "cover-letter": "tab.coverLetter",
   settings: "tab.settings",
 } as const;
