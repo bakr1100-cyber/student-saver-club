@@ -1,3 +1,5 @@
+import type { Locale } from "@/lib/i18n/locales";
+
 export interface PersonalDetails {
   fullName: string;
   dateOfBirth: string;
@@ -43,7 +45,7 @@ export interface Language {
 }
 
 export interface ResumeSettings {
-  language: "de" | "en";
+  language: Locale;
   template: "minimalist" | "modern" | "european";
   targetPosition?: string;
 }

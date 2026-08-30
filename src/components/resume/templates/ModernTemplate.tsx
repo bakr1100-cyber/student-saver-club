@@ -1,4 +1,6 @@
 import type { ResumeData } from "@/lib/resume-types";
+import { translate, type TranslationKey } from "@/lib/i18n";
+import { dateLocales } from "@/lib/i18n/locales";
 import { Mail, Phone, MapPin, Globe, Linkedin, Calendar } from "lucide-react";
 
 interface TemplateProps {
@@ -7,13 +9,14 @@ interface TemplateProps {
 
 export function ModernTemplate({ data }: TemplateProps) {
   const { personalDetails, workExperience, education, skills, languages, settings } = data;
-  const t = settings.language === "en";
+  const lang = settings.language;
+  const tr = (key: TranslationKey) => translate(lang, key);
 
   const formatDate = (dateStr: string) => {
     if (!dateStr) return "";
     const date = new Date(dateStr);
     if (Number.isNaN(date.getTime())) return dateStr;
-    return date.toLocaleDateString(settings.language === "en" ? "en-US" : "de-DE", {
+    return date.toLocaleDateString(dateLocales[lang], {
       month: "short",
       year: "numeric",
     });
@@ -32,7 +35,7 @@ export function ModernTemplate({ data }: TemplateProps) {
             />
           )}
           <div className="flex-1">
-            <h1 className="text-[26pt] font-bold tracking-tight">{personalDetails.fullName || (t ? "Your Name" : "Dein Name")}</h1>
+            <h1 className="text-[26pt] font-bold tracking-tight">{personalDetails.fullName || tr("resume.yourName")}</h1>
             {settings.targetPosition && <p className="mt-1 text-[13pt] text-slate-300">{settings.targetPosition}</p>}
             <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-[10pt] text-slate-300">
               {personalDetails.email && (
@@ -75,7 +78,7 @@ export function ModernTemplate({ data }: TemplateProps) {
         <section className="mb-6">
           <h2 className="mb-2 flex items-center gap-2 text-[12pt] font-bold text-slate-900">
             <span className="h-2 w-2 rounded-full bg-slate-900" />
-            {t ? "Profile" : "Profil"}
+            {tr("resume.profile")}
           </h2>
           <p className="whitespace-pre-wrap text-[10.5pt] text-slate-700">{personalDetails.summary}</p>
         </section>
@@ -86,7 +89,7 @@ export function ModernTemplate({ data }: TemplateProps) {
         <section className="mb-6">
           <h2 className="mb-3 flex items-center gap-2 text-[12pt] font-bold text-slate-900">
             <span className="h-2 w-2 rounded-full bg-slate-900" />
-            {t ? "Professional Experience" : "Berufserfahrung"}
+            {tr("resume.experience")}
           </h2>
           <div className="space-y-4">
             {workExperience.map((item) => (
@@ -94,7 +97,7 @@ export function ModernTemplate({ data }: TemplateProps) {
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
                   <h3 className="font-semibold text-slate-900">{item.position}</h3>
                   <span className="rounded bg-slate-100 px-2 py-0.5 text-[9pt] text-slate-600">
-                    {item.startDate} – {item.endDate || (t ? "Present" : "heute")}
+                    {item.startDate} – {item.endDate || tr("resume.present")}
                   </span>
                 </div>
                 <p className="text-[10.5pt] font-medium text-slate-600">
@@ -115,7 +118,7 @@ export function ModernTemplate({ data }: TemplateProps) {
         <section className="mb-6">
           <h2 className="mb-3 flex items-center gap-2 text-[12pt] font-bold text-slate-900">
             <span className="h-2 w-2 rounded-full bg-slate-900" />
-            {t ? "Education" : "Ausbildung"}
+            {tr("resume.education")}
           </h2>
           <div className="space-y-4">
             {education.map((item) => (
@@ -145,7 +148,7 @@ export function ModernTemplate({ data }: TemplateProps) {
           <section>
             <h2 className="mb-2 flex items-center gap-2 text-[12pt] font-bold text-slate-900">
               <span className="h-2 w-2 rounded-full bg-slate-900" />
-              {t ? "Skills" : "Fähigkeiten"}
+              {tr("resume.skills")}
             </h2>
             <div className="flex flex-wrap gap-2">
               {skills.map((item) => (
@@ -160,7 +163,7 @@ export function ModernTemplate({ data }: TemplateProps) {
           <section>
             <h2 className="mb-2 flex items-center gap-2 text-[12pt] font-bold text-slate-900">
               <span className="h-2 w-2 rounded-full bg-slate-900" />
-              {t ? "Languages" : "Sprachen"}
+              {tr("resume.languages")}
             </h2>
             <div className="space-y-1">
               {languages.map((item) => (

@@ -3,14 +3,24 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, FileText, Sparkles, Shield, Globe, Download } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "OnlineLebenslauf — ATS-geprüfte Lebensläufe mit KI" },
-      { name: "description", content: "Erstelle in Minuten einen professionellen, ATS-freundlichen Lebenslauf und Anschreiben. Einmalzahlung, kein Abo." },
+      {
+        name: "description",
+        content:
+          "Erstelle in Minuten einen professionellen, ATS-freundlichen Lebenslauf und Anschreiben in 7 Sprachen. Einmalzahlung, kein Abo.",
+      },
       { property: "og:title", content: "OnlineLebenslauf — ATS-geprüfte Lebensläufe mit KI" },
-      { property: "og:description", content: "Erstelle in Minuten einen professionellen, ATS-freundlichen Lebenslauf und Anschreiben. Einmalzahlung, kein Abo." },
+      {
+        property: "og:description",
+        content:
+          "Erstelle in Minuten einen professionellen, ATS-freundlichen Lebenslauf und Anschreiben in 7 Sprachen. Einmalzahlung, kein Abo.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -18,64 +28,58 @@ export const Route = createFileRoute("/")({
   component: LandingPage,
 });
 
-const stats = [
-  { value: "5,6 Mio", label: "erfolgreich unterstützte Bewerber" },
-  { value: "97%", label: "Übereinstimmung mit Recruiter-Kriterien" },
-  { value: "2,4x", label: "mehr Profilaufrufe" },
-];
-
-const features = [
-  {
-    icon: FileText,
-    title: "ATS-freundliche Vorlagen",
-    description: "Jede Vorlage ist auf Bewerbermanagementsysteme optimiert, damit deine Daten fehlerfrei ausgelesen werden.",
-  },
-  {
-    icon: Sparkles,
-    title: "KI-Optimierung",
-    description: "Gib deine Erfahrung in deiner Sprache ein — unsere KI formuliert sie in professionelles Business-Deutsch oder Englisch.",
-  },
-  {
-    icon: Globe,
-    title: "Mehrsprachig",
-    description: "Arabisch, Darija, Französisch oder Deutsch — der Editor unterstützt RTL-Eingaben und spricht deine Sprache.",
-  },
-  {
-    icon: Download,
-    title: "PDF-Export",
-    description: "Lade deinen Lebenslauf und dein Anschreiben als hochwertige PDF herunter — optimiert für Mobile und Desktop.",
-  },
-  {
-    icon: Shield,
-    title: "Kein Abo",
-    description: "Einmalzahlung ab €9,99. Keine versteckten Kosten, keine automatische Verlängerung.",
-  },
-  {
-    icon: CheckCircle,
-    title: "Voice Input",
-    description: "Spreche deine Erfahrungen einfach ein — Whisper transkribiert deine Sprachnotizen in Text.",
-  },
-];
-
-const testimonials = [
-  {
-    name: "Anja Fischer",
-    role: "Dipl. Pflegefachfrau HF, Berlin",
-    text: "Der ATS-Score hat mir genau gezeigt, was gefehlt hat. 3 Rückmeldungen in meiner ersten Woche.",
-  },
-  {
-    name: "Maximilian Weber",
-    role: "Logistikmitarbeiter, Hamburg",
-    text: "Ich hatte vorher null Antworten und dann 4 Vorstellungsgespräche in 10 Tagen. Gleiche Qualifikation — jetzt im richtigen Format.",
-  },
-  {
-    name: "Jan Klasen",
-    role: "PTA bei Boots Apotheke, Köln",
-    text: "Die Textvorschläge für meine Rolle waren absolut treffsicher. Am Montag beworben, zwei Wochen später hatte ich den Job.",
-  },
-];
-
 function LandingPage() {
+  const { t } = useI18n();
+
+  const stats = [
+    { value: t("stats.1.value"), label: t("stats.1.label") },
+    { value: t("stats.2.value"), label: t("stats.2.label") },
+    { value: t("stats.3.value"), label: t("stats.3.label") },
+  ];
+
+  const features = [
+    { icon: FileText, title: t("features.ats.title"), description: t("features.ats.desc") },
+    { icon: Sparkles, title: t("features.ai.title"), description: t("features.ai.desc") },
+    { icon: Globe, title: t("features.multilingual.title"), description: t("features.multilingual.desc") },
+    { icon: Download, title: t("features.pdf.title"), description: t("features.pdf.desc") },
+    { icon: Shield, title: t("features.noSub.title"), description: t("features.noSub.desc") },
+    { icon: CheckCircle, title: t("features.voice.title"), description: t("features.voice.desc") },
+  ];
+
+  const steps = [
+    { step: "1", title: t("how.1.title"), desc: t("how.1.desc") },
+    { step: "2", title: t("how.2.title"), desc: t("how.2.desc") },
+    { step: "3", title: t("how.3.title"), desc: t("how.3.desc") },
+  ];
+
+  const tiers = [
+    {
+      name: t("pricing.standard.name"),
+      price: "9,99 €",
+      desc: t("pricing.standard.desc"),
+      features: [t("pricing.standard.f1"), t("pricing.standard.f2"), t("pricing.standard.f3"), t("pricing.standard.f4")],
+    },
+    {
+      name: t("pricing.premium.name"),
+      price: "15,00 €",
+      desc: t("pricing.premium.desc"),
+      features: [t("pricing.premium.f1"), t("pricing.premium.f2"), t("pricing.premium.f3"), t("pricing.premium.f4")],
+      popular: true,
+    },
+    {
+      name: t("pricing.plus.name"),
+      price: "60,00 €",
+      desc: t("pricing.plus.desc"),
+      features: [t("pricing.plus.f1"), t("pricing.plus.f2"), t("pricing.plus.f3"), t("pricing.plus.f4")],
+    },
+  ];
+
+  const testimonials = [
+    { name: "Anja Fischer", role: t("testimonials.1.role"), text: t("testimonials.1.text") },
+    { name: "Maximilian Weber", role: t("testimonials.2.role"), text: t("testimonials.2.text") },
+    { name: "Jan Klasen", role: t("testimonials.3.role"), text: t("testimonials.3.text") },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -83,19 +87,17 @@ function LandingPage() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
           <Link to="/" className="flex items-center gap-2 text-xl font-bold tracking-tight text-foreground">
             <FileText className="h-6 w-6 text-primary" />
-            OnlineLebenslauf
+            {t("brand.name")}
           </Link>
           <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
-            <a href="#funktionen" className="text-muted-foreground hover:text-foreground">Funktionen</a>
-            <a href="#preise" className="text-muted-foreground hover:text-foreground">Preise</a>
-            <a href="#bewertungen" className="text-muted-foreground hover:text-foreground">Bewertungen</a>
+            <a href="#funktionen" className="text-muted-foreground hover:text-foreground">{t("nav.features")}</a>
+            <a href="#preise" className="text-muted-foreground hover:text-foreground">{t("nav.pricing")}</a>
+            <a href="#bewertungen" className="text-muted-foreground hover:text-foreground">{t("nav.reviews")}</a>
           </nav>
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/editor">Anmelden</Link>
-            </Button>
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher />
             <Button size="sm" asChild>
-              <Link to="/editor">Lebenslauf erstellen</Link>
+              <Link to="/editor">{t("nav.createResume")}</Link>
             </Button>
           </div>
         </div>
@@ -105,29 +107,25 @@ function LandingPage() {
       <section className="relative overflow-hidden px-4 pt-16 pb-24 md:pt-24 md:pb-32">
         <div className="mx-auto max-w-4xl text-center">
           <Badge variant="secondary" className="mb-6">
-            #1 für ATS-geprüfte Lebensläufe · 2026
+            {t("hero.badge")}
           </Badge>
           <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl">
-            Dein perfekter Lebenslauf — <span className="text-primary">schnell und professionell</span>
+            {t("hero.title")} <span className="text-primary">{t("hero.titleAccent")}</span>
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-            Erstelle in wenigen Minuten einen überzeugenden Lebenslauf und ein passendes Anschreiben. 
-            Optimiert für deine Zielsprache — Deutsch oder Englisch. Editor kostenlos testen,
-            PDF-Download einmalig 9,99 €.
-          </p>
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">{t("hero.subtitle")}</p>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Button size="lg" asChild>
-              <Link to="/editor">Jetzt Lebenslauf erstellen</Link>
+              <Link to="/editor">{t("hero.ctaPrimary")}</Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link to="/editor">Vorlagen ansehen</Link>
+              <Link to="/editor">{t("hero.ctaSecondary")}</Link>
             </Button>
           </div>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1.5"><CheckCircle className="h-4 w-4 text-primary" /> Kein Abo</span>
-            <span className="flex items-center gap-1.5"><CheckCircle className="h-4 w-4 text-primary" /> Einmalzahlung</span>
-            <span className="flex items-center gap-1.5"><CheckCircle className="h-4 w-4 text-primary" /> 100% sicher</span>
+            <span className="flex items-center gap-1.5"><CheckCircle className="h-4 w-4 text-primary" /> {t("hero.trust1")}</span>
+            <span className="flex items-center gap-1.5"><CheckCircle className="h-4 w-4 text-primary" /> {t("hero.trust2")}</span>
+            <span className="flex items-center gap-1.5"><CheckCircle className="h-4 w-4 text-primary" /> {t("hero.trust3")}</span>
           </div>
         </div>
       </section>
@@ -148,8 +146,8 @@ function LandingPage() {
       <section id="funktionen" className="px-4 py-20 md:py-28">
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-foreground">Alles, was du für deine Bewerbung brauchst</h2>
-            <p className="mt-4 text-muted-foreground">Von der Eingabe bis zum PDF-Download — in drei einfachen Schritten.</p>
+            <h2 className="text-3xl font-bold tracking-tight text-foreground">{t("features.title")}</h2>
+            <p className="mt-4 text-muted-foreground">{t("features.subtitle")}</p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((feature) => (
@@ -168,13 +166,9 @@ function LandingPage() {
       {/* How it works */}
       <section className="bg-muted/30 px-4 py-20 md:py-28">
         <div className="mx-auto max-w-5xl">
-          <h2 className="text-center text-3xl font-bold tracking-tight text-foreground">So funktioniert es</h2>
+          <h2 className="text-center text-3xl font-bold tracking-tight text-foreground">{t("how.title")}</h2>
           <div className="mt-12 grid gap-8 md:grid-cols-3">
-            {[
-              { step: "1", title: "Daten eingeben", desc: "Fülle deine persönlichen Daten, Ausbildung und Berufserfahrung aus — per Text oder Sprache." },
-              { step: "2", title: "KI optimiert", desc: "Die KI formuliert deine Erfahrungen in professionelles Business-Deutsch oder Englisch um." },
-              { step: "3", title: "PDF herunterladen", desc: "Wähle eine Vorlage, passe das Anschreiben an und lade beide Dokumente herunter." },
-            ].map((s) => (
+            {steps.map((s) => (
               <div key={s.step} className="relative rounded-2xl bg-background p-6 shadow-sm">
                 <div className="absolute -top-4 -left-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
                   {s.step}
@@ -191,18 +185,18 @@ function LandingPage() {
       <section id="preise" className="px-4 py-20 md:py-28">
         <div className="mx-auto max-w-5xl">
           <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-foreground">Transparente Preise</h2>
-            <p className="mt-4 text-muted-foreground">Einmal zahlen, für immer nutzen. Kein Abo, keine versteckten Kosten.</p>
+            <h2 className="text-3xl font-bold tracking-tight text-foreground">{t("pricing.title")}</h2>
+            <p className="mt-4 text-muted-foreground">{t("pricing.subtitle")}</p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
-            {[
-              { name: "Standard", price: "€9,99", desc: "Lebenslauf mit KI-Textoptimierung und PDF-Download.", features: ["Multi-Step Editor", "KI-Optimierung & Übersetzung", "Alle Vorlagen", "PDF-Download"] },
-              { name: "Premium", price: "€15,00", desc: "Lebenslauf + individuelles Anschreiben.", features: ["Alles aus Standard", "KI-Anschreiben", "Spracheingabe (Darija & Co.)", "Beide PDFs"], popular: true },
-
-              { name: "Premium Plus", price: "€60,00", desc: "Persönliche 45-Minuten-Session zur Optimierung.", features: ["Alles aus Premium", "45-Minuten Zoom-Call", "Persönliches Feedback", "Job-Matching-Tipps"] },
-            ].map((tier) => (
-              <Card key={tier.name} className={`relative flex flex-col ${tier.popular ? "border-primary shadow-md" : "border-border/60"}`}>
-                {tier.popular && <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">Bestseller</Badge>}
+            {tiers.map((tier) => (
+              <Card
+                key={tier.name}
+                className={`relative flex flex-col ${tier.popular ? "border-primary shadow-md" : "border-border/60"}`}
+              >
+                {tier.popular && (
+                  <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">{t("pricing.bestseller")}</Badge>
+                )}
                 <CardContent className="flex flex-1 flex-col pt-6">
                   <h3 className="text-lg font-semibold text-foreground">{tier.name}</h3>
                   <div className="mt-2 text-3xl font-bold text-foreground">{tier.price}</div>
@@ -210,13 +204,13 @@ function LandingPage() {
                   <ul className="mt-6 flex-1 space-y-2 text-sm">
                     {tier.features.map((f) => (
                       <li key={f} className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-primary" />
+                        <CheckCircle className="h-4 w-4 shrink-0 text-primary" />
                         {f}
                       </li>
                     ))}
                   </ul>
                   <Button className="mt-6 w-full" variant={tier.popular ? "default" : "outline"} asChild>
-                    <Link to="/editor">{tier.name} wählen</Link>
+                    <Link to="/editor">{`${tier.name} ${t("pricing.choose")}`}</Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -228,10 +222,10 @@ function LandingPage() {
       {/* Testimonials */}
       <section id="bewertungen" className="bg-muted/30 px-4 py-20 md:py-28">
         <div className="mx-auto max-w-6xl">
-          <h2 className="text-center text-3xl font-bold tracking-tight text-foreground">Echte Menschen. Echte Erfolge.</h2>
+          <h2 className="text-center text-3xl font-bold tracking-tight text-foreground">{t("testimonials.title")}</h2>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {testimonials.map((t) => (
-              <Card key={t.name} className="border-border/60">
+            {testimonials.map((item) => (
+              <Card key={item.name} className="border-border/60">
                 <CardContent className="pt-6">
                   <div className="flex gap-1">
                     {[...Array(5)].map((_, i) => (
@@ -240,9 +234,9 @@ function LandingPage() {
                       </svg>
                     ))}
                   </div>
-                  <p className="mt-4 text-sm text-foreground">"{t.text}"</p>
-                  <div className="mt-4 text-sm font-medium text-foreground">{t.name}</div>
-                  <div className="text-xs text-muted-foreground">{t.role}</div>
+                  <p className="mt-4 text-sm text-foreground">&laquo;{item.text}&raquo;</p>
+                  <div className="mt-4 text-sm font-medium text-foreground">{item.name}</div>
+                  <div className="text-xs text-muted-foreground">{item.role}</div>
                 </CardContent>
               </Card>
             ))}
@@ -253,10 +247,10 @@ function LandingPage() {
       {/* CTA */}
       <section className="px-4 py-20 md:py-28">
         <div className="mx-auto max-w-3xl rounded-3xl bg-primary px-6 py-16 text-center text-primary-foreground">
-          <h2 className="text-3xl font-bold tracking-tight">Dein nächster Job ist nur einen Lebenslauf entfernt.</h2>
-          <p className="mt-4 text-primary-foreground/80">Schließe dich Millionen erfolgreicher Bewerber an.</p>
+          <h2 className="text-3xl font-bold tracking-tight">{t("cta.title")}</h2>
+          <p className="mt-4 text-primary-foreground/80">{t("cta.subtitle")}</p>
           <Button size="lg" variant="secondary" className="mt-8" asChild>
-            <Link to="/editor">Jetzt starten — Download für 9,99 €</Link>
+            <Link to="/editor">{t("cta.button")}</Link>
           </Button>
         </div>
       </section>
@@ -267,18 +261,16 @@ function LandingPage() {
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <div className="flex items-center gap-2 text-lg font-bold text-foreground">
               <FileText className="h-5 w-5 text-primary" />
-              OnlineLebenslauf
+              {t("brand.name")}
             </div>
             <div className="flex gap-6 text-sm text-muted-foreground">
-              <a href="#" className="hover:text-foreground">AGB</a>
-              <a href="#" className="hover:text-foreground">Datenschutz</a>
-              <a href="#" className="hover:text-foreground">Impressum</a>
-              <a href="#" className="hover:text-foreground">Nutzungsbedingungen</a>
+              <a href="#" className="hover:text-foreground">{t("footer.terms")}</a>
+              <a href="#" className="hover:text-foreground">{t("footer.privacy")}</a>
+              <a href="#" className="hover:text-foreground">{t("footer.imprint")}</a>
+              <a href="#" className="hover:text-foreground">{t("footer.usage")}</a>
             </div>
           </div>
-          <div className="mt-8 text-center text-xs text-muted-foreground">
-            © Copyright 2026 Lead Career SL. Alle Rechte vorbehalten.
-          </div>
+          <div className="mt-8 text-center text-xs text-muted-foreground">{t("footer.copyright")}</div>
         </div>
       </footer>
     </div>

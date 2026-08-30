@@ -1,4 +1,6 @@
 import type { ResumeData } from "@/lib/resume-types";
+import { translate, type TranslationKey } from "@/lib/i18n";
+import { dateLocales } from "@/lib/i18n/locales";
 import { Mail, Phone, MapPin, Globe, Linkedin, Calendar } from "lucide-react";
 
 interface TemplateProps {
@@ -7,13 +9,14 @@ interface TemplateProps {
 
 export function EuropeanTemplate({ data }: TemplateProps) {
   const { personalDetails, workExperience, education, skills, languages, settings } = data;
-  const t = settings.language === "en";
+  const lang = settings.language;
+  const tr = (key: TranslationKey) => translate(lang, key);
 
   const formatDate = (dateStr: string) => {
     if (!dateStr) return "";
     const date = new Date(dateStr);
     if (Number.isNaN(date.getTime())) return dateStr;
-    return date.toLocaleDateString(settings.language === "en" ? "en-US" : "de-DE", {
+    return date.toLocaleDateString(dateLocales[lang], {
       month: "2-digit",
       year: "numeric",
     });
@@ -71,7 +74,7 @@ export function EuropeanTemplate({ data }: TemplateProps) {
         {skills.length > 0 && (
           <div className="mb-6">
             <h2 className="mb-3 border-b border-slate-300 pb-1 text-[11pt] font-bold uppercase tracking-wider text-slate-900">
-              {t ? "Skills" : "Fähigkeiten"}
+              {tr("resume.skills")}
             </h2>
             <div className="space-y-1.5">
               {skills.map((item) => (
@@ -86,7 +89,7 @@ export function EuropeanTemplate({ data }: TemplateProps) {
         {languages.length > 0 && (
           <div>
             <h2 className="mb-3 border-b border-slate-300 pb-1 text-[11pt] font-bold uppercase tracking-wider text-slate-900">
-              {t ? "Languages" : "Sprachen"}
+              {tr("resume.languages")}
             </h2>
             <div className="space-y-1.5">
               {languages.map((item) => (
@@ -103,14 +106,14 @@ export function EuropeanTemplate({ data }: TemplateProps) {
       {/* Main Content */}
       <div className="w-[65%] p-6 pl-8">
         <div className="mb-8">
-          <h1 className="text-[24pt] font-bold tracking-tight text-slate-900">{personalDetails.fullName || (t ? "Your Name" : "Dein Name")}</h1>
+          <h1 className="text-[24pt] font-bold tracking-tight text-slate-900">{personalDetails.fullName || tr("resume.yourName")}</h1>
           {settings.targetPosition && <p className="mt-1 text-[12pt] text-slate-600">{settings.targetPosition}</p>}
         </div>
 
         {personalDetails.summary && (
           <section className="mb-6">
             <h2 className="mb-2 border-b border-slate-300 pb-1 text-[11pt] font-bold uppercase tracking-wider text-slate-900">
-              {t ? "Profile" : "Profil"}
+              {tr("resume.profile")}
             </h2>
             <p className="whitespace-pre-wrap text-[10.5pt] text-slate-700">{personalDetails.summary}</p>
           </section>
@@ -119,7 +122,7 @@ export function EuropeanTemplate({ data }: TemplateProps) {
         {workExperience.length > 0 && (
           <section className="mb-6">
             <h2 className="mb-3 border-b border-slate-300 pb-1 text-[11pt] font-bold uppercase tracking-wider text-slate-900">
-              {t ? "Professional Experience" : "Berufserfahrung"}
+              {tr("resume.experience")}
             </h2>
             <div className="space-y-4">
               {workExperience.map((item) => (
@@ -127,7 +130,7 @@ export function EuropeanTemplate({ data }: TemplateProps) {
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <h3 className="font-semibold text-slate-900">{item.position}</h3>
                     <span className="text-[9pt] text-slate-500">
-                      {item.startDate} – {item.endDate || (t ? "Present" : "heute")}
+                      {item.startDate} – {item.endDate || tr("resume.present")}
                     </span>
                   </div>
                   <p className="text-[10.5pt] font-medium text-slate-600">
@@ -146,7 +149,7 @@ export function EuropeanTemplate({ data }: TemplateProps) {
         {education.length > 0 && (
           <section>
             <h2 className="mb-3 border-b border-slate-300 pb-1 text-[11pt] font-bold uppercase tracking-wider text-slate-900">
-              {t ? "Education" : "Ausbildung"}
+              {tr("resume.education")}
             </h2>
             <div className="space-y-4">
               {education.map((item) => (

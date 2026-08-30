@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useI18n } from "@/lib/i18n";
 import { STANDARD_PRICE, useEntitlements } from "@/lib/entitlements";
 
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ interface PDFExportButtonProps {
 export const RESUME_PRICE = STANDARD_PRICE;
 
 export function PDFExportButton({ data }: PDFExportButtonProps) {
+  const { t } = useI18n();
   const [isExporting, setIsExporting] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
   const { standard: isUnlocked, unlock } = useEntitlements();
@@ -72,27 +74,19 @@ export function PDFExportButton({ data }: PDFExportButtonProps) {
         ) : (
           <Download className="mr-1.5 h-4 w-4" />
         )}
-        PDF herunterladen
+        {t("editor.download")}
       </Button>
 
 
       <Dialog open={showPaywall} onOpenChange={setShowPaywall}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>PDF-Download freischalten</DialogTitle>
-            <DialogDescription>
-              Bearbeiten und Vorschau sind unbegrenzt möglich. Der Download deines fertigen
-              Lebenslaufs kostet einmalig {RESUME_PRICE} — kein Abo, keine automatische Verlängerung.
-            </DialogDescription>
+            <DialogTitle>{t("paywall.title")}</DialogTitle>
+            <DialogDescription>{t("paywall.desc")}</DialogDescription>
           </DialogHeader>
 
           <ul className="space-y-2 text-sm text-muted-foreground">
-            {[
-              "PDF-Download in Druckqualität (A4)",
-              "KI-Optimierung & Übersetzung",
-              "Alle Vorlagen nutzbar",
-              "Unbegrenzte Änderungen an deinem Lebenslauf",
-            ].map((feature) => (
+            {[t("paywall.f1"), t("paywall.f2"), t("paywall.f3"), t("paywall.f4")].map((feature) => (
               <li key={feature} className="flex items-start gap-2">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                 <span>{feature}</span>
@@ -104,15 +98,15 @@ export function PDFExportButton({ data }: PDFExportButtonProps) {
             <Button
               className="w-full"
               onClick={() => {
-                toast.info("Bezahlung wird gerade eingerichtet", {
-                  description: "PayPal und Cash Plus Maroc folgen im nächsten Schritt.",
+                toast.info(t("paywall.soonTitle"), {
+                  description: t("paywall.soonDesc"),
                 });
               }}
             >
-              Für {RESUME_PRICE} freischalten
+              {t("paywall.unlock")}
             </Button>
             <p className="text-center text-xs text-muted-foreground">
-              Einmalzahlung · PayPal &amp; Cash Plus Maroc (in Kürze verfügbar)
+              {t("paywall.methods")}
             </p>
           </DialogFooter>
         </DialogContent>
