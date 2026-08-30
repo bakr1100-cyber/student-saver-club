@@ -176,6 +176,7 @@ export const nl = {
   "template.minimalist": "Minimalistisch",
   "template.modern": "Modern",
   "template.european": "Europees",
+  "template.tokyo": "Tokyo",
   "resume.profile": "Profiel",
   "resume.experience": "Werkervaring",
   "resume.education": "Opleiding",
@@ -199,6 +200,7 @@ export const nl = {
   "template.minimalistDesc": "Eenvoudig en overzichtelijk",
   "template.modernDesc": "Eigentijds met een duidelijke focus",
   "template.europeanDesc": "Klassiek Europees formaat",
+  "template.tokyoDesc": "Elegante serif-stijl met aquarel",
 
   // Reference redesign: navigation, hero bullets, templates, toolkit, score, import
   "nav.contact": "Contact",

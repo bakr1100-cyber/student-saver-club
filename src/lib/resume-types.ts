@@ -46,7 +46,7 @@ export interface Language {
 
 export interface ResumeSettings {
   language: Locale;
-  template: "minimalist" | "modern" | "european";
+  template: "minimalist" | "modern" | "european" | "tokyo";
   targetPosition?: string;
   /** Accent colour preset id, see src/lib/resume-accents.ts */
   accent?: string;
@@ -114,6 +114,7 @@ export const templateLabels: Record<string, { de: string; en: string }> = {
   minimalist: { de: "Minimalist", en: "Minimalist" },
   modern: { de: "Modern", en: "Modern" },
   european: { de: "Europäisch", en: "European" },
+  tokyo: { de: "Tokyo", en: "Tokyo" },
 };
 
 export const languageLevelLabels: Record<string, { de: string; en: string }> = {

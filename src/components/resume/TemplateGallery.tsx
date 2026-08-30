@@ -14,7 +14,8 @@ type TemplateId = ResumeSettings["template"];
 const templates: { id: TemplateId; badge?: "recommended" | "new" }[] = [
   { id: "modern", badge: "recommended" },
   { id: "minimalist" },
-  { id: "european", badge: "new" },
+  { id: "tokyo", badge: "new" },
+  { id: "european" },
 ];
 
 interface TemplateGalleryProps {
@@ -25,6 +26,42 @@ interface TemplateGalleryProps {
 function TemplateThumb({ template, accent }: { template: TemplateId; accent: string }) {
   const soft = getAccent(accent).soft;
   const color = getAccent(accent).color;
+
+  if (template === "tokyo") {
+    return (
+      <div className="relative h-full w-full overflow-hidden bg-white p-3">
+        <div
+          className="absolute -left-4 -top-4 h-16 w-24 rounded-full blur-lg"
+          style={{ backgroundColor: soft }}
+        />
+        <div
+          className="absolute -bottom-5 -right-4 h-14 w-20 rounded-full blur-lg"
+          style={{ backgroundColor: soft }}
+        />
+        <div className="relative">
+          <div className="h-3 w-3/5 rounded bg-slate-300" />
+          <div className="mt-1 h-1.5 w-2/5 rounded bg-slate-200" />
+          <div className="mt-3 flex gap-2">
+            <div className="w-[36%] space-y-1">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="h-1 rounded bg-slate-200" />
+              ))}
+              <div className="mt-2 h-1.5 w-3/4 rounded" style={{ backgroundColor: color }} />
+            </div>
+            <div className="flex-1 space-y-1">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="h-1 rounded bg-slate-200" />
+              ))}
+              <div className="mt-2 h-1.5 w-1/2 rounded" style={{ backgroundColor: color }} />
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="h-1 rounded bg-slate-200" style={{ width: `${55 + ((i * 17) % 40)}%` }} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (template === "european") {
     return (
