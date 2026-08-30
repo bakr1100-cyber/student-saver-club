@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import type { ResumeData } from "@/lib/resume-types";
-import { getAccent } from "@/lib/resume-accents";
+import { getAccent, resolveAccentId } from "@/lib/resume-accents";
 import { getFontStack } from "@/lib/resume-typography";
 import { MinimalistTemplate } from "./templates/MinimalistTemplate";
 import { ModernTemplate } from "./templates/ModernTemplate";
@@ -19,10 +19,7 @@ interface ResumePreviewProps {
 export function ResumePreview({ data, hideCaption = false }: ResumePreviewProps) {
   const { t } = useI18n();
   // Tokyo lives from its watercolour washes – fall back to coral instead of the neutral default.
-  const accentId =
-    data.settings.template === "tokyo" && (!data.settings.accent || data.settings.accent === "slate")
-      ? "coral"
-      : data.settings.accent;
+  const accentId = resolveAccentId(data.settings.template, data.settings.accent);
   const accent = getAccent(accentId);
   const fontFamily = getFontStack(data.settings.fontStyle);
   const fontScale = data.settings.fontScale ?? 1;

@@ -1,8 +1,9 @@
 import { defaultResumeData, type ResumeData } from "@/lib/resume-types";
+import { getAccent, resolveAccentId } from "@/lib/resume-accents";
 
 /** Encodes resume data into a URL-safe base64 string (no server storage). */
 export function encodeResumeShare(data: ResumeData): string {
-  const json = JSON.stringify(data);
+  const json = JSON.stringify(withResolvedPalette(data));
   const bytes = new TextEncoder().encode(json);
   let binary = "";
   bytes.forEach((b) => {
@@ -37,10 +38,27 @@ export function decodeResumeShare(payload: string): ResumeData | null {
   }
 }
 
-/** Builds the absolute read-only share URL for the given resume. */
+/** Applies the effective palette (e.g. Tokyo's coral default) to the settings. */
+export function withResolvedPalette(data: ResumeData): ResumeData {
+  const accent = resolveAccentId(data.settings.template, data.settings.accent);
+  return { ...data, settings: { ...data.settings, accent } };
+}
+
+/** Builds the absolute read-only share URL for the given resume, palette included. */
 export function buildShareUrl(data: ResumeData, origin?: string): string {
   const base = origin ?? (typeof window !== "undefined" ? window.location.origin : "");
-  return `${base}/share#d=${encodeResumeShare(data)}`;
+  const resolved = withResolvedPalette(data);
+  const params = new URLSearchParams({
+    d: encodeResumeShare(resolved),
+    p: getAccent(resolved.settings.accent).id,
+  });
+  return `${base}/share#${params.toString()}`;
+}
+
+/** Reads an explicit palette override (`#...&p=coral`) from a location hash. */
+export function readSharePalette(hash: string): string | null {
+  const clean = hash.startsWith("#") ? hash.slice(1) : hash;
+  return new URLSearchParams(clean).get("p");
 }
 
 /** Reads the share payload from a location hash such as `#d=...`. */

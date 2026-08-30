@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ResumePreview } from "@/components/resume/ResumePreview";
 import { Button } from "@/components/ui/button";
-import { decodeResumeShare, readSharePayload } from "@/lib/resume-share";
+import { decodeResumeShare, readSharePalette, readSharePayload } from "@/lib/resume-share";
+import { accentPresets, resolveAccentId } from "@/lib/resume-accents";
 import type { ResumeData } from "@/lib/resume-types";
 import { useI18n } from "@/lib/i18n";
 import { Eye, FileText } from "lucide-react";
@@ -37,8 +38,19 @@ function SharePage() {
   useEffect(() => {
     const load = () => {
       const payload = readSharePayload(window.location.hash);
-      const data = payload ? decodeResumeShare(payload) : null;
-      setState(data ? { status: "ready", data } : { status: "invalid" });
+      const decoded = payload ? decodeResumeShare(payload) : null;
+      if (!decoded) {
+        setState({ status: "invalid" });
+        return;
+      }
+      const override = readSharePalette(window.location.hash);
+      const accent = accentPresets.some((preset) => preset.id === override)
+        ? override!
+        : resolveAccentId(decoded.settings.template, decoded.settings.accent);
+      setState({
+        status: "ready",
+        data: { ...decoded, settings: { ...decoded.settings, accent } },
+      });
     };
     load();
     window.addEventListener("hashchange", load);
