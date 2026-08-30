@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Check, Download, Loader2, Lock } from "lucide-react";
+import { Check, Download, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import type { ResumeData } from "@/lib/resume-types";
 
