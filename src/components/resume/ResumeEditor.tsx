@@ -26,8 +26,8 @@ const STORAGE_KEY = "resume-draft-v1";
 /** The five wizard steps; the final step combines fine-tuning and the cover letter. */
 const wizardSteps: { id: WizardStepId; forms: string[] }[] = [
   { id: "personal", forms: ["personal"] },
-  { id: "experience", forms: ["experience"] },
   { id: "education", forms: ["education"] },
+  { id: "experience", forms: ["experience"] },
   { id: "skills", forms: ["skills"] },
   { id: "finish", forms: ["summary", "settings", "cover-letter"] },
 ];

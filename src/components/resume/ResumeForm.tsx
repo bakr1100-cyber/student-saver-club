@@ -32,7 +32,7 @@ interface ResumeFormProps {
   step?: string;
 }
 
-export const resumeStepIds = ["personal", "experience", "education", "skills", "summary", "cover-letter", "settings"] as const;
+export const resumeStepIds = ["personal", "education", "experience", "skills", "summary", "cover-letter", "settings"] as const;
 export type ResumeStepId = (typeof resumeStepIds)[number];
 
 const stepIds = resumeStepIds;
@@ -184,7 +184,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
   };
 
   const addSkill = () => {
-    const item: Skill = { id: crypto.randomUUID(), name: "", level: "intermediate" };
+    const item: Skill = { id: crypto.randomUUID(), name: "" };
     onChange((prev) => ({ ...prev, skills: [...prev.skills, item] }));
   };
 
@@ -424,18 +424,23 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                     </div>
                     <div className="space-y-2">
                       <Label>{t("form.period")}</Label>
-                      <div className="flex items-center gap-2">
-                        <Input
-                          value={item.startDate}
-                          onChange={(e) => updateWorkExperience(item.id, "startDate", e.target.value)}
-                          placeholder="MM/YYYY"
-                        />
-                        <span className="text-muted-foreground">-</span>
-                        <Input
-                          value={item.endDate}
-                          onChange={(e) => updateWorkExperience(item.id, "endDate", e.target.value)}
-                          placeholder="MM/YYYY oder heute"
-                        />
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="space-y-1">
+                          <Label className="text-xs text-muted-foreground">{t("form.startDate")}</Label>
+                          <Input
+                            type="month"
+                            value={item.startDate}
+                            onChange={(e) => updateWorkExperience(item.id, "startDate", e.target.value)}
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <Label className="text-xs text-muted-foreground">{t("form.endDate")}</Label>
+                          <Input
+                            type="month"
+                            value={item.endDate}
+                            onChange={(e) => updateWorkExperience(item.id, "endDate", e.target.value)}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -524,18 +529,23 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                     </div>
                     <div className="space-y-2">
                       <Label>{t("form.period")}</Label>
-                      <div className="flex items-center gap-2">
-                        <Input
-                          value={item.startDate}
-                          onChange={(e) => updateEducation(item.id, "startDate", e.target.value)}
-                          placeholder="MM/YYYY"
-                        />
-                        <span className="text-muted-foreground">-</span>
-                        <Input
-                          value={item.endDate}
-                          onChange={(e) => updateEducation(item.id, "endDate", e.target.value)}
-                          placeholder="MM/YYYY"
-                        />
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="space-y-1">
+                          <Label className="text-xs text-muted-foreground">{t("form.startDate")}</Label>
+                          <Input
+                            type="month"
+                            value={item.startDate}
+                            onChange={(e) => updateEducation(item.id, "startDate", e.target.value)}
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <Label className="text-xs text-muted-foreground">{t("form.endDate")}</Label>
+                          <Input
+                            type="month"
+                            value={item.endDate}
+                            onChange={(e) => updateEducation(item.id, "endDate", e.target.value)}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -584,18 +594,6 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       placeholder="z. B. Projektmanagement"
                       className="flex-1"
                     />
-                    <Select value={item.level ?? ""} onValueChange={(v) => updateSkill(item.id, "level", v)}>
-                      <SelectTrigger className="w-[140px]">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {levelKeys.map((key) => (
-                          <SelectItem key={key} value={key}>
-                            {t(`level.${key}`)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
                     <Button variant="ghost" size="icon" onClick={() => removeSkill(item.id)}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>

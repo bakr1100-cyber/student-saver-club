@@ -95,7 +95,7 @@ export async function runParseResume(data: { text: string; language: Locale }) {
 {"personalDetails":{"fullName":"","dateOfBirth":"","email":"","phone":"","location":"","linkedin":"","website":"","summary":""},
 "workExperience":[{"position":"","company":"","location":"","startDate":"YYYY-MM","endDate":"YYYY-MM or empty when current","description":""}],
 "education":[{"degree":"","institution":"","location":"","startDate":"YYYY-MM","endDate":"","description":""}],
-"skills":[{"name":"","level":""}],
+"skills":[{"name":""}],
 "languages":[{"name":"","level":"native|fluent|advanced|intermediate|beginner"}]}
 
 Keep the wording in ${target}. Use empty strings for unknown values. Never invent facts.

@@ -23,8 +23,8 @@ export function AtsCheckerPanel({ data, onEditStep }: Props) {
 
   const firstMissingStep = useMemo(() => {
     if (!data.personalDetails.fullName.trim() || !data.personalDetails.email.trim()) return 0;
-    if (data.workExperience.length === 0) return 1;
-    if (data.education.length === 0) return 2;
+    if (data.education.length === 0) return 1;
+    if (data.workExperience.length === 0) return 2;
     if (data.skills.length === 0) return 3;
     return 4;
   }, [data]);
