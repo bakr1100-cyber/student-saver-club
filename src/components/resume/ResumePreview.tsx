@@ -4,6 +4,7 @@ import { getAccent } from "@/lib/resume-accents";
 import { MinimalistTemplate } from "./templates/MinimalistTemplate";
 import { ModernTemplate } from "./templates/ModernTemplate";
 import { EuropeanTemplate } from "./templates/EuropeanTemplate";
+import { TokyoTemplate } from "./templates/TokyoTemplate";
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/lib/i18n";
 import { isRtl } from "@/lib/i18n/locales";
@@ -20,7 +21,9 @@ export function ResumePreview({ data }: ResumePreviewProps) {
       ? MinimalistTemplate
       : data.settings.template === "european"
         ? EuropeanTemplate
-        : ModernTemplate;
+        : data.settings.template === "tokyo"
+          ? TokyoTemplate
+          : ModernTemplate;
 
   return (
     <div className="mx-auto max-w-[210mm]">

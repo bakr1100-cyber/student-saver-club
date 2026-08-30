@@ -176,6 +176,7 @@ export const es = {
   "template.minimalist": "Minimalista",
   "template.modern": "Moderna",
   "template.european": "Europea",
+  "template.tokyo": "Tokyo",
   "resume.profile": "Perfil",
   "resume.experience": "Experiencia laboral",
   "resume.education": "Educación",
@@ -199,6 +200,7 @@ export const es = {
   "template.minimalistDesc": "Sencillo y claro",
   "template.modernDesc": "Contemporáneo con un enfoque claro",
   "template.europeanDesc": "Formato europeo clásico",
+  "template.tokyoDesc": "Estilo serif elegante con acuarela",
 
   // Reference redesign: navigation, hero bullets, templates, toolkit, score, import
   "nav.contact": "Contacto",

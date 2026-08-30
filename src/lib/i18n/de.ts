@@ -163,6 +163,7 @@ export const de = {
   "template.minimalistDesc": "Schlicht und übersichtlich",
   "template.modernDesc": "Zeitgemäß mit klarem Fokus",
   "template.europeanDesc": "Klassisches europäisches Format",
+  "template.tokyoDesc": "Elegante Serifen-Optik mit Aquarell-Akzenten",
 
   // Form: settings
   "form.outputLanguage": "Sprache des Lebenslaufs",
@@ -240,6 +241,7 @@ export const de = {
   "template.minimalist": "Minimalistisch",
   "template.modern": "Modern",
   "template.european": "Europäisch",
+  "template.tokyo": "Tokyo",
 
   // Resume document sections (rendered inside the CV)
   "resume.profile": "Profil",
