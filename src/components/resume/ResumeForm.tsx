@@ -553,7 +553,59 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
             </Card>
           </TabsContent>
 
+          <TabsContent value="cover-letter" className="mt-0 space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Anschreiben mit KI erstellen</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="company">Unternehmen</Label>
+                  <Input
+                    id="company"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    placeholder="z. B. Muster GmbH"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="jobDescription">Stellenbeschreibung (optional)</Label>
+                  <Textarea
+                    id="jobDescription"
+                    value={jobDescription}
+                    onChange={(e) => setJobDescription(e.target.value)}
+                    placeholder="Füge hier die Stellenanzeige ein, damit das Anschreiben besser passt."
+                    rows={5}
+                  />
+                </div>
+                <Button className="w-full" onClick={handleGenerateCoverLetter} disabled={isGenerating}>
+                  {isGenerating ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Anschreiben wird erstellt…
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="mr-2 h-4 w-4" /> Anschreiben generieren
+                    </>
+                  )}
+                </Button>
+                <Separator />
+                <div className="space-y-2">
+                  <Label htmlFor="coverLetter">Anschreiben (bearbeitbar)</Label>
+                  <Textarea
+                    id="coverLetter"
+                    value={data.coverLetter || ""}
+                    onChange={(e) => onChange((prev) => ({ ...prev, coverLetter: e.target.value }))}
+                    placeholder="Dein Anschreiben erscheint hier nach der Generierung."
+                    rows={16}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           <TabsContent value="settings" className="mt-0 space-y-6">
+
             <Card>
               <CardHeader>
                 <CardTitle>Ausgabe-Einstellungen</CardTitle>
