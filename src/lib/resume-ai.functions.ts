@@ -2,9 +2,11 @@ import { createServerFn } from "@tanstack/react-start";
 import {
   CoverLetterInput,
   OptimizeInput,
+  ParseResumeInput,
   TranscribeInput,
   TranslateInput,
 } from "./resume-ai.schemas";
+
 
 export const optimizeText = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => OptimizeInput.parse(input))
