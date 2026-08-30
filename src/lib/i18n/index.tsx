@@ -69,10 +69,19 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }
 
+const fallbackI18n: I18nContextValue = {
+  locale: "de",
+  setLocale: () => {},
+  t: (key: TranslationKey) => translate("de", key),
+  dir: "ltr",
+};
+
 export function useI18n() {
   const ctx = useContext(I18nContext);
-  if (!ctx) throw new Error("useI18n must be used within I18nProvider");
-  return ctx;
+  // During hot reloads the provider module can be re-evaluated separately from
+  // consumers; fall back to German instead of crashing the whole page.
+  return ctx ?? fallbackI18n;
 }
+
 
 export type { Locale, TranslationKey };
