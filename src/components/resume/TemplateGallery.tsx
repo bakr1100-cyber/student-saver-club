@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { useI18n } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { accentPresets, getAccent } from "@/lib/resume-accents";
+import type { TranslationKey } from "@/lib/i18n";
 import type { ResumeData, ResumeSettings } from "@/lib/resume-types";
 
 type TemplateId = ResumeSettings["template"];
@@ -180,8 +181,8 @@ export function TemplateGallery({ data, onChange }: TemplateGalleryProps) {
               key={preset.id}
               type="button"
               onClick={() => selectAccent(preset.id)}
-              aria-label={t(`accent.${preset.id}`)}
-              title={t(`accent.${preset.id}`)}
+              aria-label={t(`accent.${preset.id}` as TranslationKey)}
+              title={t(`accent.${preset.id}` as TranslationKey)}
               aria-pressed={preset.id === activeAccent}
               className={cn(
                 "h-7 w-7 rounded-full border-2 transition-transform hover:scale-110",
