@@ -26,7 +26,7 @@ const wizardSteps: { id: WizardStepId; forms: string[] }[] = [
   { id: "experience", forms: ["experience"] },
   { id: "education", forms: ["education"] },
   { id: "skills", forms: ["skills"] },
-  { id: "finish", forms: ["settings", "cover-letter"] },
+  { id: "finish", forms: ["summary", "settings", "cover-letter"] },
 ];
 
 const stepLabelKeys = {

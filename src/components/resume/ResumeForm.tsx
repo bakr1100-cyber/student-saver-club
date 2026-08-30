@@ -29,7 +29,7 @@ interface ResumeFormProps {
   step?: string;
 }
 
-export const resumeStepIds = ["personal", "experience", "education", "skills", "cover-letter", "settings"] as const;
+export const resumeStepIds = ["personal", "experience", "education", "skills", "summary", "cover-letter", "settings"] as const;
 export type ResumeStepId = (typeof resumeStepIds)[number];
 
 const stepIds = resumeStepIds;
@@ -40,6 +40,7 @@ const stepLabelKeys = {
   experience: "tab.experience",
   education: "tab.education",
   skills: "tab.skills",
+  summary: "form.summary",
   "cover-letter": "tab.coverLetter",
   settings: "tab.settings",
 } as const;
@@ -327,39 +328,46 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="summary">{t("form.summary")}</Label>
-                  <div className="relative">
-                    <Textarea
-                      id="summary"
-                      value={data.personalDetails.summary}
-                      onChange={(e) => updatePersonal("summary", e.target.value)}
-                      placeholder={t("form.summaryPlaceholder")}
-                      rows={4}
-                      className={cn("pb-10", isRTL(data.personalDetails.summary || "") && "text-right")}
-                      dir={isRTL(data.personalDetails.summary || "") ? "rtl" : "ltr"}
-                    />
-                    <VoiceInputButton
-                      className="absolute right-10 bottom-2"
-                      onTranscript={(text) =>
-                        updatePersonal(
-                          "summary",
-                          data.personalDetails.summary ? `${data.personalDetails.summary} ${text}` : text
-                        )
-                      }
-                    />
-                    <AIAssistButton
-                      text={data.personalDetails.summary || ""}
-                      language={data.settings.language}
-                      context={t("form.summaryContext")}
-                      onResult={(text) => updatePersonal("summary", text)}
-                    />
-                  </div>
-                </div>
-
               </CardContent>
             </Card>
           </TabsContent>
+
+          <TabsContent value="summary" className="mt-0 space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("form.summary")}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="relative">
+                  <Textarea
+                    id="summary"
+                    value={data.personalDetails.summary}
+                    onChange={(e) => updatePersonal("summary", e.target.value)}
+                    placeholder={t("form.summaryPlaceholder")}
+                    rows={8}
+                    className={cn("pb-10", isRTL(data.personalDetails.summary || "") && "text-right")}
+                    dir={isRTL(data.personalDetails.summary || "") ? "rtl" : "ltr"}
+                  />
+                  <VoiceInputButton
+                    className="absolute right-10 bottom-2"
+                    onTranscript={(text) =>
+                      updatePersonal(
+                        "summary",
+                        data.personalDetails.summary ? `${data.personalDetails.summary} ${text}` : text
+                      )
+                    }
+                  />
+                  <AIAssistButton
+                    text={data.personalDetails.summary || ""}
+                    language={data.settings.language}
+                    context={t("form.summaryContext")}
+                    onResult={(text) => updatePersonal("summary", text)}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
 
           <TabsContent value="experience" className="mt-0 space-y-4">
             <div className="flex items-center justify-between">
