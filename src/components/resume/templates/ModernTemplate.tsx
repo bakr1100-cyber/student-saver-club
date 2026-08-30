@@ -26,7 +26,7 @@ export function ModernTemplate({ data }: TemplateProps) {
   return (
     <div className="font-sans text-[11pt] leading-relaxed text-slate-800">
       {/* Header with accent */}
-      <div className="-mx-[20mm] -mt-[20mm] mb-6 bg-slate-900 p-[20mm] text-white">
+      <div className="-mx-[20mm] -mt-[20mm] mb-6 bg-[var(--resume-accent)] p-[20mm] text-white">
         <div className="flex items-start gap-6">
           {personalDetails.photo && (
             <img
@@ -78,7 +78,7 @@ export function ModernTemplate({ data }: TemplateProps) {
       {personalDetails.summary && (
         <section className="mb-6">
           <h2 className="mb-2 flex items-center gap-2 text-[12pt] font-bold text-slate-900">
-            <span className="h-2 w-2 rounded-full bg-slate-900" />
+            <span className="h-2 w-2 rounded-full bg-[var(--resume-accent)]" />
             {tr("resume.profile")}
           </h2>
           <p className="whitespace-pre-wrap text-[10.5pt] text-slate-700">{personalDetails.summary}</p>
@@ -89,7 +89,7 @@ export function ModernTemplate({ data }: TemplateProps) {
       {workExperience.length > 0 && (
         <section className="mb-6">
           <h2 className="mb-3 flex items-center gap-2 text-[12pt] font-bold text-slate-900">
-            <span className="h-2 w-2 rounded-full bg-slate-900" />
+            <span className="h-2 w-2 rounded-full bg-[var(--resume-accent)]" />
             {tr("resume.experience")}
           </h2>
           <div className="space-y-4">
@@ -118,7 +118,7 @@ export function ModernTemplate({ data }: TemplateProps) {
       {education.length > 0 && (
         <section className="mb-6">
           <h2 className="mb-3 flex items-center gap-2 text-[12pt] font-bold text-slate-900">
-            <span className="h-2 w-2 rounded-full bg-slate-900" />
+            <span className="h-2 w-2 rounded-full bg-[var(--resume-accent)]" />
             {tr("resume.education")}
           </h2>
           <div className="space-y-4">
@@ -148,12 +148,12 @@ export function ModernTemplate({ data }: TemplateProps) {
         {skills.length > 0 && (
           <section>
             <h2 className="mb-2 flex items-center gap-2 text-[12pt] font-bold text-slate-900">
-              <span className="h-2 w-2 rounded-full bg-slate-900" />
+              <span className="h-2 w-2 rounded-full bg-[var(--resume-accent)]" />
               {tr("resume.skills")}
             </h2>
             <div className="flex flex-wrap gap-2">
               {skills.map((item) => (
-                <span key={item.id} className="rounded bg-slate-900 px-3 py-1 text-[9.5pt] text-white">
+                <span key={item.id} className="rounded bg-[var(--resume-accent)] px-3 py-1 text-[9.5pt] text-white">
                   {item.name}
                 </span>
               ))}
@@ -163,7 +163,7 @@ export function ModernTemplate({ data }: TemplateProps) {
         {languages.length > 0 && (
           <section>
             <h2 className="mb-2 flex items-center gap-2 text-[12pt] font-bold text-slate-900">
-              <span className="h-2 w-2 rounded-full bg-slate-900" />
+              <span className="h-2 w-2 rounded-full bg-[var(--resume-accent)]" />
               {tr("resume.languages")}
             </h2>
             <div className="space-y-1">

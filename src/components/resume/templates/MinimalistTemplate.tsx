@@ -26,7 +26,7 @@ export function MinimalistTemplate({ data }: TemplateProps) {
   return (
     <div className="font-sans text-[11pt] leading-relaxed text-slate-800">
       {/* Header */}
-      <div className="mb-6 border-b-2 border-slate-900 pb-6">
+      <div className="mb-6 border-b-2 border-[var(--resume-accent)] pb-6">
         <h1 className="text-[28pt] font-light tracking-tight text-slate-900">{personalDetails.fullName || tr("resume.yourName")}</h1>
         {settings.targetPosition && (
           <p className="mt-1 text-[13pt] font-medium text-slate-600">{settings.targetPosition}</p>

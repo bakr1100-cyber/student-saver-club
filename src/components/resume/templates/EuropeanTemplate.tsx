@@ -26,7 +26,7 @@ export function EuropeanTemplate({ data }: TemplateProps) {
   return (
     <div className="flex min-h-full font-sans text-[11pt] leading-relaxed text-slate-800">
       {/* Sidebar */}
-      <div className="w-[35%] bg-slate-50 p-6 pr-4">
+      <div className="w-[35%] bg-[var(--resume-accent-soft)] p-6 pr-4">
         {personalDetails.photo && (
           <div className="mb-6">
             <img src={personalDetails.photo} alt="" className="h-32 w-32 rounded object-cover" />

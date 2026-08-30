@@ -48,6 +48,8 @@ export interface ResumeSettings {
   language: Locale;
   template: "minimalist" | "modern" | "european";
   targetPosition?: string;
+  /** Accent colour preset id, see src/lib/resume-accents.ts */
+  accent?: string;
 }
 
 export interface ExtraSection {
@@ -85,6 +87,7 @@ export const defaultResumeData: ResumeData = {
   settings: {
     language: "de",
     template: "modern",
+    accent: "slate",
   },
   extraSections: [],
 };

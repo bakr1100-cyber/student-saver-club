@@ -715,31 +715,6 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="space-y-2">
-                  <Label>{t("form.template")}</Label>
-                  <div className="grid gap-3 sm:grid-cols-3">
-                    {(["minimalist", "modern", "european"] as const).map((template) => (
-                      <button
-                        key={template}
-                        type="button"
-                        onClick={() =>
-                          onChange((prev) => ({ ...prev, settings: { ...prev.settings, template } }))
-                        }
-                        className={cn(
-                          "rounded-lg border p-4 text-left transition-colors hover:bg-accent",
-                          data.settings.template === template && "border-primary bg-primary/5"
-                        )}
-                      >
-                        <div className="text-sm font-medium text-foreground">{t(`template.${template}`)}</div>
-                        <div className="mt-1 text-xs text-muted-foreground">
-                          {template === "minimalist" && t("template.minimalistDesc")}
-                          {template === "modern" && t("template.modernDesc")}
-                          {template === "european" && t("template.europeanDesc")}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
                 <Separator />
                 <div className="space-y-2">
                   <Label htmlFor="targetPosition">{t("form.targetPosition")}</Label>

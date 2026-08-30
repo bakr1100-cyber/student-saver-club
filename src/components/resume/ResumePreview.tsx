@@ -1,4 +1,6 @@
+import type { CSSProperties } from "react";
 import type { ResumeData } from "@/lib/resume-types";
+import { getAccent } from "@/lib/resume-accents";
 import { MinimalistTemplate } from "./templates/MinimalistTemplate";
 import { ModernTemplate } from "./templates/ModernTemplate";
 import { EuropeanTemplate } from "./templates/EuropeanTemplate";
@@ -12,6 +14,7 @@ interface ResumePreviewProps {
 
 export function ResumePreview({ data }: ResumePreviewProps) {
   const { t } = useI18n();
+  const accent = getAccent(data.settings.accent);
   const Template =
     data.settings.template === "minimalist"
       ? MinimalistTemplate
@@ -32,7 +35,13 @@ export function ResumePreview({ data }: ResumePreviewProps) {
           "relative min-h-[297mm] w-full overflow-hidden bg-white p-[20mm] shadow-sm",
           "print:shadow-none print:p-0"
         )}
-        style={{ aspectRatio: "210 / 297" }}
+        style={
+          {
+            aspectRatio: "210 / 297",
+            "--resume-accent": accent.color,
+            "--resume-accent-soft": accent.soft,
+          } as CSSProperties
+        }
       >
         <Template data={data} />
       </div>
