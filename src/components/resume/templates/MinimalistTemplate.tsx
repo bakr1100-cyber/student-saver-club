@@ -1,4 +1,6 @@
 import type { ResumeData } from "@/lib/resume-types";
+import { translate, type TranslationKey } from "@/lib/i18n";
+import { dateLocales } from "@/lib/i18n/locales";
 import { Mail, Phone, MapPin, Globe, Linkedin, Calendar } from "lucide-react";
 
 interface TemplateProps {
@@ -7,13 +9,14 @@ interface TemplateProps {
 
 export function MinimalistTemplate({ data }: TemplateProps) {
   const { personalDetails, workExperience, education, skills, languages, settings } = data;
-  const t = settings.language === "en";
+  const lang = settings.language;
+  const tr = (key: TranslationKey) => translate(lang, key);
 
   const formatDate = (dateStr: string) => {
     if (!dateStr) return "";
     const date = new Date(dateStr);
     if (Number.isNaN(date.getTime())) return dateStr;
-    return date.toLocaleDateString(settings.language === "en" ? "en-US" : "de-DE", {
+    return date.toLocaleDateString(dateLocales[lang], {
       month: "short",
       year: "numeric",
     });
@@ -23,7 +26,7 @@ export function MinimalistTemplate({ data }: TemplateProps) {
     <div className="font-sans text-[11pt] leading-relaxed text-slate-800">
       {/* Header */}
       <div className="mb-6 border-b-2 border-slate-900 pb-6">
-        <h1 className="text-[28pt] font-light tracking-tight text-slate-900">{personalDetails.fullName || (t ? "Your Name" : "Dein Name")}</h1>
+        <h1 className="text-[28pt] font-light tracking-tight text-slate-900">{personalDetails.fullName || tr("resume.yourName")}</h1>
         {settings.targetPosition && (
           <p className="mt-1 text-[13pt] font-medium text-slate-600">{settings.targetPosition}</p>
         )}
@@ -65,7 +68,7 @@ export function MinimalistTemplate({ data }: TemplateProps) {
       {personalDetails.summary && (
         <section className="mb-6">
           <h2 className="mb-2 text-[12pt] font-bold uppercase tracking-wider text-slate-900">
-            {t ? "Profile" : "Profil"}
+            {tr("resume.profile")}
           </h2>
           <p className="whitespace-pre-wrap text-[10.5pt] text-slate-700">{personalDetails.summary}</p>
         </section>
@@ -75,7 +78,7 @@ export function MinimalistTemplate({ data }: TemplateProps) {
       {workExperience.length > 0 && (
         <section className="mb-6">
           <h2 className="mb-3 text-[12pt] font-bold uppercase tracking-wider text-slate-900">
-            {t ? "Professional Experience" : "Berufserfahrung"}
+            {tr("resume.experience")}
           </h2>
           <div className="space-y-4">
             {workExperience.map((item) => (
@@ -83,7 +86,7 @@ export function MinimalistTemplate({ data }: TemplateProps) {
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
                   <h3 className="font-semibold text-slate-900">{item.position}</h3>
                   <span className="text-[9.5pt] text-slate-500">
-                    {item.startDate} – {item.endDate || (t ? "Present" : "heute")}
+                    {item.startDate} – {item.endDate || tr("resume.present")}
                   </span>
                 </div>
                 <p className="text-[10.5pt] font-medium text-slate-600">
@@ -103,7 +106,7 @@ export function MinimalistTemplate({ data }: TemplateProps) {
       {education.length > 0 && (
         <section className="mb-6">
           <h2 className="mb-3 text-[12pt] font-bold uppercase tracking-wider text-slate-900">
-            {t ? "Education" : "Ausbildung"}
+            {tr("resume.education")}
           </h2>
           <div className="space-y-4">
             {education.map((item) => (
@@ -132,7 +135,7 @@ export function MinimalistTemplate({ data }: TemplateProps) {
         {skills.length > 0 && (
           <section>
             <h2 className="mb-2 text-[12pt] font-bold uppercase tracking-wider text-slate-900">
-              {t ? "Skills" : "Fähigkeiten"}
+              {tr("resume.skills")}
             </h2>
             <div className="flex flex-wrap gap-2">
               {skills.map((item) => (
@@ -146,7 +149,7 @@ export function MinimalistTemplate({ data }: TemplateProps) {
         {languages.length > 0 && (
           <section>
             <h2 className="mb-2 text-[12pt] font-bold uppercase tracking-wider text-slate-900">
-              {t ? "Languages" : "Sprachen"}
+              {tr("resume.languages")}
             </h2>
             <div className="space-y-1">
               {languages.map((item) => (
