@@ -163,7 +163,6 @@ export const de = {
   "template.minimalistDesc": "Schlicht und übersichtlich",
   "template.modernDesc": "Zeitgemäß mit klarem Fokus",
   "template.europeanDesc": "Klassisches europäisches Format",
-  "nav.language": "Sprache",
 
   // Form: settings
   "form.outputLanguage": "Sprache des Lebenslaufs",
