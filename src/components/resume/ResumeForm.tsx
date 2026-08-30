@@ -50,7 +50,10 @@ function isRTL(text: string) {
   return /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(text);
 }
 
-export function ResumeForm({ data, onChange }: ResumeFormProps) {
+export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormProps) {
+  const [internalStep, setInternalStep] = useState<string>("personal");
+  const activeStep = controlledStep ?? internalStep;
+
   const { t } = useI18n();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [company, setCompany] = useState("");
