@@ -138,7 +138,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
     <div className="h-full overflow-y-auto">
       <Tabs defaultValue="personal" className="w-full">
         <div className="sticky top-[57px] z-40 border-b border-border bg-background/95 px-4 py-2 backdrop-blur-md">
-          <TabsList className="grid h-auto w-full grid-cols-5 gap-1 bg-transparent p-0">
+          <TabsList className="grid h-auto w-full grid-cols-3 gap-1 bg-transparent p-0 sm:grid-cols-6">
             {steps.map((step) => (
               <TabsTrigger
                 key={step.id}
