@@ -375,16 +375,20 @@ function LandingPage() {
       {/* Templates */}
       <section id="vorlagen" className="px-4 py-20 md:py-24">
         <div className="mx-auto max-w-6xl">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-dark">{t("templates.eyebrow")}</p>
-          <h2 className="mt-3 max-w-3xl text-3xl font-bold tracking-tight text-navy">{t("templates.title")}</h2>
-          <p className="mt-4 max-w-2xl text-muted-foreground">{t("templates.subtitle")}</p>
-          <p className="mt-3 text-sm font-semibold text-primary">32 {t("templates.count")}</p>
+          <Reveal>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-dark">{t("templates.eyebrow")}</p>
+            <h2 className="mt-3 max-w-3xl text-3xl font-bold tracking-tight text-navy">{t("templates.title")}</h2>
+            <p className="mt-4 max-w-2xl text-muted-foreground">{t("templates.subtitle")}</p>
+            <p className="mt-3 text-sm font-semibold text-primary">32 {t("templates.count")}</p>
+          </Reveal>
 
-          <div className="mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4">
+          <Stagger className="mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4" stagger={0.06}>
             {templateCards.map((tpl) => (
-              <div key={tpl.id} className="group w-44 shrink-0 snap-start sm:w-52">
+              <StaggerItem key={tpl.id} className="group w-44 shrink-0 snap-start sm:w-52">
                 <div className="relative">
-                  <TemplateThumb accent={tpl.accent} sidebar={tpl.sidebar} />
+                  <div className="transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-xl">
+                    <TemplateThumb accent={tpl.accent} sidebar={tpl.sidebar} />
+                  </div>
                   {tpl.badge && (
                     <Badge
                       className="absolute top-2 left-2 text-[10px] uppercase"
@@ -405,9 +409,9 @@ function LandingPage() {
                 <Button variant="outline" size="sm" className="mt-2 w-full" asChild>
                   <Link to="/editor">{t("templates.use")}</Link>
                 </Button>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
 
           <Button variant="ghost" className="mt-2 text-primary" asChild>
             <Link to="/editor">
@@ -424,17 +428,17 @@ function LandingPage() {
           <h2 className="mt-3 text-center text-3xl font-bold tracking-tight text-navy">
             {t("how.title")} — {t("features.ai.title")}
           </h2>
-          <div className="mt-12 grid gap-8 md:grid-cols-3">
+          <Stagger className="mt-12 grid gap-8 md:grid-cols-3" stagger={0.12}>
             {steps.map((s) => (
-              <div key={s.step} className="relative rounded-2xl bg-background p-6 shadow-sm">
+              <StaggerItem key={s.step} className="relative rounded-2xl bg-background p-6 shadow-sm transition-shadow hover:shadow-lg">
                 <div className="absolute -top-4 -left-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
                   {s.step}
                 </div>
                 <h3 className="mt-2 text-lg font-semibold text-navy">{s.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Button size="lg" className="uppercase tracking-wide" asChild>
               <Link to="/editor">{t("start.new")}</Link>
@@ -470,8 +474,9 @@ function LandingPage() {
                 desc: t("toolkit.linkedin.desc"),
                 cta: t("toolkit.linkedin.cta"),
               },
-            ].map((item) => (
-              <Card key={item.title} className="border-border/60 bg-accent/40">
+            ].map((item, i) => (
+              <Reveal key={item.title} delay={i * 0.1}>
+              <Card className="h-full border-border/60 bg-accent/40 transition-shadow hover:shadow-lg">
                 <CardContent className="pt-6">
                   <Badge className="bg-trust text-primary-foreground">{t("toolkit.new")}</Badge>
                   <item.icon className="mt-4 h-8 w-8 text-brand-dark" />
@@ -485,6 +490,7 @@ function LandingPage() {
                   </div>
                 </CardContent>
               </Card>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -497,17 +503,21 @@ function LandingPage() {
             <h2 className="text-3xl font-bold tracking-tight text-navy">{t("features.title")}</h2>
             <p className="mt-4 text-muted-foreground">{t("features.subtitle")}</p>
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {features.map((feature) => (
-              <Card key={feature.title} className="border-border/60 bg-background">
+          <Stagger className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" stagger={0.06}>
+            {features.map((feature, i) => (
+              <StaggerItem key={feature.title}>
+              <HoverLift className="h-full">
+              <Card className={`h-full border-border/60 ${i % 4 === 0 ? "bg-brand-soft" : i % 4 === 1 ? "bg-sand/50" : i % 4 === 2 ? "bg-accent/50" : "bg-background"}`}>
                 <CardContent className="pt-6">
-                  <feature.icon className="h-8 w-8 text-primary" />
+                  <feature.icon className="h-8 w-8 text-brand-dark" />
                   <h3 className="mt-4 text-base font-semibold text-navy">{feature.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">{feature.description}</p>
                 </CardContent>
               </Card>
+              </HoverLift>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
       </section>
 
@@ -518,11 +528,11 @@ function LandingPage() {
             <h2 className="text-3xl font-bold tracking-tight text-navy">{t("pricing.title")}</h2>
             <p className="mt-4 text-muted-foreground">{t("pricing.subtitle")}</p>
           </div>
-          <div className="grid gap-6 md:grid-cols-3">
+          <Stagger className="grid gap-6 md:grid-cols-3" stagger={0.1}>
             {tiers.map((tier) => (
+              <StaggerItem key={tier.name} className={tier.popular ? "md:-mt-3" : ""}>
               <Card
-                key={tier.name}
-                className={`relative flex flex-col ${tier.popular ? "border-primary shadow-md" : "border-border/60"}`}
+                className={`relative flex h-full flex-col transition-shadow hover:shadow-xl ${tier.popular ? "border-brand shadow-lg ring-1 ring-brand/30" : "border-border/60"}`}
               >
                 {tier.popular && (
                   <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">{t("pricing.bestseller")}</Badge>
@@ -544,8 +554,9 @@ function LandingPage() {
                   </Button>
                 </CardContent>
               </Card>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
       </section>
 
@@ -553,9 +564,10 @@ function LandingPage() {
       <section id="bewertungen" className="bg-secondary/50 px-4 py-20 md:py-24">
         <div className="mx-auto max-w-6xl">
           <h2 className="text-center text-3xl font-bold tracking-tight text-navy">{t("testimonials.title")}</h2>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <Stagger className="mt-12 grid gap-6 md:grid-cols-3" stagger={0.1}>
             {testimonials.map((item) => (
-              <Card key={item.name} className="border-border/60 bg-background">
+              <StaggerItem key={item.name}>
+              <Card className="h-full border-border/60 bg-background transition-shadow hover:shadow-lg">
                 <CardContent className="pt-6">
                   <div className="flex gap-1">
                     {[...Array(5)].map((_, i) => (
@@ -579,20 +591,27 @@ function LandingPage() {
                   </div>
                 </CardContent>
               </Card>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
       </section>
 
       {/* CTA */}
       <section className="px-4 py-20 md:py-24">
-        <div className="mx-auto max-w-3xl rounded-3xl bg-navy px-6 py-16 text-center text-primary-foreground">
-          <h2 className="text-3xl font-bold tracking-tight">{t("cta.title")}</h2>
-          <p className="mt-4 text-primary-foreground/80">{t("cta.subtitle")}</p>
-          <Button size="lg" className="mt-8 uppercase tracking-wide" asChild>
+        <Reveal className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl bg-navy px-6 py-16 text-center text-primary-foreground">
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute -top-20 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-brand/25 blur-3xl"
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <h2 className="relative text-3xl font-bold tracking-tight">{t("cta.title")}</h2>
+          <p className="relative mt-4 text-primary-foreground/80">{t("cta.subtitle")}</p>
+          <Button size="lg" className="relative mt-8 bg-cta font-bold uppercase tracking-wide text-cta-foreground transition-transform hover:scale-[1.03] hover:bg-cta/90" asChild>
             <Link to="/editor">{t("cta.button")}</Link>
           </Button>
-        </div>
+        </Reveal>
       </section>
 
       {/* Footer */}
