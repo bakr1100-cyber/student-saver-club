@@ -7,7 +7,7 @@ import { accentPresets } from "@/lib/resume-accents";
 import { clampSpacing, fontScales, fontStylePresets } from "@/lib/resume-typography";
 import type { ResumeData } from "@/lib/resume-types";
 import { useI18n, type TranslationKey } from "@/lib/i18n";
-import { Minus, Plus, Palette, Type, LayoutTemplate, Check } from "lucide-react";
+import { Minus, Plus, Palette, Type, LayoutTemplate, Check, Droplets } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Props {
