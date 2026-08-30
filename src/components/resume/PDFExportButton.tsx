@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { STANDARD_PRICE, useEntitlements } from "@/lib/entitlements";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
