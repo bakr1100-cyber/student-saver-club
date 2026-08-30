@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { ResumeForm } from "./ResumeForm";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { ResumeForm, resumeStepIds, type ResumeStepId } from "./ResumeForm";
 import { ResumePreview } from "./ResumePreview";
 import { PDFExportButton } from "./PDFExportButton";
 import { ResumeScoreCard } from "./ResumeScoreCard";
@@ -7,18 +7,42 @@ import { ResumeImportDialog } from "./ResumeImportDialog";
 import { defaultResumeData, type ResumeData } from "@/lib/resume-types";
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
-import { FileText, Eye, EyeOff } from "lucide-react";
+import { FileText, Eye, EyeOff, ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-
+import { motion } from "motion/react";
 
 const STORAGE_KEY = "resume-draft-v1";
+
+const stepLabelKeys = {
+  personal: "tab.personal",
+  experience: "tab.experience",
+  education: "tab.education",
+  skills: "tab.skills",
+  "cover-letter": "tab.coverLetter",
+  settings: "tab.settings",
+} as const;
+
+const stepHeadlineKeys = {
+  personal: "wizard.personal.headline",
+  experience: "wizard.experience.headline",
+  education: "wizard.education.headline",
+  skills: "wizard.skills.headline",
+  "cover-letter": "wizard.coverLetter.headline",
+  settings: "wizard.settings.headline",
+} as const;
 
 export function ResumeEditor() {
   const { t } = useI18n();
   const [data, setData] = useState<ResumeData>(defaultResumeData);
-  const [showPreview, setShowPreview] = useState(true);
+  const [showPreview, setShowPreview] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [stepIndex, setStepIndex] = useState(0);
+
+  const step = resumeStepIds[stepIndex] as ResumeStepId;
+  const totalSteps = resumeStepIds.length;
+  const progress = useMemo(() => ((stepIndex + 1) / totalSteps) * 100, [stepIndex, totalSteps]);
+  const isLastStep = stepIndex === totalSteps - 1;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -43,45 +67,118 @@ export function ResumeEditor() {
     setData((prev) => updater(prev));
   }, []);
 
+  const goTo = useCallback((index: number) => {
+    setStepIndex(Math.max(0, Math.min(resumeStepIds.length - 1, index)));
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   return (
-    <div className="flex min-h-screen flex-col">
-      {/* Editor Header */}
+    <div className="flex min-h-screen flex-col bg-background">
+      {/* Wizard Header */}
       <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-md">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-          <Link to="/" className="flex items-center gap-2 text-lg font-bold tracking-tight text-foreground">
-            <FileText className="h-5 w-5 text-primary" />
-            {t("brand.name")}
-          </Link>
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3">
+          <div className="flex items-center gap-4">
+            <Link to="/" className="flex items-center gap-2 text-base font-bold tracking-tight text-foreground">
+              <FileText className="h-5 w-5 text-brand" />
+              <span className="hidden sm:inline">{t("brand.name")}</span>
+            </Link>
+            <div className="hidden h-8 w-px bg-border sm:block" />
+            <div className="leading-tight">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                {t("wizard.step")} {stepIndex + 1} {t("wizard.of")} {totalSteps}
+              </p>
+              <p className="text-sm font-semibold text-foreground">{t(stepLabelKeys[step])}</p>
+            </div>
+          </div>
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
             <ResumeImportDialog data={data} onImport={(next) => setData(next)} />
-            <Button
-              variant="outline"
-              size="sm"
-              className="md:hidden"
-              onClick={() => setShowPreview((s) => !s)}
-            >
-              {showPreview ? <EyeOff className="mr-1.5 h-4 w-4" /> : <Eye className="mr-1.5 h-4 w-4" />}
-              {showPreview ? t("editor.previewOff") : t("editor.previewOn")}
+            <Button variant="outline" size="sm" className="lg:hidden" onClick={() => setShowPreview((s) => !s)}>
+              {showPreview ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              <span className="ml-1.5 hidden sm:inline">
+                {showPreview ? t("editor.previewOff") : t("editor.previewOn")}
+              </span>
             </Button>
             <PDFExportButton data={data} />
           </div>
         </div>
+        {/* Progress bar */}
+        <div className="h-1 w-full bg-muted">
+          <motion.div
+            className="h-full bg-brand"
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          />
+        </div>
+        {/* Step rail */}
+        <div className="mx-auto hidden max-w-7xl items-center gap-1 overflow-x-auto px-4 py-2 md:flex">
+          {resumeStepIds.map((id, index) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => goTo(index)}
+              className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                index === stepIndex
+                  ? "bg-brand text-primary-foreground"
+                  : index < stepIndex
+                    ? "text-brand hover:bg-accent"
+                    : "text-muted-foreground hover:bg-accent"
+              }`}
+            >
+              {index < stepIndex ? (
+                <Check className="h-3.5 w-3.5" />
+              ) : (
+                <span className="tabular-nums">{index + 1}</span>
+              )}
+              {t(stepLabelKeys[id])}
+            </button>
+          ))}
+        </div>
       </header>
 
-      {/* Editor Body */}
+      {/* Wizard Body */}
       <main className="flex-1">
         <div className="mx-auto grid max-w-7xl gap-0 lg:grid-cols-2">
           <div className={`${showPreview ? "hidden lg:block" : ""} border-r border-border`}>
-            <ResumeForm data={data} onChange={updateData} />
+            <div className="px-4 pt-6 lg:px-6">
+              <motion.h1
+                key={step}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35 }}
+                className="text-xl font-bold tracking-tight text-foreground sm:text-2xl"
+              >
+                {t(stepHeadlineKeys[step])}
+              </motion.h1>
+            </div>
+            <ResumeForm data={data} onChange={updateData} step={step} />
+
+            {/* Step navigation */}
+            <div className="sticky bottom-0 z-30 flex items-center justify-between gap-3 border-t border-border bg-background/95 px-4 py-3 backdrop-blur-md lg:px-6">
+              <Button variant="outline" onClick={() => goTo(stepIndex - 1)} disabled={stepIndex === 0}>
+                <ArrowLeft className="mr-1.5 h-4 w-4" />
+                {t("wizard.back")}
+              </Button>
+              {isLastStep ? (
+                <PDFExportButton data={data} label={t("wizard.finish")} />
+              ) : (
+                <Button
+                  className="bg-brand font-semibold text-primary-foreground hover:bg-brand-dark"
+                  onClick={() => goTo(stepIndex + 1)}
+                >
+                  {t("wizard.next")}
+                  <ArrowRight className="ml-1.5 h-4 w-4" />
+                </Button>
+              )}
+            </div>
           </div>
+
           <div className={`${showPreview ? "" : "hidden lg:block"} space-y-4 bg-muted/30 p-4 lg:p-8`}>
             <ResumeScoreCard data={data} />
             <ResumePreview data={data} />
           </div>
         </div>
       </main>
-
     </div>
   );
 }
