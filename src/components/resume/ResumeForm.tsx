@@ -741,6 +741,8 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
           </TabsContent>
         </div>
       </Tabs>
+      <PremiumUpsellDialog open={showUpsell} onOpenChange={setShowUpsell} feature="cover-letter" />
     </div>
+
   );
 }
