@@ -454,7 +454,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                       placeholder="z. B. Projektmanagement"
                       className="flex-1"
                     />
-                    <Select value={item.level} onValueChange={(v) => updateSkill(item.id, "level", v)}>
+                    <Select value={item.level ?? ""} onValueChange={(v) => updateSkill(item.id, "level", v)}>
                       <SelectTrigger className="w-[140px]">
                         <SelectValue />
                       </SelectTrigger>
@@ -552,7 +552,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                           data.settings.template === template && "border-primary bg-primary/5"
                         )}
                       >
-                        <div className="text-sm font-medium text-foreground">{templateLabels[template].de}</div>
+                        <div className="text-sm font-medium text-foreground">{templateLabels[template]?.de ?? template}</div>
                         <div className="mt-1 text-xs text-muted-foreground">
                           {template === "minimalist" && "Schlicht und übersichtlich"}
                           {template === "modern" && "Zeitgemäß mit klarem Fokus"}
