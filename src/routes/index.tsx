@@ -112,8 +112,10 @@ function LandingPage() {
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
             Erstelle in wenigen Minuten einen überzeugenden Lebenslauf und ein passendes Anschreiben. 
-            Optimiert für deine Zielsprache — Deutsch oder Englisch.
+            Optimiert für deine Zielsprache — Deutsch oder Englisch. Editor kostenlos testen,
+            PDF-Download einmalig 9,99 €.
           </p>
+
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Button size="lg" asChild>
               <Link to="/editor">Jetzt Lebenslauf erstellen</Link>
