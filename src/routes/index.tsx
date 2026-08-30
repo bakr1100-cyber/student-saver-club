@@ -164,24 +164,38 @@ function LandingPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur-md">
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-navy/95 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-          <Link to="/" className="flex items-center gap-2 text-xl font-bold tracking-tight text-navy">
-            <FileText className="h-6 w-6 text-primary" />
+          <Link to="/" className="flex items-center gap-2 text-xl font-bold tracking-tight text-primary-foreground">
+            <FileText className="h-6 w-6 text-brand" />
             {t("brand.name")}
           </Link>
           <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
-            <a href="#vorlagen" className="text-muted-foreground hover:text-foreground">{t("templates.eyebrow")}</a>
-            <a href="#funktionen" className="text-muted-foreground hover:text-foreground">{t("nav.features")}</a>
-            <a href="#preise" className="text-muted-foreground hover:text-foreground">{t("nav.pricing")}</a>
-            <a href="#bewertungen" className="text-muted-foreground hover:text-foreground">{t("nav.reviews")}</a>
+            {[
+              { href: "#vorlagen", label: t("templates.eyebrow") },
+              { href: "#funktionen", label: t("nav.features") },
+              { href: "#preise", label: t("nav.pricing") },
+              { href: "#bewertungen", label: t("nav.reviews") },
+            ].map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="relative text-primary-foreground/75 transition-colors hover:text-primary-foreground after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:bg-brand after:transition-transform after:duration-300 hover:after:scale-x-100"
+              >
+                {item.label}
+              </a>
+            ))}
           </nav>
           <div className="flex items-center gap-2">
-            <a href="#kontakt" className="hidden text-sm text-muted-foreground hover:text-foreground lg:inline">
+            <a href="#kontakt" className="hidden text-sm text-primary-foreground/70 hover:text-primary-foreground lg:inline">
               {t("nav.contact")}
             </a>
             <LanguageSwitcher />
-            <Button size="sm" className="uppercase tracking-wide" asChild>
+            <Button
+              size="sm"
+              className="bg-cta font-bold uppercase tracking-wide text-cta-foreground shadow-sm transition-transform hover:scale-[1.03] hover:bg-cta/90"
+              asChild
+            >
               <Link to="/editor">{t("nav.createResume")}</Link>
             </Button>
           </div>
@@ -189,55 +203,173 @@ function LandingPage() {
       </header>
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-secondary/50 px-4 pt-14 pb-16 md:pt-20 md:pb-24">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-dark">{t("hero.badge")}</p>
-          <h1 className="mt-5 text-4xl font-bold leading-tight tracking-tight text-navy sm:text-5xl md:text-6xl">
-            {t("hero.title")} <span className="text-primary">{t("hero.titleAccent")}</span>
-          </h1>
-          <ul className="mx-auto mt-7 max-w-xl space-y-2.5 text-left text-sm text-foreground sm:text-base">
-            {[t("hero.bullet1"), t("hero.bullet2"), t("hero.bullet3")].map((b) => (
-              <li key={b} className="flex items-start gap-2.5">
-                <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-                <span>{b}</span>
-              </li>
+      <section className="relative overflow-hidden bg-navy px-4 pt-14 pb-20 md:pt-20 md:pb-28">
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute -top-32 -left-24 h-96 w-96 rounded-full bg-brand/25 blur-3xl"
+          animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.8, 0.5] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute -right-24 bottom-0 h-80 w-80 rounded-full bg-trust/20 blur-3xl"
+          animate={{ scale: [1.1, 1, 1.1], opacity: [0.4, 0.7, 0.4] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        <div className="relative mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
+          <div>
+            <motion.p
+              className="text-xs font-bold uppercase tracking-[0.18em] text-brand"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              {t("hero.badge")}
+            </motion.p>
+            <motion.h1
+              className="mt-5 text-4xl font-bold leading-[1.08] tracking-tight text-primary-foreground sm:text-5xl md:text-6xl"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {t("hero.title")} <span className="text-brand">{t("hero.titleAccent")}</span>
+            </motion.h1>
+
+            <ul className="mt-7 max-w-xl space-y-2.5 text-sm text-primary-foreground/85 sm:text-base">
+              {[t("hero.bullet1"), t("hero.bullet2"), t("hero.bullet3")].map((b, i) => (
+                <motion.li
+                  key={b}
+                  className="flex items-start gap-2.5"
+                  initial={{ opacity: 0, x: -12 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.25 + i * 0.1 }}
+                >
+                  <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-brand" />
+                  <span>{b}</span>
+                </motion.li>
+              ))}
+            </ul>
+
+            <motion.div
+              className="mt-9 flex flex-col gap-3 sm:flex-row"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.55 }}
+            >
+              <Button
+                size="lg"
+                className="w-full bg-cta font-bold uppercase tracking-wide text-cta-foreground transition-transform hover:scale-[1.03] hover:bg-cta/90 sm:w-auto"
+                asChild
+              >
+                <Link to="/editor">{t("hero.ctaPrimary")}</Link>
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full border-primary-foreground/30 bg-transparent uppercase tracking-wide text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground sm:w-auto"
+                asChild
+              >
+                <Link to="/editor">{t("hero.ctaOptimize")}</Link>
+              </Button>
+            </motion.div>
+
+            <div className="mt-10 flex flex-wrap gap-x-6 gap-y-2 text-xs text-primary-foreground/70">
+              {[t("hero.trust1"), t("hero.trust2"), t("hero.trust3")].map((x) => (
+                <span key={x} className="flex items-center gap-1.5">
+                  <CheckCircle className="h-3.5 w-3.5 text-trust" /> {x}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <motion.div
+            className="relative mx-auto w-full max-w-md lg:max-w-none"
+            initial={{ opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div aria-hidden className="absolute inset-x-6 bottom-6 top-10 rounded-[2.5rem] bg-brand/25" />
+            <motion.div
+              aria-hidden
+              className="absolute right-6 top-4 h-20 w-20 rounded-2xl bg-sand/80"
+              animate={{ y: [0, -14, 0], rotate: [0, 6, 0] }}
+              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div
+              aria-hidden
+              className="absolute left-0 bottom-16 h-16 w-16 rounded-full bg-trust/70"
+              animate={{ y: [0, 12, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.img
+              src={heroImage}
+              alt={t("hero.title")}
+              width={1024}
+              height={1024}
+              className="relative z-10 w-full drop-shadow-2xl"
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div
+              className="absolute bottom-8 left-0 z-20 rounded-xl border border-border bg-background px-4 py-3 shadow-lg"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.9, duration: 0.6 }}
+            >
+              <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                {t("score.title")}
+              </div>
+              <div className="mt-1 flex items-end gap-1.5">
+                <span className="text-2xl font-bold text-trust">
+                  <AnimatedCounter value={92} locale={locale} />
+                </span>
+                <span className="pb-1 text-xs text-muted-foreground">/ 100</span>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Company logo bar */}
+      <section className="border-b border-border bg-background px-4 py-10">
+        <div className="mx-auto max-w-6xl">
+          <p className="text-center text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
+            {trustedBy[locale] ?? trustedBy.de}
+          </p>
+          <Stagger className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+            {companies.map((c) => (
+              <StaggerItem key={c}>
+                <span className="text-lg font-semibold tracking-tight text-navy/50 transition-colors hover:text-navy">
+                  {c}
+                </span>
+              </StaggerItem>
             ))}
-          </ul>
-
-          <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button size="lg" className="w-full uppercase tracking-wide sm:w-auto" asChild>
-              <Link to="/editor">{t("hero.ctaPrimary")}</Link>
-            </Button>
-            <Button size="lg" variant="outline" className="w-full uppercase tracking-wide sm:w-auto" asChild>
-              <Link to="/editor">{t("hero.ctaOptimize")}</Link>
-            </Button>
-          </div>
-
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-trust" /> {t("hero.trust1")}</span>
-            <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-trust" /> {t("hero.trust2")}</span>
-            <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-trust" /> {t("hero.trust3")}</span>
-          </div>
+          </Stagger>
         </div>
       </section>
 
       {/* Counter + stats */}
-      <section className="border-y border-border bg-navy px-4 py-10 text-primary-foreground">
+      <section className="border-y border-border bg-brand-dark px-4 py-12 text-primary-foreground">
         <div className="mx-auto max-w-5xl">
-          <div className="text-center">
-            <div className="font-mono text-3xl font-bold tracking-widest md:text-4xl">81.838.990</div>
+          <Reveal className="text-center">
+            <div className="font-mono text-3xl font-bold tracking-widest md:text-4xl">
+              <AnimatedCounter value={81838990} locale={locale} />
+            </div>
             <div className="mt-1 text-xs uppercase tracking-[0.18em] text-primary-foreground/70">
               {t("hero.counterLabel")}
             </div>
-          </div>
-          <div className="mt-10 grid gap-8 md:grid-cols-3">
+          </Reveal>
+          <Stagger className="mt-10 grid gap-8 md:grid-cols-3">
             {stats.map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-2xl font-bold text-brand">{stat.value}</div>
+              <StaggerItem key={stat.label} className="text-center">
+                <div className="text-2xl font-bold text-cta">{stat.value}</div>
                 <div className="mt-1 text-sm text-primary-foreground/80">{stat.label}</div>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
+        </div>
+
         </div>
       </section>
 
