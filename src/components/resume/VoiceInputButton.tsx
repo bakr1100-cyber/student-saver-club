@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useEntitlements } from "@/lib/entitlements";
 import { PremiumUpsellDialog } from "./PremiumUpsellDialog";
+import { useI18n } from "@/lib/i18n";
 
 
 interface VoiceInputButtonProps {
@@ -15,6 +16,7 @@ interface VoiceInputButtonProps {
 }
 
 export function VoiceInputButton({ onTranscript, className }: VoiceInputButtonProps) {
+  const { t } = useI18n();
   const transcribe = useServerFn(transcribeAudio);
   const { premium } = useEntitlements();
   const [showUpsell, setShowUpsell] = useState(false);
@@ -31,7 +33,7 @@ export function VoiceInputButton({ onTranscript, className }: VoiceInputButtonPr
 
   const start = async () => {
     if (typeof navigator === "undefined" || !navigator.mediaDevices?.getUserMedia) {
-      toast.error("Spracheingabe wird von diesem Gerät nicht unterstützt.");
+      toast.error(t("voice.unsupported"));
       return;
     }
     try {
@@ -57,12 +59,12 @@ export function VoiceInputButton({ onTranscript, className }: VoiceInputButtonPr
           });
           if (result.text?.trim()) {
             onTranscript(result.text.trim());
-            toast.success("Transkription eingefügt");
+            toast.success(t("voice.inserted"));
           } else {
-            toast.error("Keine Sprache erkannt. Bitte erneut versuchen.");
+            toast.error(t("voice.noSpeech"));
           }
         } catch {
-          toast.error("Transkription fehlgeschlagen. Bitte tippe den Text ein.");
+          toast.error(t("voice.failed"));
         } finally {
           setLoading(false);
         }
@@ -71,7 +73,7 @@ export function VoiceInputButton({ onTranscript, className }: VoiceInputButtonPr
       recorderRef.current = recorder;
       setRecording(true);
     } catch {
-      toast.error("Mikrofonzugriff verweigert.");
+      toast.error(t("voice.denied"));
     }
   };
 
@@ -85,10 +87,10 @@ export function VoiceInputButton({ onTranscript, className }: VoiceInputButtonPr
         disabled={loading}
         title={
           !premium
-            ? "Spracheingabe (Premium)"
+            ? t("voice.premium")
             : recording
-              ? "Aufnahme beenden"
-              : "Spracheingabe (Darija, Arabisch, Französisch, Deutsch)"
+              ? t("voice.stop")
+              : t("voice.record")
         }
         onClick={() => {
           if (!premium) {

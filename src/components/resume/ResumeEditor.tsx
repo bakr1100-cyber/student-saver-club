@@ -6,10 +6,13 @@ import { defaultResumeData, type ResumeData } from "@/lib/resume-types";
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import { FileText, Eye, EyeOff } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 const STORAGE_KEY = "resume-draft-v1";
 
 export function ResumeEditor() {
+  const { t } = useI18n();
   const [data, setData] = useState<ResumeData>(defaultResumeData);
   const [showPreview, setShowPreview] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -44,9 +47,10 @@ export function ResumeEditor() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
           <Link to="/" className="flex items-center gap-2 text-lg font-bold tracking-tight text-foreground">
             <FileText className="h-5 w-5 text-primary" />
-            OnlineLebenslauf
+            {t("brand.name")}
           </Link>
           <div className="flex items-center gap-2">
+            <LanguageSwitcher />
             <Button
               variant="outline"
               size="sm"
@@ -54,7 +58,7 @@ export function ResumeEditor() {
               onClick={() => setShowPreview((s) => !s)}
             >
               {showPreview ? <EyeOff className="mr-1.5 h-4 w-4" /> : <Eye className="mr-1.5 h-4 w-4" />}
-              {showPreview ? "Vorschau aus" : "Vorschau"}
+              {showPreview ? t("editor.previewOff") : t("editor.previewOn")}
             </Button>
             <PDFExportButton data={data} />
           </div>
