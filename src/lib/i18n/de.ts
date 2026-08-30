@@ -150,6 +150,21 @@ export const de = {
   "form.languageName": "Sprache",
   "form.level": "Niveau",
 
+  // Form: extra labels
+  "form.personalTitle": "Persönliche Daten",
+  "form.photoLabel": "Profilfoto",
+  "form.entry": "Eintrag",
+  "form.period": "Zeitraum",
+  "form.emptyExperience": "Noch keine Berufserfahrung hinzugefügt.",
+  "form.emptyEducation": "Noch keine Ausbildung hinzugefügt.",
+  "form.emptySkills": "Noch keine Fähigkeiten hinzugefügt.",
+  "form.emptyLanguages": "Noch keine Sprachen hinzugefügt.",
+  "form.outputSettings": "Ausgabe-Einstellungen",
+  "template.minimalistDesc": "Schlicht und übersichtlich",
+  "template.modernDesc": "Zeitgemäß mit klarem Fokus",
+  "template.europeanDesc": "Klassisches europäisches Format",
+  "nav.language": "Sprache",
+
   // Form: settings
   "form.outputLanguage": "Sprache des Lebenslaufs",
   "form.template": "Vorlage",
