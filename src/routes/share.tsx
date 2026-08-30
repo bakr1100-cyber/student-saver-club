@@ -82,7 +82,7 @@ function SharePage() {
 
         {state.status === "ready" && state.data && (
           <div className="select-none">
-            <ResumePreview data={state.data} />
+            <ResumePreview data={state.data} hideCaption />
           </div>
         )}
       </main>
