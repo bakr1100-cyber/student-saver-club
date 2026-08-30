@@ -372,4 +372,6 @@ export const en = {
   "ats.notAnalysed": "Not analysed yet",
   "ats.hint": "Complete at least 50% of your resume to see your ATS score.",
   "ats.addMissing": "Add missing sections",
+  "custom.palettes": "Tokyo colour palettes",
+  "custom.palettesHint": "Pick the watercolour mood of your Tokyo template.",
 } as const;
