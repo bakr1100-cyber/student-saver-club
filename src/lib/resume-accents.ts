@@ -13,6 +13,7 @@ export const accentPresets: AccentPreset[] = [
   { id: "burgundy", color: "#7f1d3a", soft: "#fdf0f4" },
   { id: "forest", color: "#166534", soft: "#eff8f0" },
   { id: "violet", color: "#5b21b6", soft: "#f4f0fe" },
+  { id: "coral", color: "#c2504a", soft: "#fbd9d1" },
 ];
 
 export const defaultAccentId = "slate";

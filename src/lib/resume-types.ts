@@ -50,6 +50,12 @@ export interface ResumeSettings {
   targetPosition?: string;
   /** Accent colour preset id, see src/lib/resume-accents.ts */
   accent?: string;
+  /** Typography style preset id, see src/lib/resume-typography.ts */
+  fontStyle?: string;
+  /** Base font scale multiplier (0.9 | 1 | 1.1). */
+  fontScale?: number;
+  /** Line spacing multiplier (1.0 - 2.0). */
+  lineSpacing?: number;
 }
 
 export interface ExtraSection {
@@ -88,6 +94,9 @@ export const defaultResumeData: ResumeData = {
     language: "de",
     template: "modern",
     accent: "slate",
+    fontStyle: "modern",
+    fontScale: 1,
+    lineSpacing: 1.5,
   },
   extraSections: [],
 };
