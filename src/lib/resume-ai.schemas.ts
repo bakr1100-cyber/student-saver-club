@@ -47,4 +47,10 @@ export const TranscribeInput = z.object({
   mimeType: z.string().default("audio/webm"),
 });
 
+export const ParseResumeInput = z.object({
+  text: z.string().min(20),
+  language: z.enum(SUPPORTED_LOCALES),
+});
+
 export type CoverLetterPayload = z.infer<typeof CoverLetterInput>;
+
