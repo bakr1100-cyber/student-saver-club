@@ -56,6 +56,7 @@ export function ResumePreview({ data, hideCaption = false }: ResumePreviewProps)
             aspectRatio: "210 / 297",
             "--resume-accent": accent.color,
             "--resume-accent-soft": accent.soft,
+            "--resume-accent-wash": accent.wash,
             fontFamily,
             fontSize: `${fontScale * 100}%`,
             lineHeight: lineSpacing,
