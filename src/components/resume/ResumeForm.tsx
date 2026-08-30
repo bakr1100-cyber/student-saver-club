@@ -13,6 +13,9 @@ import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
 import { AIAssistButton } from "./AIAssistButton";
 import { VoiceInputButton } from "./VoiceInputButton";
+import { PremiumUpsellDialog } from "./PremiumUpsellDialog";
+import { useEntitlements, PREMIUM_PRICE } from "@/lib/entitlements";
+
 
 import { useServerFn } from "@tanstack/react-start";
 import { generateCoverLetter } from "@/lib/resume-ai.functions";
@@ -42,13 +45,20 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
   const [jobDescription, setJobDescription] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const createCoverLetter = useServerFn(generateCoverLetter);
+  const { premium } = useEntitlements();
+  const [showUpsell, setShowUpsell] = useState(false);
 
   const handleGenerateCoverLetter = async () => {
+    if (!premium) {
+      setShowUpsell(true);
+      return;
+    }
     if (!company.trim()) {
       toast.error("Bitte gib das Unternehmen an.");
       return;
     }
     setIsGenerating(true);
+
     try {
       const result = await createCoverLetter({
         data: {
@@ -609,6 +619,14 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                 <CardTitle>Anschreiben mit KI erstellen</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
+                {!premium && (
+                  <p className="rounded-md border border-dashed bg-muted/40 p-3 text-sm text-muted-foreground">
+                    Das KI-Anschreiben und die Spracheingabe gehören zum Premium-Paket (einmalig{" "}
+                    {PREMIUM_PRICE}). Editor, Vorlagen, KI-Textoptimierung und PDF-Download sind im
+                    Standard-Paket enthalten.
+                  </p>
+                )}
+
                 <div className="space-y-2">
                   <Label htmlFor="company">Unternehmen</Label>
                   <Input
@@ -723,6 +741,8 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
           </TabsContent>
         </div>
       </Tabs>
+      <PremiumUpsellDialog open={showUpsell} onOpenChange={setShowUpsell} feature="cover-letter" />
     </div>
+
   );
 }

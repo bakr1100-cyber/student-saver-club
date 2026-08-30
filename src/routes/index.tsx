@@ -196,8 +196,9 @@ function LandingPage() {
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             {[
-              { name: "Standard", price: "€9,99", desc: "Lebenslauf mit KI-Optimierung und PDF-Download.", features: ["Multi-Step Editor", "KI-Übersetzung", "1 Lebenslauf-Vorlage", "PDF-Download"] },
-              { name: "Premium", price: "€15,00", desc: "Lebenslauf + individuelles Anschreiben.", features: ["Alles aus Standard", "KI-Anschreiben", "Alle Vorlagen", "Beide PDFs"], popular: true },
+              { name: "Standard", price: "€9,99", desc: "Lebenslauf mit KI-Textoptimierung und PDF-Download.", features: ["Multi-Step Editor", "KI-Optimierung & Übersetzung", "Alle Vorlagen", "PDF-Download"] },
+              { name: "Premium", price: "€15,00", desc: "Lebenslauf + individuelles Anschreiben.", features: ["Alles aus Standard", "KI-Anschreiben", "Spracheingabe (Darija & Co.)", "Beide PDFs"], popular: true },
+
               { name: "Premium Plus", price: "€60,00", desc: "Persönliche 45-Minuten-Session zur Optimierung.", features: ["Alles aus Premium", "45-Minuten Zoom-Call", "Persönliches Feedback", "Job-Matching-Tipps"] },
             ].map((tier) => (
               <Card key={tier.name} className={`relative flex flex-col ${tier.popular ? "border-primary shadow-md" : "border-border/60"}`}>

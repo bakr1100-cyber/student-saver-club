@@ -5,6 +5,9 @@ import { useServerFn } from "@tanstack/react-start";
 import { transcribeAudio } from "@/lib/resume-ai.functions";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useEntitlements } from "@/lib/entitlements";
+import { PremiumUpsellDialog } from "./PremiumUpsellDialog";
+
 
 interface VoiceInputButtonProps {
   onTranscript: (text: string) => void;
@@ -13,10 +16,13 @@ interface VoiceInputButtonProps {
 
 export function VoiceInputButton({ onTranscript, className }: VoiceInputButtonProps) {
   const transcribe = useServerFn(transcribeAudio);
+  const { premium } = useEntitlements();
+  const [showUpsell, setShowUpsell] = useState(false);
   const [recording, setRecording] = useState(false);
   const [loading, setLoading] = useState(false);
   const recorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
+
 
   const stop = () => {
     recorderRef.current?.stop();
@@ -70,22 +76,39 @@ export function VoiceInputButton({ onTranscript, className }: VoiceInputButtonPr
   };
 
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      type="button"
-      className={cn("h-8 w-8", className)}
-      disabled={loading}
-      title={recording ? "Aufnahme beenden" : "Spracheingabe (Darija, Arabisch, Französisch, Deutsch)"}
-      onClick={recording ? stop : start}
-    >
-      {loading ? (
-        <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-      ) : recording ? (
-        <Square className="h-4 w-4 text-destructive" />
-      ) : (
-        <Mic className="h-4 w-4 text-muted-foreground" />
-      )}
-    </Button>
+    <>
+      <Button
+        variant="ghost"
+        size="icon"
+        type="button"
+        className={cn("h-8 w-8", className)}
+        disabled={loading}
+        title={
+          !premium
+            ? "Spracheingabe (Premium)"
+            : recording
+              ? "Aufnahme beenden"
+              : "Spracheingabe (Darija, Arabisch, Französisch, Deutsch)"
+        }
+        onClick={() => {
+          if (!premium) {
+            setShowUpsell(true);
+            return;
+          }
+          if (recording) stop();
+          else void start();
+        }}
+      >
+        {loading ? (
+          <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+        ) : recording ? (
+          <Square className="h-4 w-4 text-destructive" />
+        ) : (
+          <Mic className="h-4 w-4 text-muted-foreground" />
+        )}
+      </Button>
+      <PremiumUpsellDialog open={showUpsell} onOpenChange={setShowUpsell} feature="voice" />
+    </>
   );
 }
+
