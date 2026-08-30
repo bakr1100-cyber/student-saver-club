@@ -5,6 +5,9 @@ import { useServerFn } from "@tanstack/react-start";
 import { transcribeAudio } from "@/lib/resume-ai.functions";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useEntitlements } from "@/lib/entitlements";
+import { PremiumUpsellDialog } from "./PremiumUpsellDialog";
+
 
 interface VoiceInputButtonProps {
   onTranscript: (text: string) => void;
