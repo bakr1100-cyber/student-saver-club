@@ -12,6 +12,8 @@ import { languageLevelLabels, templateLabels } from "@/lib/resume-types";
 import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
 import { AIAssistButton } from "./AIAssistButton";
+import { VoiceInputButton } from "./VoiceInputButton";
+
 import { useServerFn } from "@tanstack/react-start";
 import { generateCoverLetter } from "@/lib/resume-ai.functions";
 import { toast } from "sonner";
