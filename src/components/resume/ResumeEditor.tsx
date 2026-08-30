@@ -1,28 +1,40 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { ResumeForm, resumeStepIds, type ResumeStepId } from "./ResumeForm";
+import { ResumeForm } from "./ResumeForm";
 import { ResumePreview } from "./ResumePreview";
 import { PDFExportButton } from "./PDFExportButton";
 import { ResumeScoreCard } from "./ResumeScoreCard";
 import { ResumeImportDialog } from "./ResumeImportDialog";
 import { ExtraSectionsDialog } from "./ExtraSectionsDialog";
+import { TemplateGallery } from "./TemplateGallery";
+import { StepExamples, type WizardStepId } from "./StepExamples";
 
 import { defaultResumeData, type ResumeData } from "@/lib/resume-types";
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
-import { FileText, Eye, EyeOff, ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { FileText, Eye, EyeOff, ArrowLeft, ArrowRight, Check, Cloud, CloudOff, Loader2 } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { motion } from "motion/react";
+import { useResumeAutoSave } from "@/hooks/useResumeAutoSave";
+import { toast } from "sonner";
 
 const STORAGE_KEY = "resume-draft-v1";
+
+/** The five wizard steps; the final step combines fine-tuning and the cover letter. */
+const wizardSteps: { id: WizardStepId; forms: string[] }[] = [
+  { id: "personal", forms: ["personal"] },
+  { id: "experience", forms: ["experience"] },
+  { id: "education", forms: ["education"] },
+  { id: "skills", forms: ["skills"] },
+  { id: "finish", forms: ["settings", "cover-letter"] },
+];
 
 const stepLabelKeys = {
   personal: "tab.personal",
   experience: "tab.experience",
   education: "tab.education",
   skills: "tab.skills",
-  "cover-letter": "tab.coverLetter",
-  settings: "tab.settings",
+  finish: "tab.finish",
 } as const;
 
 const stepHeadlineKeys = {
@@ -30,8 +42,7 @@ const stepHeadlineKeys = {
   experience: "wizard.experience.headline",
   education: "wizard.education.headline",
   skills: "wizard.skills.headline",
-  "cover-letter": "wizard.coverLetter.headline",
-  settings: "wizard.settings.headline",
+  finish: "wizard.settings.headline",
 } as const;
 
 export function ResumeEditor() {
@@ -41,8 +52,8 @@ export function ResumeEditor() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
 
-  const step = resumeStepIds[stepIndex] as ResumeStepId;
-  const totalSteps = resumeStepIds.length;
+  const totalSteps = wizardSteps.length;
+  const currentStep = wizardSteps[Math.min(stepIndex, totalSteps - 1)]!;
   const progress = useMemo(() => ((stepIndex + 1) / totalSteps) * 100, [stepIndex, totalSteps]);
   const isLastStep = stepIndex === totalSteps - 1;
 
@@ -69,8 +80,18 @@ export function ResumeEditor() {
     setData((prev) => updater(prev));
   }, []);
 
+  const handleRestore = useCallback(
+    (restored: ResumeData) => {
+      setData(restored);
+      toast.success(t("autosave.restored"));
+    },
+    [t]
+  );
+
+  const { state: saveState } = useResumeAutoSave({ data, ready: isLoaded, onRestore: handleRestore });
+
   const goTo = useCallback((index: number) => {
-    setStepIndex(Math.max(0, Math.min(resumeStepIds.length - 1, index)));
+    setStepIndex(Math.max(0, Math.min(wizardSteps.length - 1, index)));
     if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
@@ -89,10 +110,25 @@ export function ResumeEditor() {
               <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                 {t("wizard.step")} {stepIndex + 1} {t("wizard.of")} {totalSteps}
               </p>
-              <p className="text-sm font-semibold text-foreground">{t(stepLabelKeys[step])}</p>
+              <p className="text-sm font-semibold text-foreground">{t(stepLabelKeys[currentStep.id])}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <span className="hidden items-center gap-1.5 text-xs text-muted-foreground sm:flex">
+              {saveState === "saving" ? (
+                <>
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" /> {t("autosave.saving")}
+                </>
+              ) : saveState === "saved" ? (
+                <>
+                  <Cloud className="h-3.5 w-3.5 text-brand" /> {t("autosave.saved")}
+                </>
+              ) : (
+                <>
+                  <CloudOff className="h-3.5 w-3.5" /> {t("autosave.local")}
+                </>
+              )}
+            </span>
             <LanguageSwitcher />
             <ResumeImportDialog data={data} onImport={(next) => setData(next)} />
             <Button variant="outline" size="sm" className="lg:hidden" onClick={() => setShowPreview((s) => !s)}>
@@ -114,9 +150,9 @@ export function ResumeEditor() {
         </div>
         {/* Step rail */}
         <div className="mx-auto hidden max-w-7xl items-center gap-1 overflow-x-auto px-4 py-2 md:flex">
-          {resumeStepIds.map((id, index) => (
+          {wizardSteps.map((wizardStep, index) => (
             <button
-              key={id}
+              key={wizardStep.id}
               type="button"
               onClick={() => goTo(index)}
               className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-colors ${
@@ -132,7 +168,7 @@ export function ResumeEditor() {
               ) : (
                 <span className="tabular-nums">{index + 1}</span>
               )}
-              {t(stepLabelKeys[id])}
+              {t(stepLabelKeys[wizardStep.id])}
             </button>
           ))}
         </div>
@@ -142,23 +178,32 @@ export function ResumeEditor() {
       <main className="flex-1">
         <div className="mx-auto grid max-w-7xl gap-0 lg:grid-cols-2">
           <div className={`${showPreview ? "hidden lg:block" : ""} border-r border-border`}>
-            <div className="px-4 pt-6 lg:px-6">
+            <div className="space-y-4 px-4 pt-6 lg:px-6">
               <motion.h1
-                key={step}
+                key={currentStep.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.35 }}
                 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl"
               >
-                {t(stepHeadlineKeys[step])}
+                {t(stepHeadlineKeys[currentStep.id])}
               </motion.h1>
+              <StepExamples step={currentStep.id} />
             </div>
-            <ResumeForm data={data} onChange={updateData} step={step} />
+
+            {currentStep.id === "finish" && (
+              <div className="px-4 pt-6 lg:px-6">
+                <TemplateGallery data={data} onChange={updateData} />
+              </div>
+            )}
+
+            {currentStep.forms.map((formStep) => (
+              <ResumeForm key={formStep} data={data} onChange={updateData} step={formStep} />
+            ))}
 
             <div className="px-4 pb-2 lg:px-6">
               <ExtraSectionsDialog data={data} onChange={updateData} />
             </div>
-
 
             {/* Step navigation */}
             <div className="sticky bottom-0 z-30 flex items-center justify-between gap-3 border-t border-border bg-background/95 px-4 py-3 backdrop-blur-md lg:px-6">
