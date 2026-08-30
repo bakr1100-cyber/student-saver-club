@@ -96,6 +96,36 @@ export function ResumeEditor() {
     if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
+  if (mode === "workspace") {
+    return (
+      <div className="min-h-screen bg-background">
+        <header className="sticky top-0 z-50 flex items-center justify-between border-b border-border bg-background/95 px-4 py-3 backdrop-blur-md">
+          <Link to="/" className="flex items-center gap-2 text-base font-bold tracking-tight text-foreground">
+            <FileText className="h-5 w-5 text-brand" />
+            <span className="hidden sm:inline">{t("brand.name")}</span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher />
+            <Button variant="outline" size="sm" onClick={() => setMode("wizard")}>
+              <ArrowLeft className="mr-1.5 h-4 w-4" />
+              {t("ws.backToEditor")}
+            </Button>
+          </div>
+        </header>
+        <ResumeWorkspace
+          data={data}
+          onChange={updateData}
+          onEditStep={(index) => {
+            setMode("wizard");
+            goTo(index);
+          }}
+        />
+      </div>
+    );
+  }
+
+
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
       {/* Wizard Header */}
