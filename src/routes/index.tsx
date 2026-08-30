@@ -18,6 +18,10 @@ import {
 } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { motion } from "motion/react";
+import { Reveal, Stagger, StaggerItem, HoverLift, AnimatedCounter } from "@/components/motion/Reveal";
+import heroImage from "@/assets/hero-professional.png";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
