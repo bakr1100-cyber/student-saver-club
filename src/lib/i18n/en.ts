@@ -354,4 +354,8 @@ export const en = {
   "font.classic": "Classic",
   "font.technical": "Technical",
   "accent.coral": "Coral",
+  "ats.resultsTitle": "ATS analysis results",
+  "ats.notAnalysed": "Not analysed yet",
+  "ats.hint": "Complete at least 50% of your resume to see your ATS score.",
+  "ats.addMissing": "Add missing sections",
 } as const;

@@ -411,6 +411,10 @@ export const de = {
   "font.classic": "Klassisch",
   "font.technical": "Technisch",
   "accent.coral": "Koralle",
+  "ats.resultsTitle": "Ergebnisse der ATS-Analyse",
+  "ats.notAnalysed": "Noch nicht analysiert",
+  "ats.hint": "Fülle mindestens 50 % deines Lebenslaufs aus, um deinen ATS-Score zu sehen.",
+  "ats.addMissing": "Fehlende Abschnitte hinzufügen",
 } as const;
 
 export type TranslationKey = keyof typeof de;
