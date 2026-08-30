@@ -105,9 +105,10 @@ ${data.text}`,
 
   const raw = result.text.trim().replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
   try {
-    return { data: JSON.parse(raw) as Record<string, unknown> };
+    JSON.parse(raw);
   } catch {
     throw new Error("Resume parsing failed");
   }
+  return { json: raw };
 }
 
