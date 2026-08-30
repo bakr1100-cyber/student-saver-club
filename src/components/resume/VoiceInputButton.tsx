@@ -4,6 +4,7 @@ import { Loader2, Mic, Square } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { transcribeAudio } from "@/lib/resume-ai.functions";
 import { toast } from "sonner";
+import { aiErrorKey } from "@/lib/ai-errors";
 import { cn } from "@/lib/utils";
 import { useEntitlements } from "@/lib/entitlements";
 import { PremiumUpsellDialog } from "./PremiumUpsellDialog";
@@ -63,8 +64,8 @@ export function VoiceInputButton({ onTranscript, className }: VoiceInputButtonPr
           } else {
             toast.error(t("voice.noSpeech"));
           }
-        } catch {
-          toast.error(t("voice.failed"));
+        } catch (error) {
+          toast.error(t(aiErrorKey(error, "voice.failed")));
         } finally {
           setLoading(false);
         }

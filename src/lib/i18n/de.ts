@@ -188,6 +188,10 @@ export const de = {
   "cover.failed": "Anschreiben konnte nicht erstellt werden. Bitte erneut versuchen.",
 
   // AI assist
+  "ai.usage.today": "KI-Aufrufe heute",
+  "ai.limit.auth": "Bitte melde dich an, um die KI-Funktionen zu nutzen.",
+  "ai.limit.daily": "Tageslimit für KI-Aufrufe erreicht. Morgen geht es weiter – oder du wechselst zu einem höheren Tarif.",
+  "ai.limit.tooFast": "Zu viele KI-Anfragen in kurzer Zeit. Bitte warte einen Moment.",
   "ai.optimize": "Mit KI optimieren",
   "ai.translate": "In die Zielsprache übersetzen",
   "ai.optimized": "Text optimiert",
