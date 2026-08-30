@@ -14,6 +14,9 @@ import {
 import { Check, Download, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import type { ResumeData } from "@/lib/resume-types";
+import { useAuth } from "@/hooks/useAuth";
+import { AuthPanel } from "@/components/auth/AuthPanel";
+
 
 interface PDFExportButtonProps {
   data: ResumeData;
