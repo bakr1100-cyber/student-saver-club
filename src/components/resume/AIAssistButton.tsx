@@ -11,6 +11,7 @@ import { Sparkles, Languages, Wand2, Loader2 } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { optimizeText, translateText } from "@/lib/resume-ai.functions";
 import { toast } from "sonner";
+import { aiErrorKey } from "@/lib/ai-errors";
 import { useI18n } from "@/lib/i18n";
 import { SUPPORTED_LOCALES, localeFlags, localeNames, type Locale } from "@/lib/i18n/locales";
 
@@ -35,8 +36,8 @@ export function AIAssistButton({ text, language, context, onResult, disabled }: 
       const result = await optimize({ data: { text, language, context } });
       onResult(result.text);
       toast.success(t("ai.optimized"));
-    } catch {
-      toast.error(t("ai.optimizeFailed"));
+    } catch (error) {
+      toast.error(t(aiErrorKey(error, "ai.optimizeFailed")));
     } finally {
       setIsLoading(false);
     }
@@ -49,8 +50,8 @@ export function AIAssistButton({ text, language, context, onResult, disabled }: 
       const result = await translate({ data: { text, targetLanguage } });
       onResult(result.text);
       toast.success(t("ai.translated"));
-    } catch {
-      toast.error(t("ai.translateFailed"));
+    } catch (error) {
+      toast.error(t(aiErrorKey(error, "ai.translateFailed")));
     } finally {
       setIsLoading(false);
     }

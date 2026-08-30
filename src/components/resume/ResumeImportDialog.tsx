@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Loader2, Upload } from "lucide-react";
 import { toast } from "sonner";
+import { aiErrorKey } from "@/lib/ai-errors";
 import { useServerFn } from "@tanstack/react-start";
 import { parseResumeText } from "@/lib/resume-ai.functions";
 import { useI18n } from "@/lib/i18n";
@@ -98,8 +99,8 @@ export function ResumeImportDialog({
       toast.success(t("import.success"));
       setOpen(false);
       setText("");
-    } catch {
-      toast.error(t("import.error"));
+    } catch (error) {
+      toast.error(t(aiErrorKey(error, "import.error")));
     } finally {
       setBusy(false);
     }
