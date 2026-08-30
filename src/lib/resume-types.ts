@@ -87,6 +87,7 @@ export const defaultResumeData: ResumeData = {
   settings: {
     language: "de",
     template: "modern",
+    accent: "slate",
   },
   extraSections: [],
 };
