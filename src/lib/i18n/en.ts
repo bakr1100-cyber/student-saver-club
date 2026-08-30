@@ -135,6 +135,7 @@ export const en = {
   "cover.needCompany": "Please enter the company name.",
   "cover.created": "Cover letter created",
   "cover.failed": "Failed to create cover letter. Please try again.",
+  "ai.usage.today": "AI calls today",
   "ai.limit.auth": "Please sign in to use the AI features.",
   "ai.limit.daily": "Daily AI limit reached. Try again tomorrow or upgrade your plan.",
   "ai.limit.tooFast": "Too many AI requests in a short time. Please wait a moment.",
