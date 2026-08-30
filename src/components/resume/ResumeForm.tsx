@@ -450,14 +450,23 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                   </div>
                   <div className="space-y-2">
                     <Label>Beschreibung</Label>
-                    <Textarea
-                      value={item.description}
-                      onChange={(e) => updateEducation(item.id, "description", e.target.value)}
-                      placeholder="Schwerpunkte, Noten, Projekte"
-                      rows={3}
-                      className={cn(isRTL(item.description) && "text-right")}
-                      dir={isRTL(item.description) ? "rtl" : "ltr"}
-                    />
+                    <div className="relative">
+                      <Textarea
+                        value={item.description}
+                        onChange={(e) => updateEducation(item.id, "description", e.target.value)}
+                        placeholder="Schwerpunkte, Noten, Projekte"
+                        rows={3}
+                        className={cn("pb-10", isRTL(item.description) && "text-right")}
+                        dir={isRTL(item.description) ? "rtl" : "ltr"}
+                      />
+                      <AIAssistButton
+                        text={item.description}
+                        language={data.settings.language}
+                        context={`Ausbildung: ${item.degree || "Abschluss"} an ${item.institution || "Institution"}`}
+                        onResult={(text) => updateEducation(item.id, "description", text)}
+                      />
+                    </div>
+
                   </div>
                 </CardContent>
               </Card>
