@@ -12,6 +12,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { optimizeText, translateText } from "@/lib/resume-ai.functions";
 import { toast } from "sonner";
 import { aiErrorKey } from "@/lib/ai-errors";
+import { hasAiSession } from "@/lib/ai-auth";
 import { useI18n } from "@/lib/i18n";
 import { SUPPORTED_LOCALES, localeFlags, localeNames, type Locale } from "@/lib/i18n/locales";
 
@@ -33,6 +34,7 @@ export function AIAssistButton({ text, language, context, onResult, disabled }: 
     if (!text.trim()) return;
     setIsLoading(true);
     try {
+      if (!(await hasAiSession())) throw new Error("AI_AUTH_REQUIRED");
       const result = await optimize({ data: { text, language, context } });
       onResult(result.text);
       toast.success(t("ai.optimized"));
@@ -47,6 +49,7 @@ export function AIAssistButton({ text, language, context, onResult, disabled }: 
     if (!text.trim()) return;
     setIsLoading(true);
     try {
+      if (!(await hasAiSession())) throw new Error("AI_AUTH_REQUIRED");
       const result = await translate({ data: { text, targetLanguage } });
       onResult(result.text);
       toast.success(t("ai.translated"));

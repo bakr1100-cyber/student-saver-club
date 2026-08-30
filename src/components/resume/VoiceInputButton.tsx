@@ -5,6 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { transcribeAudio } from "@/lib/resume-ai.functions";
 import { toast } from "sonner";
 import { aiErrorKey } from "@/lib/ai-errors";
+import { hasAiSession } from "@/lib/ai-auth";
 import { cn } from "@/lib/utils";
 import { useEntitlements } from "@/lib/entitlements";
 import { PremiumUpsellDialog } from "./PremiumUpsellDialog";
@@ -55,6 +56,7 @@ export function VoiceInputButton({ onTranscript, className }: VoiceInputButtonPr
           const bytes = new Uint8Array(buffer);
           for (let i = 0; i < bytes.length; i += 1) binary += String.fromCharCode(bytes[i]!);
           const base64 = btoa(binary);
+          if (!(await hasAiSession())) throw new Error("AI_AUTH_REQUIRED");
           const result = await transcribe({
             data: { audioBase64: base64, mimeType: blob.type || "audio/webm" },
           });
