@@ -335,7 +335,7 @@ function LandingPage() {
       <section className="border-b border-border bg-background px-4 py-10">
         <div className="mx-auto max-w-6xl">
           <p className="text-center text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
-            {trustedBy[locale] ?? trustedBy.de}
+            {trustedBy[locale] ?? trustedBy["de"]}
           </p>
           <Stagger className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
             {companies.map((c) => (
