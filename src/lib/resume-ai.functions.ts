@@ -2,9 +2,11 @@ import { createServerFn } from "@tanstack/react-start";
 import {
   CoverLetterInput,
   OptimizeInput,
+  ParseResumeInput,
   TranscribeInput,
   TranslateInput,
 } from "./resume-ai.schemas";
+
 
 export const optimizeText = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => OptimizeInput.parse(input))
@@ -32,4 +34,11 @@ export const transcribeAudio = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { runTranscribe } = await import("./resume-ai.server");
     return runTranscribe(data);
+  });
+
+export const parseResumeText = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => ParseResumeInput.parse(input))
+  .handler(async ({ data }) => {
+    const { runParseResume } = await import("./resume-ai.server");
+    return runParseResume(data);
   });

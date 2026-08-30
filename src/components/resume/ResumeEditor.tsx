@@ -2,12 +2,15 @@ import { useState, useEffect, useCallback } from "react";
 import { ResumeForm } from "./ResumeForm";
 import { ResumePreview } from "./ResumePreview";
 import { PDFExportButton } from "./PDFExportButton";
+import { ResumeScoreCard } from "./ResumeScoreCard";
+import { ResumeImportDialog } from "./ResumeImportDialog";
 import { defaultResumeData, type ResumeData } from "@/lib/resume-types";
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import { FileText, Eye, EyeOff } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+
 
 const STORAGE_KEY = "resume-draft-v1";
 
@@ -51,6 +54,7 @@ export function ResumeEditor() {
           </Link>
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
+            <ResumeImportDialog data={data} onImport={(next) => setData(next)} />
             <Button
               variant="outline"
               size="sm"
@@ -71,11 +75,13 @@ export function ResumeEditor() {
           <div className={`${showPreview ? "hidden lg:block" : ""} border-r border-border`}>
             <ResumeForm data={data} onChange={updateData} />
           </div>
-          <div className={`${showPreview ? "" : "hidden lg:block"} bg-muted/30 p-4 lg:p-8`}>
+          <div className={`${showPreview ? "" : "hidden lg:block"} space-y-4 bg-muted/30 p-4 lg:p-8`}>
+            <ResumeScoreCard data={data} />
             <ResumePreview data={data} />
           </div>
         </div>
       </main>
+
     </div>
   );
 }

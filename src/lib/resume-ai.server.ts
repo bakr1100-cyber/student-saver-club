@@ -83,3 +83,32 @@ export async function runTranscribe(data: { audioBase64: string; mimeType: strin
   });
   return { text: result.text };
 }
+
+export async function runParseResume(data: { text: string; language: Locale }) {
+  const target = languageName(data.language);
+  const result = await generateText({
+    model: gateway()(MODEL),
+    system:
+      "You extract structured CV data from raw text. Answer with valid JSON only, no markdown fences, no commentary.",
+    prompt: `Extract the CV below into this exact JSON shape:
+{"personalDetails":{"fullName":"","dateOfBirth":"","email":"","phone":"","location":"","linkedin":"","website":"","summary":""},
+"workExperience":[{"position":"","company":"","location":"","startDate":"YYYY-MM","endDate":"YYYY-MM or empty when current","description":""}],
+"education":[{"degree":"","institution":"","location":"","startDate":"YYYY-MM","endDate":"","description":""}],
+"skills":[{"name":"","level":""}],
+"languages":[{"name":"","level":"native|fluent|advanced|intermediate|beginner"}]}
+
+Keep the wording in ${target}. Use empty strings for unknown values. Never invent facts.
+
+CV text:
+${data.text}`,
+  });
+
+  const raw = result.text.trim().replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
+  try {
+    JSON.parse(raw);
+  } catch {
+    throw new Error("Resume parsing failed");
+  }
+  return { json: raw };
+}
+
