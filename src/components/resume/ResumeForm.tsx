@@ -20,6 +20,7 @@ import { useEntitlements } from "@/lib/entitlements";
 
 import { useServerFn } from "@tanstack/react-start";
 import { generateCoverLetter } from "@/lib/resume-ai.functions";
+import { aiErrorKey } from "@/lib/ai-errors";
 import { toast } from "sonner";
 
 interface ResumeFormProps {
@@ -105,8 +106,8 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
       });
       onChange((prev) => ({ ...prev, coverLetter: result.text }));
       toast.success(t("cover.created"));
-    } catch {
-      toast.error(t("cover.failed"));
+    } catch (error) {
+      toast.error(t(aiErrorKey(error, "cover.failed")));
     } finally {
       setIsGenerating(false);
     }
