@@ -369,9 +369,8 @@ function LandingPage() {
             ))}
           </Stagger>
         </div>
-
-        </div>
       </section>
+
 
       {/* Templates */}
       <section id="vorlagen" className="px-4 py-20 md:py-24">
