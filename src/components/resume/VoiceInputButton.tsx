@@ -6,6 +6,7 @@ import { transcribeAudio } from "@/lib/resume-ai.functions";
 import { toast } from "sonner";
 import { aiErrorKey } from "@/lib/ai-errors";
 import { hasAiSession } from "@/lib/ai-auth";
+import { trackAiAction } from "@/lib/ai-cost";
 import { cn } from "@/lib/utils";
 import { useEntitlements } from "@/lib/entitlements";
 import { PremiumUpsellDialog } from "./PremiumUpsellDialog";
@@ -60,6 +61,7 @@ export function VoiceInputButton({ onTranscript, className }: VoiceInputButtonPr
           const result = await transcribe({
             data: { audioBase64: base64, mimeType: blob.type || "audio/webm" },
           });
+          trackAiAction("transcribe");
           if (result.text?.trim()) {
             onTranscript(result.text.trim());
             toast.success(t("voice.inserted"));
