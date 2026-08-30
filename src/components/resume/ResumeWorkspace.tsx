@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { ResumePreview } from "./ResumePreview";
-import { ResumeScoreCard } from "./ResumeScoreCard";
+import { AtsCheckerPanel } from "./AtsCheckerPanel";
 import { CustomizePanel } from "./CustomizePanel";
 import { ExtraSectionsDialog } from "./ExtraSectionsDialog";
 import { PDFExportButton } from "./PDFExportButton";
@@ -145,7 +145,7 @@ export function ResumeWorkspace({ data, onChange, onEditStep }: Props) {
 
         {tab === "ats" && (
           <div className="p-5">
-            <ResumeScoreCard data={data} />
+            <AtsCheckerPanel data={data} onEditStep={onEditStep} />
           </div>
         )}
       </aside>
