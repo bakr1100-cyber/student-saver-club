@@ -51,6 +51,7 @@ export function ResumeEditor() {
   const [showPreview, setShowPreview] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
+  const [mode, setMode] = useState<"wizard" | "workspace">("wizard");
 
   const totalSteps = wizardSteps.length;
   const currentStep = wizardSteps[Math.min(stepIndex, totalSteps - 1)]!;
