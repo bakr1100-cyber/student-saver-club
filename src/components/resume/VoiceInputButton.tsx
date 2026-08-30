@@ -13,10 +13,13 @@ interface VoiceInputButtonProps {
 
 export function VoiceInputButton({ onTranscript, className }: VoiceInputButtonProps) {
   const transcribe = useServerFn(transcribeAudio);
+  const { premium } = useEntitlements();
+  const [showUpsell, setShowUpsell] = useState(false);
   const [recording, setRecording] = useState(false);
   const [loading, setLoading] = useState(false);
   const recorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
+
 
   const stop = () => {
     recorderRef.current?.stop();
