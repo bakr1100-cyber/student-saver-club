@@ -6,7 +6,7 @@ import { TemplateGallery } from "./TemplateGallery";
 import { accentPresets } from "@/lib/resume-accents";
 import { clampSpacing, fontScales, fontStylePresets } from "@/lib/resume-typography";
 import type { ResumeData } from "@/lib/resume-types";
-import { useI18n } from "@/lib/i18n";
+import { useI18n, type TranslationKey } from "@/lib/i18n";
 import { Minus, Plus, Palette, Type, LayoutTemplate, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -43,7 +43,7 @@ export function CustomizePanel({ data, onChange }: Props) {
                 <SelectContent>
                   {fontStylePresets.map((preset) => (
                     <SelectItem key={preset.id} value={preset.id}>
-                      {t(`font.${preset.id}`)}
+                      {t(`font.${preset.id}` as TranslationKey)}
                     </SelectItem>
                   ))}
                 </SelectContent>

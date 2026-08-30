@@ -353,4 +353,5 @@ export const en = {
   "font.elegant": "Elegant",
   "font.classic": "Classic",
   "font.technical": "Technical",
+  "accent.coral": "Coral",
 } as const;

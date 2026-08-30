@@ -410,6 +410,7 @@ export const de = {
   "font.elegant": "Elegant",
   "font.classic": "Klassisch",
   "font.technical": "Technisch",
+  "accent.coral": "Koralle",
 } as const;
 
 export type TranslationKey = keyof typeof de;
