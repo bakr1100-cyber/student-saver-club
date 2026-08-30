@@ -63,6 +63,10 @@ export function PDFExportButton({ data, label }: PDFExportButtonProps) {
   };
 
   const handleClick = () => {
+    if (!isAuthenticated) {
+      setShowAuth(true);
+      return;
+    }
     if (isUnlocked) {
       void exportPdf();
       return;
@@ -78,8 +82,22 @@ export function PDFExportButton({ data, label }: PDFExportButtonProps) {
         ) : (
           <Download className="mr-1.5 h-4 w-4" />
         )}
-        {t("editor.download")}
+        {label ?? t("editor.download")}
       </Button>
+
+      <Dialog open={showAuth} onOpenChange={setShowAuth}>
+        <DialogContent className="overflow-hidden p-0 sm:max-w-3xl">
+          <AuthPanel
+            redirectPath="/editor"
+            onAuthenticated={() => {
+              setShowAuth(false);
+              setShowPaywall(!isUnlocked);
+            }}
+          />
+        </DialogContent>
+      </Dialog>
+
+
 
 
       <Dialog open={showPaywall} onOpenChange={setShowPaywall}>
