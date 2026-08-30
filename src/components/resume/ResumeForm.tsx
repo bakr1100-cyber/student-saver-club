@@ -356,19 +356,26 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                         onChange={(e) => updateWorkExperience(item.id, "description", e.target.value)}
                         placeholder="Beschreibe deine Aufgaben und Erfolge"
                         rows={4}
-                        className={cn(isRTL(item.description) && "text-right")}
+                        className={cn("pb-10", isRTL(item.description) && "text-right")}
                         dir={isRTL(item.description) ? "rtl" : "ltr"}
                       />
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="absolute right-2 bottom-2 h-8 w-8"
-                        type="button"
-                        title="Spracheingabe (bald verfügbar)"
-                        disabled
-                      >
-                        <Mic className="h-4 w-4 text-muted-foreground" />
-                      </Button>
+                      <VoiceInputButton
+                        className="absolute right-10 bottom-2"
+                        onTranscript={(text) =>
+                          updateWorkExperience(
+                            item.id,
+                            "description",
+                            item.description ? `${item.description} ${text}` : text
+                          )
+                        }
+                      />
+                      <AIAssistButton
+                        text={item.description}
+                        language={data.settings.language}
+                        context={`Berufserfahrung: ${item.position || "Position"} bei ${item.company || "Unternehmen"}`}
+                        onResult={(text) => updateWorkExperience(item.id, "description", text)}
+                      />
+
                     </div>
                   </div>
                 </CardContent>
