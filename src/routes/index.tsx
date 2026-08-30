@@ -253,7 +253,7 @@ function LandingPage() {
           <h2 className="text-3xl font-bold tracking-tight">Dein nächster Job ist nur einen Lebenslauf entfernt.</h2>
           <p className="mt-4 text-primary-foreground/80">Schließe dich Millionen erfolgreicher Bewerber an.</p>
           <Button size="lg" variant="secondary" className="mt-8" asChild>
-            <Link to="/editor">Jetzt kostenlos starten</Link>
+            <Link to="/editor">Jetzt starten — Download für 9,99 €</Link>
           </Button>
         </div>
       </section>
