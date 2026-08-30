@@ -1,14 +1,15 @@
+import { SUPPORTED_LOCALES } from "@/lib/i18n/locales";
 import { z } from "zod";
 
 export const OptimizeInput = z.object({
   text: z.string().min(1),
-  language: z.enum(["de", "en"]),
+  language: z.enum(SUPPORTED_LOCALES),
   context: z.string().optional(),
 });
 
 export const TranslateInput = z.object({
   text: z.string().min(1),
-  targetLanguage: z.enum(["de", "en"]),
+  targetLanguage: z.enum(SUPPORTED_LOCALES),
 });
 
 export const CoverLetterInput = z.object({
@@ -20,7 +21,7 @@ export const CoverLetterInput = z.object({
       location: z.string(),
     }),
     settings: z.object({
-      language: z.enum(["de", "en"]),
+      language: z.enum(SUPPORTED_LOCALES),
       targetPosition: z.string().optional(),
     }),
     workExperience: z.array(
