@@ -10,7 +10,7 @@ function gateway() {
   return createLovableAiGatewayProvider(key);
 }
 
-export async function runOptimize(data: { text: string; language: "de" | "en"; context?: string }) {
+export async function runOptimize(data: { text: string; language: "de" | "en"; context?: string | undefined }) {
   const result = await generateText({
     model: gateway()(MODEL),
     system:
