@@ -211,24 +211,27 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
 
   return (
     <div className="h-full overflow-y-auto">
-      <Tabs defaultValue="personal" className="w-full">
-        <div className="sticky top-[57px] z-40 border-b border-border bg-background/95 px-4 py-2 backdrop-blur-md">
-          <TabsList className="grid h-auto w-full grid-cols-3 gap-1 bg-transparent p-0 sm:grid-cols-6">
-            {stepIds.map((step) => (
-              <TabsTrigger
-                key={step}
-                value={step}
-                className="truncate rounded-md px-1 py-1.5 text-[10px] font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground sm:text-xs"
-              >
-                {t(stepLabelKeys[step])}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </div>
+      <Tabs value={activeStep} onValueChange={setInternalStep} className="w-full">
+        {!controlledStep && (
+          <div className="sticky top-[57px] z-40 border-b border-border bg-background/95 px-4 py-2 backdrop-blur-md">
+            <TabsList className="grid h-auto w-full grid-cols-3 gap-1 bg-transparent p-0 sm:grid-cols-6">
+              {stepIds.map((step) => (
+                <TabsTrigger
+                  key={step}
+                  value={step}
+                  className="truncate rounded-md px-1 py-1.5 text-[10px] font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground sm:text-xs"
+                >
+                  {t(stepLabelKeys[step])}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </div>
+        )}
 
-        <div className="p-4 pb-24 lg:p-6">
+        <div className="p-4 pb-8 lg:p-6">
           <TabsContent value="personal" className="mt-0 space-y-6">
             <Card>
+
               <CardHeader>
                 <CardTitle>{t("form.personalTitle")}</CardTitle>
               </CardHeader>
