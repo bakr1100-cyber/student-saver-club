@@ -391,6 +391,15 @@ export const de = {
   "example.finish.1": "Zielposition angeben, z. B. „Junior Marketing Manager“.",
   "example.finish.2": "Vorlage und Akzentfarbe passend zur Branche wählen.",
   "example.finish.3": "Anschreiben ergänzen — es erhöht die Rückmeldequote deutlich.",
+  "ws.title": "Hier ist dein Lebenslauf!",
+  "ws.download": "Herunterladen",
+  "ws.tabResume": "Lebenslauf",
+  "ws.tabCustomize": "Anpassen",
+  "ws.tabAts": "ATS Checker",
+  "ws.start": "Los geht's mit deinem Lebenslauf!",
+  "ws.startDesc": "Trag deine Infos ein und bring deine Stärken auf den Punkt.",
+  "ws.sections": "Abschnitte",
+  "ws.backToEditor": "Weiter bearbeiten",
 } as const;
 
 export type TranslationKey = keyof typeof de;

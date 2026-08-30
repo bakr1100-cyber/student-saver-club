@@ -334,4 +334,13 @@ export const en = {
   "example.finish.1": "Add a target position, e.g. “Junior Marketing Manager”.",
   "example.finish.2": "Pick a template and accent colour that fit your industry.",
   "example.finish.3": "Add a cover letter — it clearly raises your response rate.",
+  "ws.title": "Here is your resume!",
+  "ws.download": "Download",
+  "ws.tabResume": "Resume",
+  "ws.tabCustomize": "Customise",
+  "ws.tabAts": "ATS checker",
+  "ws.start": "Let's get started with your resume!",
+  "ws.startDesc": "Add your details and highlight your strengths.",
+  "ws.sections": "Sections",
+  "ws.backToEditor": "Keep editing",
 } as const;
