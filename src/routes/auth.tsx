@@ -8,13 +8,13 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Anmelden — OnlineLebenslauf" },
+      { title: "Anmelden — myCVonline.com" },
       {
         name: "description",
         content:
           "Melde dich an oder registriere dich, um deinen Lebenslauf zu speichern, weiter zu bearbeiten und als PDF herunterzuladen.",
       },
-      { property: "og:title", content: "Anmelden — OnlineLebenslauf" },
+      { property: "og:title", content: "Anmelden — myCVonline.com" },
       {
         property: "og:description",
         content: "Konto erstellen, Lebenslauf speichern und als PDF herunterladen.",

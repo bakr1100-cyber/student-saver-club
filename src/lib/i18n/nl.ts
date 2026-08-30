@@ -1,5 +1,5 @@
 export const nl = {
-  "brand.name": "OnlineLebenslauf",
+  "brand.name": "myCVonline.com",
   "nav.features": "Functies",
   "nav.pricing": "Prijzen",
   "nav.reviews": "Beoordelingen",
@@ -183,9 +183,9 @@ export const nl = {
   "resume.languages": "Talen",
   "resume.present": "heden",
   "resume.yourName": "Jouw naam",
-  "seo.home.title": "OnlineLebenslauf — ATS-vriendelijke CV's met AI",
+  "seo.home.title": "myCVonline.com — ATS-vriendelijke CV's met AI",
   "seo.home.description": "Maak binnen enkele minuten een professioneel, ATS-vriendelijk CV en motivatiebrief. Eenmalige betaling, geen abonnement.",
-  "seo.editor.title": "CV maken — OnlineLebenslauf",
+  "seo.editor.title": "CV maken — myCVonline.com",
   "seo.editor.description": "Maak je professionele CV met live voorbeeld en PDF-export.",
 "form.personalTitle": "Persoonlijke gegevens",
   "form.photoLabel": "Profielfoto",

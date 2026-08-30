@@ -1,5 +1,5 @@
 export const ar = {
-  "brand.name": "OnlineLebenslauf",
+  "brand.name": "myCVonline.com",
   "nav.features": "المميزات",
   "nav.pricing": "الأسعار",
   "nav.reviews": "التقييمات",
@@ -183,9 +183,9 @@ export const ar = {
   "resume.languages": "اللغات",
   "resume.present": "حتى الآن",
   "resume.yourName": "اسمك",
-  "seo.home.title": "OnlineLebenslauf — سير ذاتية متوافقة مع ATS بالذكاء الاصطناعي",
+  "seo.home.title": "myCVonline.com — سير ذاتية متوافقة مع ATS بالذكاء الاصطناعي",
   "seo.home.description": "أنشئ سيرة ذاتية وخطاب تغطية احترافيين ومتوافقين مع أنظمة ATS في دقائق. دفع لمرة واحدة وبدون اشتراك.",
-  "seo.editor.title": "إنشاء سيرة ذاتية — OnlineLebenslauf",
+  "seo.editor.title": "إنشاء سيرة ذاتية — myCVonline.com",
   "seo.editor.description": "أنشئ سيرتك الذاتية الاحترافية مع معاينة فورية وتصدير بصيغة PDF.",
 "form.personalTitle": "البيانات الشخصية",
   "form.photoLabel": "صورة الملف الشخصي",

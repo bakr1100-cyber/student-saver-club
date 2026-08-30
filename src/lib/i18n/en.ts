@@ -1,5 +1,5 @@
 export const en = {
-  "brand.name": "OnlineLebenslauf",
+  "brand.name": "myCVonline.com",
   "nav.features": "Features",
   "nav.pricing": "Pricing",
   "nav.reviews": "Reviews",
@@ -183,9 +183,9 @@ export const en = {
   "resume.languages": "Languages",
   "resume.present": "Present",
   "resume.yourName": "Your Name",
-  "seo.home.title": "OnlineLebenslauf — ATS-Friendly Resumes with AI",
+  "seo.home.title": "myCVonline.com — ATS-Friendly Resumes with AI",
   "seo.home.description": "Create a professional, ATS-friendly resume and cover letter in minutes. One-time payment, no subscription.",
-  "seo.editor.title": "Create Resume — OnlineLebenslauf",
+  "seo.editor.title": "Create Resume — myCVonline.com",
   "seo.editor.description": "Build your professional resume with live preview and PDF export.",
 "form.personalTitle": "Personal Information",
   "form.photoLabel": "Profile Photo",

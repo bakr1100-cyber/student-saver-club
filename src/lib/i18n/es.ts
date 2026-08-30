@@ -1,5 +1,5 @@
 export const es = {
-  "brand.name": "OnlineLebenslauf",
+  "brand.name": "myCVonline.com",
   "nav.features": "Funciones",
   "nav.pricing": "Precios",
   "nav.reviews": "Opiniones",
@@ -183,9 +183,9 @@ export const es = {
   "resume.languages": "Idiomas",
   "resume.present": "actualidad",
   "resume.yourName": "Tu nombre",
-  "seo.home.title": "OnlineLebenslauf — Currículums compatibles con ATS gracias a la IA",
+  "seo.home.title": "myCVonline.com — Currículums compatibles con ATS gracias a la IA",
   "seo.home.description": "Crea en minutos un currículum profesional y una carta de presentación optimizados para ATS. Pago único, sin suscripción.",
-  "seo.editor.title": "Crear currículum — OnlineLebenslauf",
+  "seo.editor.title": "Crear currículum — myCVonline.com",
   "seo.editor.description": "Crea tu currículum profesional con vista previa en directo y exportación a PDF.",
 "form.personalTitle": "Datos personales",
   "form.photoLabel": "Foto de perfil",

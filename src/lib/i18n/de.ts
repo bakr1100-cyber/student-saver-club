@@ -1,6 +1,6 @@
 export const de = {
   // Brand & navigation
-  "brand.name": "OnlineLebenslauf",
+  "brand.name": "myCVonline.com",
   "nav.features": "Funktionen",
   "nav.pricing": "Preise",
   "nav.reviews": "Bewertungen",
@@ -251,10 +251,10 @@ export const de = {
   "resume.yourName": "Dein Name",
 
   // SEO
-  "seo.home.title": "OnlineLebenslauf — ATS-geprüfte Lebensläufe mit KI",
+  "seo.home.title": "myCVonline.com — ATS-geprüfte Lebensläufe mit KI",
   "seo.home.description":
     "Erstelle in Minuten einen professionellen, ATS-freundlichen Lebenslauf und Anschreiben. Einmalzahlung, kein Abo.",
-  "seo.editor.title": "Lebenslauf erstellen — OnlineLebenslauf",
+  "seo.editor.title": "Lebenslauf erstellen — myCVonline.com",
   "seo.editor.description": "Erstelle deinen professionellen Lebenslauf mit Live-Vorschau und PDF-Export.",
 
   // Reference redesign: navigation, hero bullets, templates, toolkit, score, import
