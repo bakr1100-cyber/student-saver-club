@@ -113,6 +113,49 @@ export function CustomizePanel({ data, onChange }: Props) {
         </AccordionContent>
       </AccordionItem>
 
+      {settings.template === "tokyo" && (
+        <AccordionItem value="palettes">
+          <AccordionTrigger className="text-sm font-semibold">
+            <span className="flex items-center gap-2">
+              <Droplets className="h-4 w-4" /> {t("custom.palettes")}
+            </span>
+          </AccordionTrigger>
+          <AccordionContent className="space-y-3 pt-2">
+            <p className="text-xs text-muted-foreground">{t("custom.palettesHint")}</p>
+            <div className="grid grid-cols-3 gap-2">
+              {accentPresets.map((preset) => {
+                const active = (settings.accent ?? "coral") === preset.id;
+                return (
+                  <button
+                    key={preset.id}
+                    type="button"
+                    onClick={() => update({ accent: preset.id })}
+                    className={cn(
+                      "overflow-hidden rounded-lg border border-border text-left transition-shadow hover:shadow-md",
+                      active && "ring-2 ring-foreground"
+                    )}
+                    aria-pressed={active}
+                  >
+                    <span
+                      className="block h-12 w-full bg-white"
+                      style={{
+                        backgroundImage: `radial-gradient(60% 70% at 20% 25%, ${preset.wash} 0%, transparent 70%), radial-gradient(55% 65% at 85% 80%, ${preset.wash} 0%, transparent 70%)`,
+                      }}
+                    />
+                    <span className="flex items-center justify-between gap-1 px-2 py-1.5">
+                      <span className="truncate text-[11px] font-medium">
+                        {t(`accent.${preset.id}` as TranslationKey)}
+                      </span>
+                      <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: preset.color }} />
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      )}
+
       <AccordionItem value="templates" className="border-b-0">
         <AccordionTrigger className="text-sm font-semibold">
           <span className="flex items-center gap-2">
