@@ -187,4 +187,16 @@ export const fr = {
   "seo.home.description": "Créez en quelques minutes un CV professionnel et compatible ATS ainsi qu'une lettre de motivation. Paiement unique, sans abonnement.",
   "seo.editor.title": "Créer un CV — OnlineLebenslauf",
   "seo.editor.description": "Créez votre CV professionnel avec aperçu en direct et export PDF."
-} as const;
+} as const;  "form.personalTitle": "Informations personnelles",
+  "form.photoLabel": "Photo de profil",
+  "form.entry": "Entrée",
+  "form.period": "Période",
+  "form.emptyExperience": "Aucune expérience professionnelle ajoutée.",
+  "form.emptyEducation": "Aucune formation ajoutée.",
+  "form.emptySkills": "Aucune compétence ajoutée.",
+  "form.emptyLanguages": "Aucune langue ajoutée.",
+  "form.outputSettings": "Paramètres de sortie",
+  "template.minimalistDesc": "Simple et clair",
+  "template.modernDesc": "Contemporain avec un accent clair",
+  "template.europeanDesc": "Format européen classique",
+

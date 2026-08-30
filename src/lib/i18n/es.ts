@@ -187,4 +187,16 @@ export const es = {
   "seo.home.description": "Crea en minutos un currículum profesional y una carta de presentación optimizados para ATS. Pago único, sin suscripción.",
   "seo.editor.title": "Crear currículum — OnlineLebenslauf",
   "seo.editor.description": "Crea tu currículum profesional con vista previa en directo y exportación a PDF."
-} as const;
+} as const;  "form.personalTitle": "Datos personales",
+  "form.photoLabel": "Foto de perfil",
+  "form.entry": "Entrada",
+  "form.period": "Periodo",
+  "form.emptyExperience": "Aún no se ha añadido experiencia profesional.",
+  "form.emptyEducation": "Aún no se ha añadido formación académica.",
+  "form.emptySkills": "Aún no se han añadido habilidades.",
+  "form.emptyLanguages": "Aún no se han añadido idiomas.",
+  "form.outputSettings": "Ajustes de salida",
+  "template.minimalistDesc": "Sencillo y claro",
+  "template.modernDesc": "Contemporáneo con un enfoque claro",
+  "template.europeanDesc": "Formato europeo clásico",
+

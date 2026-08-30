@@ -187,4 +187,16 @@ export const it = {
   "seo.home.description": "Crea in pochi minuti un curriculum e una lettera di presentazione professionali e ATS-friendly. Pagamento unico, nessun abbonamento.",
   "seo.editor.title": "Crea curriculum — OnlineLebenslauf",
   "seo.editor.description": "Crea il tuo curriculum professionale con anteprima in tempo reale ed esportazione in PDF."
-} as const;
+} as const;  "form.personalTitle": "Dati personali",
+  "form.photoLabel": "Foto del profilo",
+  "form.entry": "Voce",
+  "form.period": "Periodo",
+  "form.emptyExperience": "Nessuna esperienza lavorativa ancora aggiunta.",
+  "form.emptyEducation": "Nessuna formazione ancora aggiunta.",
+  "form.emptySkills": "Nessuna competenza ancora aggiunta.",
+  "form.emptyLanguages": "Nessuna lingua ancora aggiunta.",
+  "form.outputSettings": "Impostazioni di output",
+  "template.minimalistDesc": "Semplice e chiaro",
+  "template.modernDesc": "Contemporaneo con un focus preciso",
+  "template.europeanDesc": "Formato classico europeo",
+

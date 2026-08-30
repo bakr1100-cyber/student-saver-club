@@ -187,4 +187,16 @@ export const en = {
   "seo.home.description": "Create a professional, ATS-friendly resume and cover letter in minutes. One-time payment, no subscription.",
   "seo.editor.title": "Create Resume — OnlineLebenslauf",
   "seo.editor.description": "Build your professional resume with live preview and PDF export."
-} as const;
+} as const;  "form.personalTitle": "Personal Information",
+  "form.photoLabel": "Profile Photo",
+  "form.entry": "Entry",
+  "form.period": "Period",
+  "form.emptyExperience": "No work experience added yet.",
+  "form.emptyEducation": "No education added yet.",
+  "form.emptySkills": "No skills added yet.",
+  "form.emptyLanguages": "No languages added yet.",
+  "form.outputSettings": "Output Settings",
+  "template.minimalistDesc": "Simple and clear",
+  "template.modernDesc": "Contemporary with a clear focus",
+  "template.europeanDesc": "Classic European format",
+

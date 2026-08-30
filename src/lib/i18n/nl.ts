@@ -187,4 +187,16 @@ export const nl = {
   "seo.home.description": "Maak binnen enkele minuten een professioneel, ATS-vriendelijk CV en motivatiebrief. Eenmalige betaling, geen abonnement.",
   "seo.editor.title": "CV maken — OnlineLebenslauf",
   "seo.editor.description": "Maak je professionele CV met live voorbeeld en PDF-export."
-} as const;
+} as const;  "form.personalTitle": "Persoonlijke gegevens",
+  "form.photoLabel": "Profielfoto",
+  "form.entry": "Vermelding",
+  "form.period": "Periode",
+  "form.emptyExperience": "Nog geen werkervaring toegevoegd.",
+  "form.emptyEducation": "Nog geen opleiding toegevoegd.",
+  "form.emptySkills": "Nog geen vaardigheden toegevoegd.",
+  "form.emptyLanguages": "Nog geen talen toegevoegd.",
+  "form.outputSettings": "Uitvoerinstellingen",
+  "template.minimalistDesc": "Eenvoudig en overzichtelijk",
+  "template.modernDesc": "Eigentijds met een duidelijke focus",
+  "template.europeanDesc": "Klassiek Europees formaat",
+
