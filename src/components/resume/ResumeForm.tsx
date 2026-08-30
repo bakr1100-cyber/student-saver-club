@@ -38,6 +38,54 @@ function isRTL(text: string) {
 
 export function ResumeForm({ data, onChange }: ResumeFormProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [company, setCompany] = useState("");
+  const [jobDescription, setJobDescription] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const createCoverLetter = useServerFn(generateCoverLetter);
+
+  const handleGenerateCoverLetter = async () => {
+    if (!company.trim()) {
+      toast.error("Bitte gib das Unternehmen an.");
+      return;
+    }
+    setIsGenerating(true);
+    try {
+      const result = await createCoverLetter({
+        data: {
+          resume: {
+            personalDetails: {
+              fullName: data.personalDetails.fullName || "",
+              email: data.personalDetails.email || "",
+              phone: data.personalDetails.phone || "",
+              location: data.personalDetails.location || "",
+            },
+            settings: {
+              language: data.settings.language,
+              targetPosition: data.settings.targetPosition || "",
+            },
+            workExperience: data.workExperience.map((w) => ({
+              position: w.position,
+              company: w.company,
+              description: w.description,
+            })),
+            education: data.education.map((e) => ({
+              degree: e.degree,
+              institution: e.institution,
+            })),
+          },
+          company: company.trim(),
+          jobDescription: jobDescription.trim() || undefined,
+        },
+      });
+      onChange((prev) => ({ ...prev, coverLetter: result.text }));
+      toast.success("Anschreiben erstellt");
+    } catch {
+      toast.error("Anschreiben konnte nicht erstellt werden. Bitte erneut versuchen.");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
 
   const updatePersonal = (field: keyof ResumeData["personalDetails"], value: string) => {
     onChange((prev) => ({
