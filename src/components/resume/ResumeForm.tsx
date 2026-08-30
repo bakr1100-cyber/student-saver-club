@@ -8,13 +8,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import { Plus, Trash2, Upload, Loader2, Sparkles } from "lucide-react";
 import type { ResumeData, Education, WorkExperience, Skill, Language } from "@/lib/resume-types";
-import { languageLevelLabels, templateLabels } from "@/lib/resume-types";
+import { useI18n } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, localeFlags, localeNames, type Locale } from "@/lib/i18n/locales";
 import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
 import { AIAssistButton } from "./AIAssistButton";
 import { VoiceInputButton } from "./VoiceInputButton";
 import { PremiumUpsellDialog } from "./PremiumUpsellDialog";
-import { useEntitlements, PREMIUM_PRICE } from "@/lib/entitlements";
+import { useEntitlements } from "@/lib/entitlements";
 
 
 import { useServerFn } from "@tanstack/react-start";
@@ -26,20 +27,25 @@ interface ResumeFormProps {
   onChange: (updater: (prev: ResumeData) => ResumeData) => void;
 }
 
-const steps = [
-  { id: "personal", label: "Persönlich" },
-  { id: "experience", label: "Berufserfahrung" },
-  { id: "education", label: "Ausbildung" },
-  { id: "skills", label: "Fähigkeiten" },
-  { id: "cover-letter", label: "Anschreiben" },
-  { id: "settings", label: "Einstellungen" },
-];
+const stepIds = ["personal", "experience", "education", "skills", "cover-letter", "settings"] as const;
+
+const stepLabelKeys = {
+  personal: "tab.personal",
+  experience: "tab.experience",
+  education: "tab.education",
+  skills: "tab.skills",
+  "cover-letter": "tab.coverLetter",
+  settings: "tab.settings",
+} as const;
+
+const levelKeys = ["native", "fluent", "advanced", "intermediate", "beginner"] as const;
 
 function isRTL(text: string) {
   return /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(text);
 }
 
 export function ResumeForm({ data, onChange }: ResumeFormProps) {
+  const { t } = useI18n();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [company, setCompany] = useState("");
   const [jobDescription, setJobDescription] = useState("");
@@ -54,7 +60,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
       return;
     }
     if (!company.trim()) {
-      toast.error("Bitte gib das Unternehmen an.");
+      toast.error(t("cover.needCompany"));
       return;
     }
     setIsGenerating(true);
@@ -88,9 +94,9 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
         },
       });
       onChange((prev) => ({ ...prev, coverLetter: result.text }));
-      toast.success("Anschreiben erstellt");
+      toast.success(t("cover.created"));
     } catch {
-      toast.error("Anschreiben konnte nicht erstellt werden. Bitte erneut versuchen.");
+      toast.error(t("cover.failed"));
     } finally {
       setIsGenerating(false);
     }
@@ -199,13 +205,13 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
       <Tabs defaultValue="personal" className="w-full">
         <div className="sticky top-[57px] z-40 border-b border-border bg-background/95 px-4 py-2 backdrop-blur-md">
           <TabsList className="grid h-auto w-full grid-cols-3 gap-1 bg-transparent p-0 sm:grid-cols-6">
-            {steps.map((step) => (
+            {stepIds.map((step) => (
               <TabsTrigger
-                key={step.id}
-                value={step.id}
+                key={step}
+                value={step}
                 className="truncate rounded-md px-1 py-1.5 text-[10px] font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground sm:text-xs"
               >
-                {step.label}
+                {t(stepLabelKeys[step])}
               </TabsTrigger>
             ))}
           </TabsList>
@@ -215,7 +221,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
           <TabsContent value="personal" className="mt-0 space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Persönliche Daten</CardTitle>
+                <CardTitle>{t("form.personalTitle")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center gap-4">
@@ -230,7 +236,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                     )}
                   </div>
                   <div className="flex-1">
-                    <Label htmlFor="photo-upload">Profilfoto</Label>
+                    <Label htmlFor="photo-upload">{t("form.photoLabel")}</Label>
                     <Input
                       id="photo-upload"
                       ref={fileInputRef}
@@ -244,7 +250,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2 sm:col-span-2">
-                    <Label htmlFor="fullName">Vollständiger Name</Label>
+                    <Label htmlFor="fullName">{t("form.fullName")}</Label>
                     <Input
                       id="fullName"
                       value={data.personalDetails.fullName}
@@ -253,7 +259,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="dateOfBirth">Geburtsdatum</Label>
+                    <Label htmlFor="dateOfBirth">{t("form.dateOfBirth")}</Label>
                     <Input
                       id="dateOfBirth"
                       type="date"
@@ -262,7 +268,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="location">Ort</Label>
+                    <Label htmlFor="location">{t("form.location")}</Label>
                     <Input
                       id="location"
                       value={data.personalDetails.location}
@@ -271,7 +277,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">E-Mail</Label>
+                    <Label htmlFor="email">{t("form.email")}</Label>
                     <Input
                       id="email"
                       type="email"
@@ -281,7 +287,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="phone">Telefon</Label>
+                    <Label htmlFor="phone">{t("form.phone")}</Label>
                     <Input
                       id="phone"
                       value={data.personalDetails.phone}
@@ -310,13 +316,13 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="summary">Profil / Zusammenfassung</Label>
+                  <Label htmlFor="summary">{t("form.summary")}</Label>
                   <div className="relative">
                     <Textarea
                       id="summary"
                       value={data.personalDetails.summary}
                       onChange={(e) => updatePersonal("summary", e.target.value)}
-                      placeholder="Kurze Zusammenfassung deiner Erfahrung und Stärken"
+                      placeholder={t("form.summaryPlaceholder")}
                       rows={4}
                       className={cn("pb-10", isRTL(data.personalDetails.summary || "") && "text-right")}
                       dir={isRTL(data.personalDetails.summary || "") ? "rtl" : "ltr"}
@@ -333,7 +339,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                     <AIAssistButton
                       text={data.personalDetails.summary || ""}
                       language={data.settings.language}
-                      context="Profil / Zusammenfassung im Lebenslauf"
+                      context={t("form.summaryContext")}
                       onResult={(text) => updatePersonal("summary", text)}
                     />
                   </div>
@@ -345,22 +351,22 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
 
           <TabsContent value="experience" className="mt-0 space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Berufserfahrung</h3>
+              <h3 className="text-lg font-semibold">{t("tab.experience")}</h3>
               <Button size="sm" onClick={addWorkExperience}>
-                <Plus className="mr-1.5 h-4 w-4" /> Hinzufügen
+                <Plus className="mr-1.5 h-4 w-4" /> {t("form.add")}
               </Button>
             </div>
             {data.workExperience.length === 0 && (
               <Card className="border-dashed">
                 <CardContent className="py-8 text-center text-sm text-muted-foreground">
-                  Noch keine Berufserfahrung hinzugefügt.
+                  {t("form.emptyExperience")}
                 </CardContent>
               </Card>
             )}
             {data.workExperience.map((item, index) => (
               <Card key={item.id}>
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-base">Eintrag {index + 1}</CardTitle>
+                  <CardTitle className="text-base">{`${t("form.entry")} ${index + 1}`}</CardTitle>
                   <Button variant="ghost" size="icon" onClick={() => removeWorkExperience(item.id)}>
                     <Trash2 className="h-4 w-4 text-destructive" />
                   </Button>
@@ -368,7 +374,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                 <CardContent className="space-y-4">
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
-                      <Label>Position</Label>
+                      <Label>{t("form.position")}</Label>
                       <Input
                         value={item.position}
                         onChange={(e) => updateWorkExperience(item.id, "position", e.target.value)}
@@ -376,7 +382,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Unternehmen</Label>
+                      <Label>{t("form.company")}</Label>
                       <Input
                         value={item.company}
                         onChange={(e) => updateWorkExperience(item.id, "company", e.target.value)}
@@ -384,7 +390,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Ort</Label>
+                      <Label>{t("form.location")}</Label>
                       <Input
                         value={item.location}
                         onChange={(e) => updateWorkExperience(item.id, "location", e.target.value)}
@@ -392,7 +398,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Zeitraum</Label>
+                      <Label>{t("form.period")}</Label>
                       <div className="flex items-center gap-2">
                         <Input
                           value={item.startDate}
@@ -409,12 +415,12 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label>Beschreibung</Label>
+                    <Label>{t("form.description")}</Label>
                     <div className="relative">
                       <Textarea
                         value={item.description}
                         onChange={(e) => updateWorkExperience(item.id, "description", e.target.value)}
-                        placeholder="Beschreibe deine Aufgaben und Erfolge"
+                        placeholder={t("form.experienceDescPlaceholder")}
                         rows={4}
                         className={cn("pb-10", isRTL(item.description) && "text-right")}
                         dir={isRTL(item.description) ? "rtl" : "ltr"}
@@ -432,7 +438,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                       <AIAssistButton
                         text={item.description}
                         language={data.settings.language}
-                        context={`Berufserfahrung: ${item.position || "Position"} bei ${item.company || "Unternehmen"}`}
+                        context={`${t("tab.experience")}: ${item.position} – ${item.company}`}
                         onResult={(text) => updateWorkExperience(item.id, "description", text)}
                       />
 
@@ -445,22 +451,22 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
 
           <TabsContent value="education" className="mt-0 space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Ausbildung</h3>
+              <h3 className="text-lg font-semibold">{t("tab.education")}</h3>
               <Button size="sm" onClick={addEducation}>
-                <Plus className="mr-1.5 h-4 w-4" /> Hinzufügen
+                <Plus className="mr-1.5 h-4 w-4" /> {t("form.add")}
               </Button>
             </div>
             {data.education.length === 0 && (
               <Card className="border-dashed">
                 <CardContent className="py-8 text-center text-sm text-muted-foreground">
-                  Noch keine Ausbildung hinzugefügt.
+                  {t("form.emptyEducation")}
                 </CardContent>
               </Card>
             )}
             {data.education.map((item, index) => (
               <Card key={item.id}>
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-base">Eintrag {index + 1}</CardTitle>
+                  <CardTitle className="text-base">{`${t("form.entry")} ${index + 1}`}</CardTitle>
                   <Button variant="ghost" size="icon" onClick={() => removeEducation(item.id)}>
                     <Trash2 className="h-4 w-4 text-destructive" />
                   </Button>
@@ -468,7 +474,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                 <CardContent className="space-y-4">
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
-                      <Label>Abschluss / Titel</Label>
+                      <Label>{t("form.degree")}</Label>
                       <Input
                         value={item.degree}
                         onChange={(e) => updateEducation(item.id, "degree", e.target.value)}
@@ -476,7 +482,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Institution</Label>
+                      <Label>{t("form.institution")}</Label>
                       <Input
                         value={item.institution}
                         onChange={(e) => updateEducation(item.id, "institution", e.target.value)}
@@ -484,7 +490,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Ort</Label>
+                      <Label>{t("form.location")}</Label>
                       <Input
                         value={item.location}
                         onChange={(e) => updateEducation(item.id, "location", e.target.value)}
@@ -492,7 +498,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Zeitraum</Label>
+                      <Label>{t("form.period")}</Label>
                       <div className="flex items-center gap-2">
                         <Input
                           value={item.startDate}
@@ -509,12 +515,12 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label>Beschreibung</Label>
+                    <Label>{t("form.description")}</Label>
                     <div className="relative">
                       <Textarea
                         value={item.description}
                         onChange={(e) => updateEducation(item.id, "description", e.target.value)}
-                        placeholder="Schwerpunkte, Noten, Projekte"
+                        placeholder={t("form.educationDescPlaceholder")}
                         rows={3}
                         className={cn("pb-10", isRTL(item.description) && "text-right")}
                         dir={isRTL(item.description) ? "rtl" : "ltr"}
@@ -522,7 +528,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                       <AIAssistButton
                         text={item.description}
                         language={data.settings.language}
-                        context={`Ausbildung: ${item.degree || "Abschluss"} an ${item.institution || "Institution"}`}
+                        context={`${t("tab.education")}: ${item.degree} – ${item.institution}`}
                         onResult={(text) => updateEducation(item.id, "description", text)}
                       />
                     </div>
@@ -536,14 +542,14 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
           <TabsContent value="skills" className="mt-0 space-y-6">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle>Fähigkeiten</CardTitle>
+                <CardTitle>{t("form.skills")}</CardTitle>
                 <Button size="sm" onClick={addSkill}>
                   <Plus className="mr-1.5 h-4 w-4" />
                 </Button>
               </CardHeader>
               <CardContent className="space-y-3">
                 {data.skills.length === 0 && (
-                  <p className="text-sm text-muted-foreground">Noch keine Fähigkeiten hinzugefügt.</p>
+                  <p className="text-sm text-muted-foreground">{t("form.emptySkills")}</p>
                 )}
                 {data.skills.map((item) => (
                   <div key={item.id} className="flex items-center gap-2">
@@ -558,9 +564,9 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {Object.entries(languageLevelLabels).map(([key, labels]) => (
+                        {levelKeys.map((key) => (
                           <SelectItem key={key} value={key}>
-                            {labels.de}
+                            {t(`level.${key}`)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -575,14 +581,14 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle>Sprachen</CardTitle>
+                <CardTitle>{t("form.languages")}</CardTitle>
                 <Button size="sm" onClick={addLanguage}>
                   <Plus className="mr-1.5 h-4 w-4" />
                 </Button>
               </CardHeader>
               <CardContent className="space-y-3">
                 {data.languages.length === 0 && (
-                  <p className="text-sm text-muted-foreground">Noch keine Sprachen hinzugefügt.</p>
+                  <p className="text-sm text-muted-foreground">{t("form.emptyLanguages")}</p>
                 )}
                 {data.languages.map((item) => (
                   <div key={item.id} className="flex items-center gap-2">
@@ -597,9 +603,9 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {Object.entries(languageLevelLabels).map(([key, labels]) => (
+                        {levelKeys.map((key) => (
                           <SelectItem key={key} value={key}>
-                            {labels.de}
+                            {t(`level.${key}`)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -616,55 +622,53 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
           <TabsContent value="cover-letter" className="mt-0 space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Anschreiben mit KI erstellen</CardTitle>
+                <CardTitle>{t("cover.title")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {!premium && (
                   <p className="rounded-md border border-dashed bg-muted/40 p-3 text-sm text-muted-foreground">
-                    Das KI-Anschreiben und die Spracheingabe gehören zum Premium-Paket (einmalig{" "}
-                    {PREMIUM_PRICE}). Editor, Vorlagen, KI-Textoptimierung und PDF-Download sind im
-                    Standard-Paket enthalten.
+                    {t("cover.premiumHint")}
                   </p>
                 )}
 
                 <div className="space-y-2">
-                  <Label htmlFor="company">Unternehmen</Label>
+                  <Label htmlFor="company">{t("cover.company")}</Label>
                   <Input
                     id="company"
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
-                    placeholder="z. B. Muster GmbH"
+                    placeholder={t("cover.companyPlaceholder")}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="jobDescription">Stellenbeschreibung (optional)</Label>
+                  <Label htmlFor="jobDescription">{t("cover.jobDescription")}</Label>
                   <Textarea
                     id="jobDescription"
                     value={jobDescription}
                     onChange={(e) => setJobDescription(e.target.value)}
-                    placeholder="Füge hier die Stellenanzeige ein, damit das Anschreiben besser passt."
+                    placeholder={t("cover.jobDescriptionPlaceholder")}
                     rows={5}
                   />
                 </div>
                 <Button className="w-full" onClick={handleGenerateCoverLetter} disabled={isGenerating}>
                   {isGenerating ? (
                     <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Anschreiben wird erstellt…
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> {t("cover.generating")}
                     </>
                   ) : (
                     <>
-                      <Sparkles className="mr-2 h-4 w-4" /> Anschreiben generieren
+                      <Sparkles className="mr-2 h-4 w-4" /> {t("cover.generate")}
                     </>
                   )}
                 </Button>
                 <Separator />
                 <div className="space-y-2">
-                  <Label htmlFor="coverLetter">Anschreiben (bearbeitbar)</Label>
+                  <Label htmlFor="coverLetter">{t("cover.editable")}</Label>
                   <Textarea
                     id="coverLetter"
                     value={data.coverLetter || ""}
                     onChange={(e) => onChange((prev) => ({ ...prev, coverLetter: e.target.value }))}
-                    placeholder="Dein Anschreiben erscheint hier nach der Generierung."
+                    placeholder={t("cover.placeholder")}
                     rows={16}
                   />
                 </div>
@@ -676,28 +680,31 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
 
             <Card>
               <CardHeader>
-                <CardTitle>Ausgabe-Einstellungen</CardTitle>
+                <CardTitle>{t("form.outputSettings")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label>Zielsprache</Label>
+                  <Label>{t("form.outputLanguage")}</Label>
                   <Select
                     value={data.settings.language}
                     onValueChange={(v) =>
-                      onChange((prev) => ({ ...prev, settings: { ...prev.settings, language: v as "de" | "en" } }))
+                      onChange((prev) => ({ ...prev, settings: { ...prev.settings, language: v as Locale } }))
                     }
                   >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="de">Deutsch</SelectItem>
-                      <SelectItem value="en">Englisch</SelectItem>
+                      {SUPPORTED_LOCALES.map((code) => (
+                        <SelectItem key={code} value={code}>
+                          {localeFlags[code]} {localeNames[code]}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Vorlage</Label>
+                  <Label>{t("form.template")}</Label>
                   <div className="grid gap-3 sm:grid-cols-3">
                     {(["minimalist", "modern", "european"] as const).map((template) => (
                       <button
@@ -711,11 +718,11 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                           data.settings.template === template && "border-primary bg-primary/5"
                         )}
                       >
-                        <div className="text-sm font-medium text-foreground">{templateLabels[template]?.de ?? template}</div>
+                        <div className="text-sm font-medium text-foreground">{t(`template.${template}`)}</div>
                         <div className="mt-1 text-xs text-muted-foreground">
-                          {template === "minimalist" && "Schlicht und übersichtlich"}
-                          {template === "modern" && "Zeitgemäß mit klarem Fokus"}
-                          {template === "european" && "Klassisches europäisches Format"}
+                          {template === "minimalist" && t("template.minimalistDesc")}
+                          {template === "modern" && t("template.modernDesc")}
+                          {template === "european" && t("template.europeanDesc")}
                         </div>
                       </button>
                     ))}
@@ -723,7 +730,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                 </div>
                 <Separator />
                 <div className="space-y-2">
-                  <Label htmlFor="targetPosition">Zielposition (optional)</Label>
+                  <Label htmlFor="targetPosition">{t("form.targetPosition")}</Label>
                   <Input
                     id="targetPosition"
                     value={data.settings.targetPosition || ""}
@@ -733,7 +740,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                         settings: { ...prev.settings, targetPosition: e.target.value },
                       }))
                     }
-                    placeholder="z. B. Projektmanager"
+                    placeholder={t("form.targetPositionPlaceholder")}
                   />
                 </div>
               </CardContent>
