@@ -94,8 +94,21 @@ function TemplateThumb({ accent, sidebar }: { accent: string; sidebar?: boolean 
   );
 }
 
+const companies = ["Siemens", "SAP", "Allianz", "Bosch", "Deutsche Bahn", "Lufthansa"];
+
+const trustedBy: Record<string, string> = {
+  de: "Nutzer wurden eingestellt bei",
+  en: "Our users got hired at",
+  fr: "Nos utilisateurs ont été recrutés chez",
+  ar: "تم تعيين مستخدمينا في",
+  es: "Nuestros usuarios fueron contratados en",
+  it: "I nostri utenti sono stati assunti da",
+  nl: "Onze gebruikers werden aangenomen bij",
+};
+
 function LandingPage() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+
 
   const stats = [
     { value: t("stats.1.value"), label: t("stats.1.label") },
