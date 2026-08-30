@@ -21,6 +21,7 @@ import { useEntitlements } from "@/lib/entitlements";
 import { useServerFn } from "@tanstack/react-start";
 import { generateCoverLetter } from "@/lib/resume-ai.functions";
 import { aiErrorKey } from "@/lib/ai-errors";
+import { hasAiSession } from "@/lib/ai-auth";
 import { toast } from "sonner";
 
 interface ResumeFormProps {
@@ -77,6 +78,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
     setIsGenerating(true);
 
     try {
+      if (!(await hasAiSession())) throw new Error("AI_AUTH_REQUIRED");
       const result = await createCoverLetter({
         data: {
           resume: {
