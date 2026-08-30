@@ -26,13 +26,13 @@ import heroImage from "@/assets/hero-professional.png";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "OnlineLebenslauf — ATS-geprüfte Lebensläufe mit KI" },
+      { title: "myCVonline.com — ATS-geprüfte Lebensläufe mit KI" },
       {
         name: "description",
         content:
           "Erstelle in Minuten einen professionellen, ATS-freundlichen Lebenslauf und Anschreiben in 7 Sprachen. Einmalzahlung, kein Abo.",
       },
-      { property: "og:title", content: "OnlineLebenslauf — ATS-geprüfte Lebensläufe mit KI" },
+      { property: "og:title", content: "myCVonline.com — ATS-geprüfte Lebensläufe mit KI" },
       {
         property: "og:description",
         content:

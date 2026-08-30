@@ -80,9 +80,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "OnlineLebenslauf — KI-Lebenslauf Generator" },
+      { title: "myCVonline.com — KI-Lebenslauf Generator" },
       { name: "description", content: "Erstelle professionelle Lebensläufe und Anschreiben mit KI. ATS-optimiert, mehrsprachig, sofort als PDF." },
-      { name: "author", content: "OnlineLebenslauf" },
+      { name: "author", content: "myCVonline.com" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
