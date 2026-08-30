@@ -251,16 +251,34 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
 
                 <div className="space-y-2">
                   <Label htmlFor="summary">Profil / Zusammenfassung</Label>
-                  <Textarea
-                    id="summary"
-                    value={data.personalDetails.summary}
-                    onChange={(e) => updatePersonal("summary", e.target.value)}
-                    placeholder="Kurze Zusammenfassung deiner Erfahrung und Stärken"
-                    rows={4}
-                    className={cn(isRTL(data.personalDetails.summary || "") && "text-right")}
-                    dir={isRTL(data.personalDetails.summary || "") ? "rtl" : "ltr"}
-                  />
+                  <div className="relative">
+                    <Textarea
+                      id="summary"
+                      value={data.personalDetails.summary}
+                      onChange={(e) => updatePersonal("summary", e.target.value)}
+                      placeholder="Kurze Zusammenfassung deiner Erfahrung und Stärken"
+                      rows={4}
+                      className={cn("pb-10", isRTL(data.personalDetails.summary || "") && "text-right")}
+                      dir={isRTL(data.personalDetails.summary || "") ? "rtl" : "ltr"}
+                    />
+                    <VoiceInputButton
+                      className="absolute right-10 bottom-2"
+                      onTranscript={(text) =>
+                        updatePersonal(
+                          "summary",
+                          data.personalDetails.summary ? `${data.personalDetails.summary} ${text}` : text
+                        )
+                      }
+                    />
+                    <AIAssistButton
+                      text={data.personalDetails.summary || ""}
+                      language={data.settings.language}
+                      context="Profil / Zusammenfassung im Lebenslauf"
+                      onResult={(text) => updatePersonal("summary", text)}
+                    />
+                  </div>
                 </div>
+
               </CardContent>
             </Card>
           </TabsContent>
