@@ -4,6 +4,8 @@ import { AtsCheckerPanel } from "./AtsCheckerPanel";
 import { CustomizePanel } from "./CustomizePanel";
 import { ExtraSectionsDialog } from "./ExtraSectionsDialog";
 import { PDFExportButton } from "./PDFExportButton";
+import { ShareLinkButton } from "./ShareLinkButton";
+
 import { Button } from "@/components/ui/button";
 import { calculateResumeScore } from "@/lib/resume-score";
 import type { ResumeData } from "@/lib/resume-types";
