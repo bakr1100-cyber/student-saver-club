@@ -9,13 +9,14 @@ import { Globe } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { SUPPORTED_LOCALES, localeFlags, localeNames } from "@/lib/i18n/locales";
 
-export function LanguageSwitcher() {
+export function LanguageSwitcher({ className }: { className?: string }) {
   const { locale, setLocale, t } = useI18n();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" aria-label={t("nav.language")}>
+        <Button variant="ghost" size="sm" aria-label={t("nav.language")} className={className}>
+
           <Globe className="h-4 w-4" />
           <span className="ml-1.5 hidden sm:inline">{localeNames[locale]}</span>
           <span className="ml-1.5 sm:hidden">{locale.toUpperCase()}</span>
