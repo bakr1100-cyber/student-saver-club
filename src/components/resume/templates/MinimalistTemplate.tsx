@@ -1,4 +1,5 @@
 import type { ResumeData } from "@/lib/resume-types";
+import { ExtraSectionsBlock } from "./ExtraSectionsBlock";
 import { translate, type TranslationKey } from "@/lib/i18n";
 import { dateLocales } from "@/lib/i18n/locales";
 import { Mail, Phone, MapPin, Globe, Linkedin, Calendar } from "lucide-react";
@@ -162,6 +163,8 @@ export function MinimalistTemplate({ data }: TemplateProps) {
           </section>
         )}
       </div>
+
+      <ExtraSectionsBlock data={data} />
     </div>
   );
 }
