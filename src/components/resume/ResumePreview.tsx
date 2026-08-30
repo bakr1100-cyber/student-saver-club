@@ -4,6 +4,7 @@ import { ModernTemplate } from "./templates/ModernTemplate";
 import { EuropeanTemplate } from "./templates/EuropeanTemplate";
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/lib/i18n";
+import { isRtl } from "@/lib/i18n/locales";
 
 interface ResumePreviewProps {
   data: ResumeData;
@@ -26,6 +27,7 @@ export function ResumePreview({ data }: ResumePreviewProps) {
       </div>
       <div
         id="resume-preview-container"
+        dir={isRtl(data.settings.language) ? "rtl" : "ltr"}
         className={cn(
           "relative min-h-[297mm] w-full overflow-hidden bg-white p-[20mm] shadow-sm",
           "print:shadow-none print:p-0"
