@@ -27,20 +27,23 @@ export function TokyoTemplate({ data }: TemplateProps) {
       {/* Watercolour washes */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-[24mm] -top-[24mm] h-[80mm] w-[95mm] opacity-70 blur-2xl"
+        className="pointer-events-none absolute -left-[22mm] -top-[26mm] h-[95mm] w-[105mm] blur-[18px]"
         style={{
+          opacity: 0.95,
           background:
-            "radial-gradient(60% 60% at 40% 40%, var(--resume-accent-soft) 0%, transparent 72%), radial-gradient(45% 45% at 70% 65%, var(--resume-accent-soft) 0%, transparent 70%)",
+            "radial-gradient(55% 55% at 38% 42%, var(--resume-accent-soft) 0%, transparent 74%), radial-gradient(40% 48% at 68% 62%, var(--resume-accent-soft) 0%, transparent 72%), radial-gradient(35% 30% at 25% 72%, var(--resume-accent-soft) 0%, transparent 76%)",
         }}
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-[26mm] -right-[24mm] h-[70mm] w-[80mm] opacity-70 blur-2xl"
+        className="pointer-events-none absolute -bottom-[28mm] -right-[22mm] h-[85mm] w-[95mm] blur-[18px]"
         style={{
+          opacity: 0.95,
           background:
-            "radial-gradient(60% 60% at 60% 60%, var(--resume-accent-soft) 0%, transparent 72%)",
+            "radial-gradient(55% 55% at 62% 58%, var(--resume-accent-soft) 0%, transparent 74%), radial-gradient(38% 42% at 35% 78%, var(--resume-accent-soft) 0%, transparent 74%)",
         }}
       />
+
 
       <div className="relative">
         {/* Header */}
