@@ -14,19 +14,26 @@ import {
 import { Check, Download, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import type { ResumeData } from "@/lib/resume-types";
+import { useAuth } from "@/hooks/useAuth";
+import { AuthPanel } from "@/components/auth/AuthPanel";
+
 
 interface PDFExportButtonProps {
   data: ResumeData;
+  label?: string;
 }
 
 export const RESUME_PRICE = STANDARD_PRICE;
 
-export function PDFExportButton({ data }: PDFExportButtonProps) {
+export function PDFExportButton({ data, label }: PDFExportButtonProps) {
   const { t } = useI18n();
   const [isExporting, setIsExporting] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [showAuth, setShowAuth] = useState(false);
   const { standard: isUnlocked, unlock } = useEntitlements();
+  const { isAuthenticated } = useAuth();
   void unlock;
+
 
 
   const exportPdf = async () => {
@@ -59,6 +66,10 @@ export function PDFExportButton({ data }: PDFExportButtonProps) {
   };
 
   const handleClick = () => {
+    if (!isAuthenticated) {
+      setShowAuth(true);
+      return;
+    }
     if (isUnlocked) {
       void exportPdf();
       return;
@@ -74,8 +85,22 @@ export function PDFExportButton({ data }: PDFExportButtonProps) {
         ) : (
           <Download className="mr-1.5 h-4 w-4" />
         )}
-        {t("editor.download")}
+        {label ?? t("editor.download")}
       </Button>
+
+      <Dialog open={showAuth} onOpenChange={setShowAuth}>
+        <DialogContent className="overflow-hidden p-0 sm:max-w-3xl">
+          <AuthPanel
+            redirectPath="/editor"
+            onAuthenticated={() => {
+              setShowAuth(false);
+              setShowPaywall(!isUnlocked);
+            }}
+          />
+        </DialogContent>
+      </Dialog>
+
+
 
 
       <Dialog open={showPaywall} onOpenChange={setShowPaywall}>

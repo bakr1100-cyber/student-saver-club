@@ -25,9 +25,15 @@ import { toast } from "sonner";
 interface ResumeFormProps {
   data: ResumeData;
   onChange: (updater: (prev: ResumeData) => ResumeData) => void;
+  /** When provided, the form is driven by an external wizard and hides its own tab bar. */
+  step?: string;
 }
 
-const stepIds = ["personal", "experience", "education", "skills", "cover-letter", "settings"] as const;
+export const resumeStepIds = ["personal", "experience", "education", "skills", "cover-letter", "settings"] as const;
+export type ResumeStepId = (typeof resumeStepIds)[number];
+
+const stepIds = resumeStepIds;
+
 
 const stepLabelKeys = {
   personal: "tab.personal",
@@ -44,7 +50,10 @@ function isRTL(text: string) {
   return /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(text);
 }
 
-export function ResumeForm({ data, onChange }: ResumeFormProps) {
+export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormProps) {
+  const [internalStep, setInternalStep] = useState<string>("personal");
+  const activeStep = controlledStep ?? internalStep;
+
   const { t } = useI18n();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [company, setCompany] = useState("");
@@ -202,24 +211,27 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
 
   return (
     <div className="h-full overflow-y-auto">
-      <Tabs defaultValue="personal" className="w-full">
-        <div className="sticky top-[57px] z-40 border-b border-border bg-background/95 px-4 py-2 backdrop-blur-md">
-          <TabsList className="grid h-auto w-full grid-cols-3 gap-1 bg-transparent p-0 sm:grid-cols-6">
-            {stepIds.map((step) => (
-              <TabsTrigger
-                key={step}
-                value={step}
-                className="truncate rounded-md px-1 py-1.5 text-[10px] font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground sm:text-xs"
-              >
-                {t(stepLabelKeys[step])}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </div>
+      <Tabs value={activeStep} onValueChange={setInternalStep} className="w-full">
+        {!controlledStep && (
+          <div className="sticky top-[57px] z-40 border-b border-border bg-background/95 px-4 py-2 backdrop-blur-md">
+            <TabsList className="grid h-auto w-full grid-cols-3 gap-1 bg-transparent p-0 sm:grid-cols-6">
+              {stepIds.map((step) => (
+                <TabsTrigger
+                  key={step}
+                  value={step}
+                  className="truncate rounded-md px-1 py-1.5 text-[10px] font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground sm:text-xs"
+                >
+                  {t(stepLabelKeys[step])}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </div>
+        )}
 
-        <div className="p-4 pb-24 lg:p-6">
+        <div className="p-4 pb-8 lg:p-6">
           <TabsContent value="personal" className="mt-0 space-y-6">
             <Card>
+
               <CardHeader>
                 <CardTitle>{t("form.personalTitle")}</CardTitle>
               </CardHeader>
