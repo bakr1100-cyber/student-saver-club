@@ -93,7 +93,7 @@ export function ResumeImportDialog({
     setBusy(true);
     try {
       const result = await parse({ data: { text: text.trim(), language: data.settings.language } });
-      onImport(toResumeData((result.data ?? {}) as ParsedShape, data));
+      onImport(toResumeData((result.data ?? {}) as unknown as ParsedShape, data));
       toast.success(t("import.success"));
       setOpen(false);
       setText("");

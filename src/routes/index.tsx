@@ -60,7 +60,7 @@ const templateCards: Array<{
   { id: "t8", category: "Minimalist", accent: "bg-brand-dark" },
 ];
 
-function TemplateThumb({ accent, sidebar }: { accent: string; sidebar?: boolean }) {
+function TemplateThumb({ accent, sidebar }: { accent: string; sidebar?: boolean | undefined }) {
   return (
     <div className="aspect-[3/4] w-full overflow-hidden rounded-lg border border-border bg-background shadow-sm">
       <div className="flex h-full">
