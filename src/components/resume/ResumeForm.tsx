@@ -6,12 +6,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Plus, Trash2, Upload, Mic } from "lucide-react";
+import { Plus, Trash2, Upload, Loader2, Sparkles } from "lucide-react";
 import type { ResumeData, Education, WorkExperience, Skill, Language } from "@/lib/resume-types";
 import { languageLevelLabels, templateLabels } from "@/lib/resume-types";
 import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
 import { AIAssistButton } from "./AIAssistButton";
+import { VoiceInputButton } from "./VoiceInputButton";
+
 import { useServerFn } from "@tanstack/react-start";
 import { generateCoverLetter } from "@/lib/resume-ai.functions";
 import { toast } from "sonner";
@@ -36,6 +38,54 @@ function isRTL(text: string) {
 
 export function ResumeForm({ data, onChange }: ResumeFormProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [company, setCompany] = useState("");
+  const [jobDescription, setJobDescription] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const createCoverLetter = useServerFn(generateCoverLetter);
+
+  const handleGenerateCoverLetter = async () => {
+    if (!company.trim()) {
+      toast.error("Bitte gib das Unternehmen an.");
+      return;
+    }
+    setIsGenerating(true);
+    try {
+      const result = await createCoverLetter({
+        data: {
+          resume: {
+            personalDetails: {
+              fullName: data.personalDetails.fullName || "",
+              email: data.personalDetails.email || "",
+              phone: data.personalDetails.phone || "",
+              location: data.personalDetails.location || "",
+            },
+            settings: {
+              language: data.settings.language,
+              targetPosition: data.settings.targetPosition || "",
+            },
+            workExperience: data.workExperience.map((w) => ({
+              position: w.position,
+              company: w.company,
+              description: w.description,
+            })),
+            education: data.education.map((e) => ({
+              degree: e.degree,
+              institution: e.institution,
+            })),
+          },
+          company: company.trim(),
+          jobDescription: jobDescription.trim() || undefined,
+        },
+      });
+      onChange((prev) => ({ ...prev, coverLetter: result.text }));
+      toast.success("Anschreiben erstellt");
+    } catch {
+      toast.error("Anschreiben konnte nicht erstellt werden. Bitte erneut versuchen.");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
 
   const updatePersonal = (field: keyof ResumeData["personalDetails"], value: string) => {
     onChange((prev) => ({
@@ -138,7 +188,7 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
     <div className="h-full overflow-y-auto">
       <Tabs defaultValue="personal" className="w-full">
         <div className="sticky top-[57px] z-40 border-b border-border bg-background/95 px-4 py-2 backdrop-blur-md">
-          <TabsList className="grid h-auto w-full grid-cols-5 gap-1 bg-transparent p-0">
+          <TabsList className="grid h-auto w-full grid-cols-3 gap-1 bg-transparent p-0 sm:grid-cols-6">
             {steps.map((step) => (
               <TabsTrigger
                 key={step.id}
@@ -251,16 +301,34 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
 
                 <div className="space-y-2">
                   <Label htmlFor="summary">Profil / Zusammenfassung</Label>
-                  <Textarea
-                    id="summary"
-                    value={data.personalDetails.summary}
-                    onChange={(e) => updatePersonal("summary", e.target.value)}
-                    placeholder="Kurze Zusammenfassung deiner Erfahrung und Stärken"
-                    rows={4}
-                    className={cn(isRTL(data.personalDetails.summary || "") && "text-right")}
-                    dir={isRTL(data.personalDetails.summary || "") ? "rtl" : "ltr"}
-                  />
+                  <div className="relative">
+                    <Textarea
+                      id="summary"
+                      value={data.personalDetails.summary}
+                      onChange={(e) => updatePersonal("summary", e.target.value)}
+                      placeholder="Kurze Zusammenfassung deiner Erfahrung und Stärken"
+                      rows={4}
+                      className={cn("pb-10", isRTL(data.personalDetails.summary || "") && "text-right")}
+                      dir={isRTL(data.personalDetails.summary || "") ? "rtl" : "ltr"}
+                    />
+                    <VoiceInputButton
+                      className="absolute right-10 bottom-2"
+                      onTranscript={(text) =>
+                        updatePersonal(
+                          "summary",
+                          data.personalDetails.summary ? `${data.personalDetails.summary} ${text}` : text
+                        )
+                      }
+                    />
+                    <AIAssistButton
+                      text={data.personalDetails.summary || ""}
+                      language={data.settings.language}
+                      context="Profil / Zusammenfassung im Lebenslauf"
+                      onResult={(text) => updatePersonal("summary", text)}
+                    />
+                  </div>
                 </div>
+
               </CardContent>
             </Card>
           </TabsContent>
@@ -338,19 +406,26 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                         onChange={(e) => updateWorkExperience(item.id, "description", e.target.value)}
                         placeholder="Beschreibe deine Aufgaben und Erfolge"
                         rows={4}
-                        className={cn(isRTL(item.description) && "text-right")}
+                        className={cn("pb-10", isRTL(item.description) && "text-right")}
                         dir={isRTL(item.description) ? "rtl" : "ltr"}
                       />
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="absolute right-2 bottom-2 h-8 w-8"
-                        type="button"
-                        title="Spracheingabe (bald verfügbar)"
-                        disabled
-                      >
-                        <Mic className="h-4 w-4 text-muted-foreground" />
-                      </Button>
+                      <VoiceInputButton
+                        className="absolute right-10 bottom-2"
+                        onTranscript={(text) =>
+                          updateWorkExperience(
+                            item.id,
+                            "description",
+                            item.description ? `${item.description} ${text}` : text
+                          )
+                        }
+                      />
+                      <AIAssistButton
+                        text={item.description}
+                        language={data.settings.language}
+                        context={`Berufserfahrung: ${item.position || "Position"} bei ${item.company || "Unternehmen"}`}
+                        onResult={(text) => updateWorkExperience(item.id, "description", text)}
+                      />
+
                     </div>
                   </div>
                 </CardContent>
@@ -425,14 +500,23 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
                   </div>
                   <div className="space-y-2">
                     <Label>Beschreibung</Label>
-                    <Textarea
-                      value={item.description}
-                      onChange={(e) => updateEducation(item.id, "description", e.target.value)}
-                      placeholder="Schwerpunkte, Noten, Projekte"
-                      rows={3}
-                      className={cn(isRTL(item.description) && "text-right")}
-                      dir={isRTL(item.description) ? "rtl" : "ltr"}
-                    />
+                    <div className="relative">
+                      <Textarea
+                        value={item.description}
+                        onChange={(e) => updateEducation(item.id, "description", e.target.value)}
+                        placeholder="Schwerpunkte, Noten, Projekte"
+                        rows={3}
+                        className={cn("pb-10", isRTL(item.description) && "text-right")}
+                        dir={isRTL(item.description) ? "rtl" : "ltr"}
+                      />
+                      <AIAssistButton
+                        text={item.description}
+                        language={data.settings.language}
+                        context={`Ausbildung: ${item.degree || "Abschluss"} an ${item.institution || "Institution"}`}
+                        onResult={(text) => updateEducation(item.id, "description", text)}
+                      />
+                    </div>
+
                   </div>
                 </CardContent>
               </Card>
@@ -519,7 +603,59 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
             </Card>
           </TabsContent>
 
+          <TabsContent value="cover-letter" className="mt-0 space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Anschreiben mit KI erstellen</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="company">Unternehmen</Label>
+                  <Input
+                    id="company"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    placeholder="z. B. Muster GmbH"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="jobDescription">Stellenbeschreibung (optional)</Label>
+                  <Textarea
+                    id="jobDescription"
+                    value={jobDescription}
+                    onChange={(e) => setJobDescription(e.target.value)}
+                    placeholder="Füge hier die Stellenanzeige ein, damit das Anschreiben besser passt."
+                    rows={5}
+                  />
+                </div>
+                <Button className="w-full" onClick={handleGenerateCoverLetter} disabled={isGenerating}>
+                  {isGenerating ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Anschreiben wird erstellt…
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="mr-2 h-4 w-4" /> Anschreiben generieren
+                    </>
+                  )}
+                </Button>
+                <Separator />
+                <div className="space-y-2">
+                  <Label htmlFor="coverLetter">Anschreiben (bearbeitbar)</Label>
+                  <Textarea
+                    id="coverLetter"
+                    value={data.coverLetter || ""}
+                    onChange={(e) => onChange((prev) => ({ ...prev, coverLetter: e.target.value }))}
+                    placeholder="Dein Anschreiben erscheint hier nach der Generierung."
+                    rows={16}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           <TabsContent value="settings" className="mt-0 space-y-6">
+
             <Card>
               <CardHeader>
                 <CardTitle>Ausgabe-Einstellungen</CardTitle>
