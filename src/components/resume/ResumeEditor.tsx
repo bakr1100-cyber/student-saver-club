@@ -4,6 +4,8 @@ import { ResumePreview } from "./ResumePreview";
 import { PDFExportButton } from "./PDFExportButton";
 import { ResumeScoreCard } from "./ResumeScoreCard";
 import { ResumeImportDialog } from "./ResumeImportDialog";
+import { ExtraSectionsDialog } from "./ExtraSectionsDialog";
+
 import { defaultResumeData, type ResumeData } from "@/lib/resume-types";
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
