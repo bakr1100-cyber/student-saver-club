@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { ResumeForm } from "./ResumeForm";
 import { ResumePreview } from "./ResumePreview";
 import { PDFExportButton } from "./PDFExportButton";
+import { ShareLinkButton } from "./ShareLinkButton";
+
 import { ResumeScoreCard } from "./ResumeScoreCard";
 import { ResumeImportDialog } from "./ResumeImportDialog";
 import { ExtraSectionsDialog } from "./ExtraSectionsDialog";
