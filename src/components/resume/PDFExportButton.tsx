@@ -17,16 +17,20 @@ import type { ResumeData } from "@/lib/resume-types";
 
 interface PDFExportButtonProps {
   data: ResumeData;
+  label?: string;
 }
 
 export const RESUME_PRICE = STANDARD_PRICE;
 
-export function PDFExportButton({ data }: PDFExportButtonProps) {
+export function PDFExportButton({ data, label }: PDFExportButtonProps) {
   const { t } = useI18n();
   const [isExporting, setIsExporting] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [showAuth, setShowAuth] = useState(false);
   const { standard: isUnlocked, unlock } = useEntitlements();
+  const { isAuthenticated } = useAuth();
   void unlock;
+
 
 
   const exportPdf = async () => {
