@@ -14,6 +14,7 @@ import { Loader2, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { aiErrorKey } from "@/lib/ai-errors";
 import { hasAiSession } from "@/lib/ai-auth";
+import { trackAiAction } from "@/lib/ai-cost";
 import { useServerFn } from "@tanstack/react-start";
 import { parseResumeText } from "@/lib/resume-ai.functions";
 import { useI18n } from "@/lib/i18n";
@@ -96,6 +97,7 @@ export function ResumeImportDialog({
     try {
       if (!(await hasAiSession())) throw new Error("AI_AUTH_REQUIRED");
       const result = await parse({ data: { text: text.trim(), language: data.settings.language } });
+      trackAiAction("parseResume");
       const parsed = JSON.parse(result.json) as ParsedShape;
       onImport(toResumeData(parsed, data));
       toast.success(t("import.success"));

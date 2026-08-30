@@ -6,6 +6,7 @@ import { ExtraSectionsDialog } from "./ExtraSectionsDialog";
 import { PDFExportButton } from "./PDFExportButton";
 import { ShareLinkButton } from "./ShareLinkButton";
 import { AiUsageBadge } from "./AiUsageBadge";
+import { AiCostSummary } from "./AiCostSummary";
 
 import { Button } from "@/components/ui/button";
 import { calculateResumeScore } from "@/lib/resume-score";
@@ -70,6 +71,7 @@ export function ResumeWorkspace({ data, onChange, onEditStep }: Props) {
             <PDFExportButton data={data} label={t("ws.download")} />
             <ShareLinkButton data={data} className="mt-2 w-full" />
             <AiUsageBadge className="mt-3" />
+            <AiCostSummary className="mt-3" />
 
           </div>
         </div>

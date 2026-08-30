@@ -22,6 +22,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { generateCoverLetter } from "@/lib/resume-ai.functions";
 import { aiErrorKey } from "@/lib/ai-errors";
 import { hasAiSession } from "@/lib/ai-auth";
+import { trackAiAction } from "@/lib/ai-cost";
 import { toast } from "sonner";
 
 interface ResumeFormProps {
@@ -106,6 +107,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
           jobDescription: jobDescription.trim() || undefined,
         },
       });
+      trackAiAction("coverLetter");
       onChange((prev) => ({ ...prev, coverLetter: result.text }));
       toast.success(t("cover.created"));
     } catch (error) {

@@ -13,6 +13,7 @@ import { optimizeText, translateText } from "@/lib/resume-ai.functions";
 import { toast } from "sonner";
 import { aiErrorKey } from "@/lib/ai-errors";
 import { hasAiSession } from "@/lib/ai-auth";
+import { trackAiAction } from "@/lib/ai-cost";
 import { useI18n } from "@/lib/i18n";
 import { SUPPORTED_LOCALES, localeFlags, localeNames, type Locale } from "@/lib/i18n/locales";
 
@@ -36,6 +37,7 @@ export function AIAssistButton({ text, language, context, onResult, disabled }: 
     try {
       if (!(await hasAiSession())) throw new Error("AI_AUTH_REQUIRED");
       const result = await optimize({ data: { text, language, context } });
+      trackAiAction("optimize");
       onResult(result.text);
       toast.success(t("ai.optimized"));
     } catch (error) {
@@ -51,6 +53,7 @@ export function AIAssistButton({ text, language, context, onResult, disabled }: 
     try {
       if (!(await hasAiSession())) throw new Error("AI_AUTH_REQUIRED");
       const result = await translate({ data: { text, targetLanguage } });
+      trackAiAction("translate");
       onResult(result.text);
       toast.success(t("ai.translated"));
     } catch (error) {

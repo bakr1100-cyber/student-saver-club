@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import type { ResumeData } from "@/lib/resume-types";
 import { useAuth } from "@/hooks/useAuth";
 import { AuthPanel } from "@/components/auth/AuthPanel";
+import { AiCostSummary } from "./AiCostSummary";
 
 
 interface PDFExportButtonProps {
@@ -30,6 +31,7 @@ export function PDFExportButton({ data, label }: PDFExportButtonProps) {
   const [isExporting, setIsExporting] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
+  const [showCost, setShowCost] = useState(false);
   const { standard: isUnlocked, unlock } = useEntitlements();
   const { isAuthenticated } = useAuth();
   void unlock;
@@ -71,7 +73,7 @@ export function PDFExportButton({ data, label }: PDFExportButtonProps) {
       return;
     }
     if (isUnlocked) {
-      void exportPdf();
+      setShowCost(true);
       return;
     }
     setShowPaywall(true);
@@ -102,6 +104,29 @@ export function PDFExportButton({ data, label }: PDFExportButtonProps) {
 
 
 
+
+      <Dialog open={showCost} onOpenChange={setShowCost}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t("aiCost.confirmTitle")}</DialogTitle>
+            <DialogDescription>{t("aiCost.confirmDesc")}</DialogDescription>
+          </DialogHeader>
+
+          <AiCostSummary />
+
+          <DialogFooter>
+            <Button
+              className="w-full"
+              onClick={() => {
+                setShowCost(false);
+                void exportPdf();
+              }}
+            >
+              {t("aiCost.confirmCta")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={showPaywall} onOpenChange={setShowPaywall}>
         <DialogContent className="sm:max-w-md">
