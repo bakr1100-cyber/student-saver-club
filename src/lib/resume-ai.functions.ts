@@ -35,3 +35,10 @@ export const transcribeAudio = createServerFn({ method: "POST" })
     const { runTranscribe } = await import("./resume-ai.server");
     return runTranscribe(data);
   });
+
+export const parseResumeText = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => ParseResumeInput.parse(input))
+  .handler(async ({ data }) => {
+    const { runParseResume } = await import("./resume-ai.server");
+    return runParseResume(data);
+  });
