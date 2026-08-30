@@ -42,13 +42,20 @@ export function ResumeForm({ data, onChange }: ResumeFormProps) {
   const [jobDescription, setJobDescription] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const createCoverLetter = useServerFn(generateCoverLetter);
+  const { premium } = useEntitlements();
+  const [showUpsell, setShowUpsell] = useState(false);
 
   const handleGenerateCoverLetter = async () => {
+    if (!premium) {
+      setShowUpsell(true);
+      return;
+    }
     if (!company.trim()) {
       toast.error("Bitte gib das Unternehmen an.");
       return;
     }
     setIsGenerating(true);
+
     try {
       const result = await createCoverLetter({
         data: {
