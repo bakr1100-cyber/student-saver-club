@@ -169,7 +169,9 @@ export function ResumeEditor() {
                 {showPreview ? t("editor.previewOff") : t("editor.previewOn")}
               </span>
             </Button>
+            <ShareLinkButton data={data} className="hidden h-9 px-3 text-sm sm:inline-flex" />
             <PDFExportButton data={data} />
+
           </div>
         </div>
         {/* Progress bar */}
