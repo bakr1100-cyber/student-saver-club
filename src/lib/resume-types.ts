@@ -50,6 +50,12 @@ export interface ResumeSettings {
   targetPosition?: string;
 }
 
+export interface ExtraSection {
+  id: string;
+  title: string;
+  content: string;
+}
+
 export interface ResumeData {
   personalDetails: PersonalDetails;
   education: Education[];
@@ -58,6 +64,7 @@ export interface ResumeData {
   languages: Language[];
   settings: ResumeSettings;
   coverLetter?: string;
+  extraSections?: ExtraSection[];
 }
 
 export const defaultResumeData: ResumeData = {
@@ -79,7 +86,21 @@ export const defaultResumeData: ResumeData = {
     language: "de",
     template: "modern",
   },
+  extraSections: [],
 };
+
+export const extraSectionPresets = [
+  "projects",
+  "certificates",
+  "awards",
+  "volunteering",
+  "publications",
+  "hobbies",
+  "references",
+  "custom",
+] as const;
+
+export type ExtraSectionPreset = (typeof extraSectionPresets)[number];
 
 export const languageLabels: Record<string, { de: string; en: string }> = {
   de: { de: "Deutsch", en: "German" },
