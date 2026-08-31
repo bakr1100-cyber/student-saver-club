@@ -23,7 +23,7 @@ import { useResumeAutoSave } from "@/hooks/useResumeAutoSave";
 import { toast } from "sonner";
 
 const STORAGE_KEY = "resume-draft-v1";
-const LANGUAGE_INTRO_KEY = "resume-language-intro-v2";
+const LANGUAGE_INTRO_KEY = "resume-language-intro-v3";
 const INTERFACE_LANGUAGE_KEY = "interface-language-selected-v1";
 
 /** The five wizard steps; the final step combines fine-tuning and the cover letter. */
