@@ -24,6 +24,7 @@ import { toast } from "sonner";
 
 const STORAGE_KEY = "resume-draft-v1";
 const LANGUAGE_INTRO_KEY = "resume-language-intro-v2";
+const INTERFACE_LANGUAGE_KEY = "interface-language-selected-v1";
 
 /** The five wizard steps; the final step combines fine-tuning and the cover letter. */
 const wizardSteps: { id: WizardStepId; forms: string[] }[] = [
@@ -87,7 +88,13 @@ export function ResumeEditor() {
   useEffect(() => {
     if (!isLoaded || typeof window === "undefined") return;
     if (localStorage.getItem(LANGUAGE_INTRO_KEY) === "done") return;
-
+    const savedInterfaceLanguage = localStorage.getItem(INTERFACE_LANGUAGE_KEY) as Locale | null;
+    if (savedInterfaceLanguage && SUPPORTED_LOCALES.includes(savedInterfaceLanguage)) {
+      setSelectedInterfaceLanguage(savedInterfaceLanguage);
+      setSelectedLanguage(data.settings.language || savedInterfaceLanguage);
+      setLanguageIntroStage("resume");
+      return;
+    }
     setSelectedInterfaceLanguage(locale);
     setLanguageIntroStage("interface");
   }, [isLoaded]);
@@ -113,6 +120,7 @@ export function ResumeEditor() {
 
   const confirmInterfaceLanguage = useCallback(() => {
     setLocale(selectedInterfaceLanguage);
+    if (typeof window !== "undefined") localStorage.setItem(INTERFACE_LANGUAGE_KEY, selectedInterfaceLanguage);
     const hasExistingDraft = typeof window !== "undefined" && Boolean(localStorage.getItem(STORAGE_KEY));
     setSelectedLanguage(hasExistingDraft ? data.settings.language : selectedInterfaceLanguage);
     setLanguageIntroStage("resume");

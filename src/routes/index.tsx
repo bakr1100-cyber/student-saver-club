@@ -50,22 +50,22 @@ export const Route = createFileRoute("/")({
 
 type TemplateCategory = "Minimalist" | "Modern" | "Creative";
 
-const LANGUAGE_INTRO_KEY = "resume-language-intro-v2";
+const INTERFACE_LANGUAGE_KEY = "interface-language-selected-v1";
 
 function LanguageIntroGate({ onComplete }: { onComplete: () => void }) {
   const { t, locale, setLocale } = useI18n();
-  const [stage, setStage] = useState<"interface" | "resume">("interface");
+  const [stage] = useState<"interface" | "resume">("interface");
   const [interfaceLanguage, setInterfaceLanguage] = useState<Locale>(locale);
   const [resumeLanguage, setResumeLanguage] = useState<Locale>(locale);
   const isInterface = stage === "interface";
   const selected = isInterface ? interfaceLanguage : resumeLanguage;
   const continueFlow = () => {
     if (isInterface) {
-      setResumeLanguage(interfaceLanguage);
-      setStage("resume");
+      localStorage.setItem(INTERFACE_LANGUAGE_KEY, interfaceLanguage);
+      onComplete();
       return;
     }
-    localStorage.setItem(LANGUAGE_INTRO_KEY, "done");
+    localStorage.setItem(INTERFACE_LANGUAGE_KEY, interfaceLanguage);
     onComplete();
   };
 
@@ -157,7 +157,7 @@ function LandingPage() {
   const { t, locale } = useI18n();
   const [showLanguageIntro, setShowLanguageIntro] = useState(false);
   useEffect(() => {
-    setShowLanguageIntro(localStorage.getItem(LANGUAGE_INTRO_KEY) !== "done");
+    setShowLanguageIntro(localStorage.getItem(INTERFACE_LANGUAGE_KEY) !== "done");
   }, []);
 
 
