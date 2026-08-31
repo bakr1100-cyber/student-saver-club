@@ -292,6 +292,12 @@ export function ResumeEditor() {
               )}
             </span>
             <LanguageSwitcher />
+            <Link
+              to="/auth"
+              className="hidden rounded-lg border border-border px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:border-brand hover:text-brand sm:inline-flex"
+            >
+              {t("nav.signIn")}
+            </Link>
             <ResumeImportDialog data={data} onImport={(next) => setData(next)} />
             <ShareLinkButton data={data} className="hidden h-9 px-3 text-sm sm:inline-flex" />
             <PDFExportButton data={data} />
