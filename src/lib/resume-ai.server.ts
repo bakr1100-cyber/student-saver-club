@@ -116,6 +116,26 @@ ${data.text}`,
   return { json: raw };
 }
 
+export async function runExperienceSuggestions(data: { position: string; company?: string; language: Locale }) {
+  const target = languageName(data.language);
+  const result = await generateText({
+    model: gateway()(MODEL),
+    system:
+      "You are a career coach helping a CV writer. Generate realistic, role-specific bullet point ideas. " +
+      "Return valid JSON only in the shape {\"suggestions\":[\"...\"]}. Return exactly 4 concise suggestions in the requested language. " +
+      "Do not invent the candidate's employers, dates, metrics or achievements; phrase ideas so the user can confirm and adapt them.",
+    prompt: `Role: ${data.position}\nCompany (optional context): ${data.company || "not provided"}\nLanguage: ${target}\n\nGenerate four distinct CV bullet-point ideas covering typical responsibilities, tools or outcomes for this role.`,
+  });
+  const raw = result.text.trim().replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
+  try {
+    const parsed = JSON.parse(raw) as { suggestions?: unknown };
+    if (!Array.isArray(parsed.suggestions) || parsed.suggestions.length < 1) throw new Error("invalid suggestions");
+    return { suggestions: parsed.suggestions.filter((item): item is string => typeof item === "string").slice(0, 4) };
+  } catch {
+    throw new Error("Experience suggestions failed");
+  }
+}
+
 
 // --- quota / abuse protection -------------------------------------------------
 

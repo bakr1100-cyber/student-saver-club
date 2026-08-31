@@ -503,6 +503,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                     <RoleSuggestionPanel
                       position={item.position}
                       company={item.company}
+                      language={data.settings.language}
                       onApply={(text) => updateWorkExperience(item.id, "description", text)}
                     />
                     <div className="relative">

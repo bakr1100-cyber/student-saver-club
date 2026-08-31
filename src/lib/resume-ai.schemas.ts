@@ -52,5 +52,11 @@ export const ParseResumeInput = z.object({
   language: z.enum(SUPPORTED_LOCALES),
 });
 
+export const ExperienceSuggestionsInput = z.object({
+  position: z.string().min(2),
+  company: z.string().optional(),
+  language: z.enum(SUPPORTED_LOCALES),
+});
+
 export type CoverLetterPayload = z.infer<typeof CoverLetterInput>;
 
