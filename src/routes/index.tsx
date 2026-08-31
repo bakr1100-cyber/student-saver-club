@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,6 +9,7 @@ import {
   Sparkles,
   Shield,
   Globe,
+  Globe2,
   Download,
   Mic,
   TrendingUp,
@@ -17,6 +19,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, localeFlags, localeNames, type Locale } from "@/lib/i18n/locales";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { motion } from "motion/react";
 import { Reveal, Stagger, StaggerItem, HoverLift, AnimatedCounter } from "@/components/motion/Reveal";
@@ -46,6 +49,50 @@ export const Route = createFileRoute("/")({
 });
 
 type TemplateCategory = "Minimalist" | "Modern" | "Creative";
+
+const LANGUAGE_INTRO_KEY = "resume-language-intro-v2";
+
+function LanguageIntroGate({ onComplete }: { onComplete: () => void }) {
+  const { t, locale, setLocale } = useI18n();
+  const [stage, setStage] = useState<"interface" | "resume">("interface");
+  const [interfaceLanguage, setInterfaceLanguage] = useState<Locale>(locale);
+  const [resumeLanguage, setResumeLanguage] = useState<Locale>(locale);
+  const isInterface = stage === "interface";
+  const selected = isInterface ? interfaceLanguage : resumeLanguage;
+  const continueFlow = () => {
+    if (isInterface) {
+      setResumeLanguage(interfaceLanguage);
+      setStage("resume");
+      return;
+    }
+    localStorage.setItem(LANGUAGE_INTRO_KEY, "done");
+    onComplete();
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-navy/85 p-4 backdrop-blur-md" role="dialog" aria-modal="true">
+      <div className="relative w-full max-w-2xl overflow-hidden rounded-[2rem] border border-white/20 bg-background shadow-[0_32px_100px_rgba(0,0,0,0.45)]">
+        <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-brand via-trust to-cta" />
+        <div className="relative p-6 sm:p-9">
+          <div className="flex items-start gap-4">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand text-primary-foreground shadow-lg shadow-brand/25"><Globe2 className="h-6 w-6" /></div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand">myCVonline.com · {isInterface ? t("languageIntro.step1") : t("languageIntro.step2")}</p>
+              <h2 className="mt-2 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">{isInterface ? t("languageIntro.interfaceTitle") : t("languageIntro.resumeTitle")}</h2>
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">{isInterface ? t("languageIntro.interfaceDescription") : t("languageIntro.resumeDescription")}</p>
+            </div>
+          </div>
+          <div className="mt-7 rounded-2xl border border-brand/20 bg-brand/5 p-4 text-sm text-foreground/80"><strong className="text-foreground">{t("languageIntro.important")}</strong>{" "}{isInterface ? t("languageIntro.interfaceNote") : t("languageIntro.resumeNote")}</div>
+          <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {SUPPORTED_LOCALES.map((code) => <button key={code} type="button" aria-pressed={selected === code} onClick={() => { if (isInterface) { setInterfaceLanguage(code); setLocale(code); } else setResumeLanguage(code); }} className={`relative flex min-h-16 items-center gap-2 rounded-xl border px-3 py-3 text-left transition-all ${selected === code ? "border-brand bg-brand text-primary-foreground shadow-md shadow-brand/20" : "border-border bg-background text-foreground hover:border-brand/50 hover:bg-brand/5"}`}><span className="text-xl" aria-hidden="true">{localeFlags[code]}</span><span className="text-sm font-semibold">{localeNames[code]}</span>{selected === code && <CheckCircle className="absolute right-2 top-2 h-3.5 w-3.5" />}</button>)}
+          </div>
+          <Button size="lg" onClick={continueFlow} className="mt-7 w-full bg-cta font-bold uppercase tracking-wide text-cta-foreground shadow-lg shadow-cta/20 hover:bg-cta/90">{isInterface ? t("languageIntro.interfaceContinue") : t("languageIntro.resumeContinue")}<ArrowRight className="ml-2 h-4 w-4" /></Button>
+          <p className="mt-3 text-center text-xs text-muted-foreground">{isInterface ? t("languageIntro.interfaceLater") : t("languageIntro.resumeLater")}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const templateCards: Array<{
   id: string;
@@ -108,6 +155,10 @@ const trustedBy: Record<string, string> = {
 
 function LandingPage() {
   const { t, locale } = useI18n();
+  const [showLanguageIntro, setShowLanguageIntro] = useState(false);
+  useEffect(() => {
+    setShowLanguageIntro(localStorage.getItem(LANGUAGE_INTRO_KEY) !== "done");
+  }, []);
 
 
   const stats = [
@@ -160,6 +211,8 @@ function LandingPage() {
     { name: "Maximilian Weber", role: t("testimonials.2.role"), city: "Hamburg", text: t("testimonials.2.text") },
     { name: "Jan Klasen", role: t("testimonials.3.role"), city: "Köln", text: t("testimonials.3.text") },
   ];
+
+  if (showLanguageIntro) return <LanguageIntroGate onComplete={() => setShowLanguageIntro(false)} />;
 
   return (
     <div className="min-h-screen bg-background">
