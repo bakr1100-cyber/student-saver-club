@@ -170,9 +170,6 @@ export function TokyoTemplate({ data }: TemplateProps) {
                         {item.company}
                         {item.location && ` | ${item.location}`}
                       </p>
-                      {item.description && (
-                        <p className="mt-1.5 whitespace-pre-wrap text-[10pt] leading-[1.5] text-slate-700">{item.description}</p>
-                      )}
                     </div>
                   ))}
                 </div>

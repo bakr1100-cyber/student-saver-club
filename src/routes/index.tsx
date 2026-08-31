@@ -291,12 +291,12 @@ function LandingPage() {
           </div>
 
           <motion.div
-            className="relative mx-auto w-full max-w-md lg:max-w-none"
+            className="relative mx-auto aspect-[1.02/1] w-full max-w-md lg:max-w-none"
             initial={{ opacity: 0, scale: 0.94 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div aria-hidden className="absolute inset-x-6 bottom-6 top-10 rounded-[2.5rem] bg-brand/25" />
+            <div aria-hidden className="absolute inset-x-6 bottom-6 top-10 rounded-[2.5rem] bg-brand/20" />
             <motion.div
               aria-hidden
               className="absolute right-6 top-4 h-20 w-20 rounded-2xl bg-sand/80"
@@ -309,15 +309,113 @@ function LandingPage() {
               animate={{ y: [0, 12, 0] }}
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
             />
+
+            {/* A recognisable finished CV behind the person: outcome first, without competing with the hero. */}
+            <motion.div
+              aria-hidden="true"
+              className="absolute right-[1%] top-[2%] z-[5] w-[59%] origin-bottom-left rotate-[7deg] overflow-hidden rounded-[0.8rem] border border-white/70 bg-[#fffdf9] shadow-[0_28px_65px_rgba(0,0,0,0.35)]"
+              animate={{ y: [0, -5, 0], rotate: [7, 6.4, 7] }}
+              transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-white/0 via-white/10 to-brand/5" />
+              <div className="relative aspect-[210/297] p-[7%] text-navy/85">
+                <div className="absolute inset-x-0 top-0 h-[21%] bg-[linear-gradient(125deg,#fee4dc_0%,#f7b8a7_45%,#ec927e_100%)] opacity-90" />
+                <div className="relative flex items-start justify-between gap-3">
+                  <div>
+                    <div className="text-[clamp(9px,1.45vw,17px)] font-bold tracking-tight text-navy">
+                      Daniel Weber
+                    </div>
+                    <div className="mt-0.5 text-[clamp(4px,0.55vw,7px)] font-semibold uppercase tracking-[0.15em] text-navy/65">
+                      Digital Marketing Manager
+                    </div>
+                  </div>
+                  <div className="rounded-full border border-white/80 bg-white/75 px-2 py-1 text-[clamp(4px,0.5vw,6px)] font-bold uppercase tracking-[0.2em] text-[#b85d4c] shadow-sm">
+                    Tokyo
+                  </div>
+                </div>
+
+                <div className="relative mt-[12%] grid grid-cols-[34%_1fr] gap-[7%]">
+                  <div className="space-y-[12%] border-r border-navy/10 pr-[10%]">
+                    <div>
+                      <div className="text-[clamp(4px,0.55vw,7px)] font-bold uppercase tracking-[0.16em] text-[#bd6655]">Kontakt</div>
+                      <div className="mt-2 space-y-1 text-[clamp(3px,0.45vw,6px)] leading-relaxed text-navy/65">
+                        <div>Berlin, Deutschland</div>
+                        <div>daniel@beispiel.de</div>
+                        <div>+49 170 1234567</div>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[clamp(4px,0.55vw,7px)] font-bold uppercase tracking-[0.16em] text-[#bd6655]">Fähigkeiten</div>
+                      <div className="mt-2 space-y-1.5">
+                        {[82, 70, 88, 64].map((width, index) => (
+                          <div key={width}>
+                            <div className="mb-0.5 h-[3px] w-[65%] rounded bg-navy/25" />
+                            <div className="h-[2px] rounded bg-navy/10"><div className="h-full rounded bg-[#cf7867]" style={{ width: `${width}%` }} /></div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[clamp(4px,0.55vw,7px)] font-bold uppercase tracking-[0.16em] text-[#bd6655]">Sprachen</div>
+                      <div className="mt-2 space-y-1 text-[clamp(3px,0.45vw,6px)] text-navy/65">
+                        <div>Deutsch · Muttersprache</div>
+                        <div>Englisch · Fließend</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-[clamp(4px,0.55vw,7px)] font-bold uppercase tracking-[0.16em] text-[#bd6655]">Profil</div>
+                    <div className="mt-2 space-y-1">
+                      <div className="h-[3px] w-full rounded bg-navy/16" />
+                      <div className="h-[3px] w-[92%] rounded bg-navy/16" />
+                      <div className="h-[3px] w-[75%] rounded bg-navy/16" />
+                    </div>
+
+                    <div className="mt-[11%] text-[clamp(4px,0.55vw,7px)] font-bold uppercase tracking-[0.16em] text-[#bd6655]">Berufserfahrung</div>
+                    <div className="mt-2 space-y-[9%] border-l border-[#d88a79]/45 pl-[7%]">
+                      {[
+                        ["Senior Marketing Manager", "2021 — heute"],
+                        ["Marketing Specialist", "2017 — 2021"],
+                      ].map(([role, dates]) => (
+                        <div key={role} className="relative">
+                          <div className="absolute -left-[8.6%] top-1 h-1.5 w-1.5 rounded-full bg-[#cf7867] ring-2 ring-[#fffdf9]" />
+                          <div className="flex items-start justify-between gap-1 text-[clamp(3px,0.47vw,6px)] font-bold text-navy/80">
+                            <span>{role}</span><span className="shrink-0 font-medium text-navy/45">{dates}</span>
+                          </div>
+                          <div className="mt-1 space-y-1">
+                            <div className="h-[3px] w-full rounded bg-navy/12" />
+                            <div className="h-[3px] w-[86%] rounded bg-navy/12" />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="mt-[11%] text-[clamp(4px,0.55vw,7px)] font-bold uppercase tracking-[0.16em] text-[#bd6655]">Ausbildung</div>
+                    <div className="mt-2 text-[clamp(3px,0.47vw,6px)] font-semibold text-navy/70">M.A. Marketing Management</div>
+                    <div className="mt-1 h-[3px] w-[76%] rounded bg-navy/12" />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
             <motion.img
               src={heroImage}
               alt={t("hero.title")}
               width={1024}
               height={1024}
-              className="relative z-10 w-full drop-shadow-2xl"
+              className="absolute inset-x-0 bottom-0 z-10 mx-auto w-[88%] drop-shadow-2xl"
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
             />
+            <motion.div
+              className="absolute right-[2%] top-[12%] z-20 rounded-full border border-white/20 bg-navy/80 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-white shadow-xl backdrop-blur-md"
+              initial={{ opacity: 0, x: 12 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 1.05, duration: 0.6 }}
+            >
+              <span className="mr-1.5 text-trust">✓</span> ATS-geprüft
+            </motion.div>
             <motion.div
               className="absolute bottom-8 left-0 z-20 rounded-xl border border-border bg-background px-4 py-3 shadow-lg"
               initial={{ opacity: 0, y: 20 }}

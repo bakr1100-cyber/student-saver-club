@@ -50,6 +50,58 @@ const stepLabelKeys = {
 
 const levelKeys = ["native", "fluent", "advanced", "intermediate", "beginner"] as const;
 
+const fieldExamples: Record<Locale, Record<string, string>> = {
+  de: {
+    fullName: "z. B. Sara Benali", location: "z. B. Köln, Deutschland", email: "z. B. sara.benali@email.de",
+    phone: "z. B. +49 170 1234567", linkedin: "z. B. linkedin.com/in/sara-benali", website: "z. B. sarabenali.de",
+    position: "z. B. Projektmanagerin", company: "z. B. Deloitte", workLocation: "z. B. Düsseldorf",
+    degree: "z. B. Bachelor Wirtschaftsinformatik", institution: "z. B. Universität zu Köln", educationLocation: "z. B. Köln",
+    skill: "z. B. Projektmanagement", language: "z. B. Deutsch",
+  },
+  en: {
+    fullName: "e.g. Sara Benali", location: "e.g. London, United Kingdom", email: "e.g. sara.benali@email.com",
+    phone: "e.g. +44 7700 900123", linkedin: "e.g. linkedin.com/in/sara-benali", website: "e.g. sarabenali.com",
+    position: "e.g. Project Manager", company: "e.g. Deloitte", workLocation: "e.g. London",
+    degree: "e.g. BSc Business Information Systems", institution: "e.g. University of London", educationLocation: "e.g. London",
+    skill: "e.g. Project management", language: "e.g. English",
+  },
+  fr: {
+    fullName: "ex. Sara Benali", location: "ex. Paris, France", email: "ex. sara.benali@email.fr",
+    phone: "ex. +33 6 12 34 56 78", linkedin: "ex. linkedin.com/in/sara-benali", website: "ex. sarabenali.fr",
+    position: "ex. Cheffe de projet", company: "ex. Deloitte", workLocation: "ex. Paris",
+    degree: "ex. Licence en informatique de gestion", institution: "ex. Université Paris Cité", educationLocation: "ex. Paris",
+    skill: "ex. Gestion de projet", language: "ex. Français",
+  },
+  ar: {
+    fullName: "مثال: سارة بنعلي", location: "مثال: الدار البيضاء، المغرب", email: "مثال: sara.benali@email.ma",
+    phone: "مثال: +212 6 12 34 56 78", linkedin: "مثال: linkedin.com/in/sara-benali", website: "مثال: sarabenali.ma",
+    position: "مثال: مديرة مشاريع", company: "مثال: Deloitte", workLocation: "مثال: الدار البيضاء",
+    degree: "مثال: إجازة في نظم المعلومات", institution: "مثال: جامعة الحسن الثاني", educationLocation: "مثال: الدار البيضاء",
+    skill: "مثال: إدارة المشاريع", language: "مثال: العربية",
+  },
+  es: {
+    fullName: "p. ej. Sara Benali", location: "p. ej. Madrid, España", email: "p. ej. sara.benali@email.es",
+    phone: "p. ej. +34 612 345 678", linkedin: "p. ej. linkedin.com/in/sara-benali", website: "p. ej. sarabenali.es",
+    position: "p. ej. Gestora de proyectos", company: "p. ej. Deloitte", workLocation: "p. ej. Madrid",
+    degree: "p. ej. Grado en Sistemas de Información", institution: "p. ej. Universidad Complutense", educationLocation: "p. ej. Madrid",
+    skill: "p. ej. Gestión de proyectos", language: "p. ej. Español",
+  },
+  it: {
+    fullName: "es. Sara Benali", location: "es. Milano, Italia", email: "es. sara.benali@email.it",
+    phone: "es. +39 320 123 4567", linkedin: "es. linkedin.com/in/sara-benali", website: "es. sarabenali.it",
+    position: "es. Project manager", company: "es. Deloitte", workLocation: "es. Milano",
+    degree: "es. Laurea in Sistemi informativi", institution: "es. Università degli Studi di Milano", educationLocation: "es. Milano",
+    skill: "es. Gestione progetti", language: "es. Italiano",
+  },
+  nl: {
+    fullName: "bijv. Sara Benali", location: "bijv. Amsterdam, Nederland", email: "bijv. sara.benali@email.nl",
+    phone: "bijv. +31 6 12345678", linkedin: "bijv. linkedin.com/in/sara-benali", website: "bijv. sarabenali.nl",
+    position: "bijv. Projectmanager", company: "bijv. Deloitte", workLocation: "bijv. Amsterdam",
+    degree: "bijv. Bachelor Bedrijfsinformatica", institution: "bijv. Universiteit van Amsterdam", educationLocation: "bijv. Amsterdam",
+    skill: "bijv. Projectmanagement", language: "bijv. Nederlands",
+  },
+};
+
 function isRTL(text: string) {
   return /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(text);
 }
@@ -58,7 +110,8 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
   const [internalStep, setInternalStep] = useState<string>("personal");
   const activeStep = controlledStep ?? internalStep;
 
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const fieldExample = fieldExamples[locale];
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [company, setCompany] = useState("");
   const [jobDescription, setJobDescription] = useState("");
@@ -216,7 +269,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
   };
 
   return (
-    <div className="h-full overflow-y-auto">
+    <div className="w-full">
       <Tabs value={activeStep} onValueChange={setInternalStep} className="w-full">
         {!controlledStep && (
           <div className="sticky top-[57px] z-40 border-b border-border bg-background/95 px-4 py-2 backdrop-blur-md">
@@ -273,7 +326,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       id="fullName"
                       value={data.personalDetails.fullName}
                       onChange={(e) => updatePersonal("fullName", e.target.value)}
-                      placeholder="Max Mustermann"
+                      placeholder={fieldExample.fullName}
                     />
                   </div>
                   <div className="space-y-2">
@@ -291,7 +344,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       id="location"
                       value={data.personalDetails.location}
                       onChange={(e) => updatePersonal("location", e.target.value)}
-                      placeholder="Berlin, Deutschland"
+                      placeholder={fieldExample.location}
                     />
                   </div>
                   <div className="space-y-2">
@@ -301,7 +354,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       type="email"
                       value={data.personalDetails.email}
                       onChange={(e) => updatePersonal("email", e.target.value)}
-                      placeholder="max@beispiel.de"
+                      placeholder={fieldExample.email}
                     />
                   </div>
                   <div className="space-y-2">
@@ -310,7 +363,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       id="phone"
                       value={data.personalDetails.phone}
                       onChange={(e) => updatePersonal("phone", e.target.value)}
-                      placeholder="+49 170 1234567"
+                      placeholder={fieldExample.phone}
                     />
                   </div>
                   <div className="space-y-2">
@@ -319,7 +372,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       id="linkedin"
                       value={data.personalDetails.linkedin}
                       onChange={(e) => updatePersonal("linkedin", e.target.value)}
-                      placeholder="linkedin.com/in/maxmustermann"
+                      placeholder={fieldExample.linkedin}
                     />
                   </div>
                   <div className="space-y-2">
@@ -328,7 +381,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       id="website"
                       value={data.personalDetails.website}
                       onChange={(e) => updatePersonal("website", e.target.value)}
-                      placeholder="maxmustermann.de"
+                      placeholder={fieldExample.website}
                     />
                   </div>
                 </div>
@@ -403,7 +456,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       <Input
                         value={item.position}
                         onChange={(e) => updateWorkExperience(item.id, "position", e.target.value)}
-                        placeholder="Projektmanager"
+                        placeholder={fieldExample.position}
                       />
                     </div>
                     <div className="space-y-2">
@@ -411,7 +464,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       <Input
                         value={item.company}
                         onChange={(e) => updateWorkExperience(item.id, "company", e.target.value)}
-                        placeholder="Muster GmbH"
+                        placeholder={fieldExample.company}
                       />
                     </div>
                     <div className="space-y-2">
@@ -419,7 +472,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       <Input
                         value={item.location}
                         onChange={(e) => updateWorkExperience(item.id, "location", e.target.value)}
-                        placeholder="Hamburg"
+                        placeholder={fieldExample.workLocation}
                       />
                     </div>
                     <div className="space-y-2">
@@ -508,7 +561,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       <Input
                         value={item.degree}
                         onChange={(e) => updateEducation(item.id, "degree", e.target.value)}
-                        placeholder="Bachelor of Arts"
+                        placeholder={fieldExample.degree}
                       />
                     </div>
                     <div className="space-y-2">
@@ -516,7 +569,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       <Input
                         value={item.institution}
                         onChange={(e) => updateEducation(item.id, "institution", e.target.value)}
-                        placeholder="Universität Musterstadt"
+                        placeholder={fieldExample.institution}
                       />
                     </div>
                     <div className="space-y-2">
@@ -524,7 +577,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       <Input
                         value={item.location}
                         onChange={(e) => updateEducation(item.id, "location", e.target.value)}
-                        placeholder="Musterstadt"
+                        placeholder={fieldExample.educationLocation}
                       />
                     </div>
                     <div className="space-y-2">
@@ -549,26 +602,6 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       </div>
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label>{t("form.description")}</Label>
-                    <div className="relative">
-                      <Textarea
-                        value={item.description}
-                        onChange={(e) => updateEducation(item.id, "description", e.target.value)}
-                        placeholder={t("form.educationDescPlaceholder")}
-                        rows={3}
-                        className={cn("pb-10", isRTL(item.description) && "text-right")}
-                        dir={isRTL(item.description) ? "rtl" : "ltr"}
-                      />
-                      <AIAssistButton
-                        text={item.description}
-                        language={data.settings.language}
-                        context={`${t("tab.education")}: ${item.degree} – ${item.institution}`}
-                        onResult={(text) => updateEducation(item.id, "description", text)}
-                      />
-                    </div>
-
-                  </div>
                 </CardContent>
               </Card>
             ))}
@@ -591,7 +624,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                     <Input
                       value={item.name}
                       onChange={(e) => updateSkill(item.id, "name", e.target.value)}
-                      placeholder="z. B. Projektmanagement"
+                      placeholder={fieldExample.skill}
                       className="flex-1"
                     />
                     <Button variant="ghost" size="icon" onClick={() => removeSkill(item.id)}>
@@ -619,7 +652,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       <Input
                         value={item.name}
                         onChange={(e) => updateLanguage(item.id, "name", e.target.value)}
-                        placeholder="z. B. Englisch"
+                        placeholder={fieldExample.language}
                         className="flex-1"
                       />
                       <Button variant="ghost" size="icon" onClick={() => removeLanguage(item.id)}>

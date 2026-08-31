@@ -13,19 +13,19 @@ export function ResumeScoreCard({ data }: { data: ResumeData }) {
   const barColor = score >= 85 ? "bg-trust" : score >= 60 ? "bg-brand" : "bg-brand-dark";
 
   return (
-    <Card className="border-border/60 bg-card">
-      <CardContent className="pt-6">
+    <Card className="border-border/70 bg-card shadow-sm">
+      <CardContent className="p-5 sm:p-7">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-              <TrendingUp className="h-4 w-4 text-primary" />
+            <div className="flex items-center gap-2 text-base font-bold text-foreground sm:text-lg">
+              <TrendingUp className="h-5 w-5 text-primary" />
               {t("score.title")}
             </div>
-            <p className="mt-1 text-xs text-muted-foreground">{t("score.desc")}</p>
+            <p className="mt-1 text-sm text-muted-foreground sm:text-base">{t("score.desc")}</p>
           </div>
           <div className="text-right">
-            <div className="text-3xl font-bold text-foreground">{score}</div>
-            <div className="text-xs font-medium text-primary">{label}</div>
+            <div className="text-4xl font-bold text-foreground">{score}</div>
+            <div className="text-sm font-semibold text-primary">{label}</div>
           </div>
         </div>
 
@@ -44,11 +44,11 @@ export function ResumeScoreCard({ data }: { data: ResumeData }) {
             </p>
           ) : (
             <>
-              <p className="text-xs font-semibold text-foreground">{t("score.tips")}</p>
-              <ul className="mt-2 space-y-1.5">
+              <p className="text-sm font-bold text-foreground sm:text-base">{t("score.tips")}</p>
+              <ul className="mt-3 space-y-2">
                 {tips.slice(0, 4).map((tip) => (
-                  <li key={tip} className="flex items-start gap-2 text-xs text-muted-foreground">
-                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                  <li key={tip} className="flex items-start gap-2.5 text-sm leading-relaxed text-muted-foreground">
+                    <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-primary" />
                     {t(tip)}
                   </li>
                 ))}
