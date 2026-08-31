@@ -27,6 +27,7 @@ interface AIAssistButtonProps {
 
 export function AIAssistButton({ text, language, context, onResult, disabled }: AIAssistButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [suggestion, setSuggestion] = useState<string | null>(null);
   const { t } = useI18n();
   const optimize = useServerFn(optimizeText);
   const translate = useServerFn(translateText);
@@ -38,7 +39,7 @@ export function AIAssistButton({ text, language, context, onResult, disabled }: 
       if (!(await hasAiSession())) throw new Error("AI_AUTH_REQUIRED");
       const result = await optimize({ data: { text, language, context } });
       trackAiAction("optimize");
-      onResult(result.text);
+      setSuggestion(result.text);
       toast.success(t("ai.optimized"));
     } catch (error) {
       toast.error(t(aiErrorKey(error, "ai.optimizeFailed")));
@@ -54,7 +55,7 @@ export function AIAssistButton({ text, language, context, onResult, disabled }: 
       if (!(await hasAiSession())) throw new Error("AI_AUTH_REQUIRED");
       const result = await translate({ data: { text, targetLanguage } });
       trackAiAction("translate");
-      onResult(result.text);
+      setSuggestion(result.text);
       toast.success(t("ai.translated"));
     } catch (error) {
       toast.error(t(aiErrorKey(error, "ai.translateFailed")));
@@ -64,7 +65,8 @@ export function AIAssistButton({ text, language, context, onResult, disabled }: 
   };
 
   return (
-    <DropdownMenu>
+    <div className="relative">
+      <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
@@ -97,6 +99,17 @@ export function AIAssistButton({ text, language, context, onResult, disabled }: 
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
-    </DropdownMenu>
+      </DropdownMenu>
+      {suggestion && (
+        <div className="absolute right-0 bottom-10 z-30 w-[min(24rem,calc(100vw-2rem))] rounded-xl border border-brand/30 bg-background p-3 shadow-xl">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-brand">KI-Vorschlag</p>
+          <p className="max-h-32 overflow-y-auto whitespace-pre-wrap text-sm text-foreground">{suggestion}</p>
+          <div className="mt-3 flex justify-end gap-2">
+            <Button type="button" size="sm" variant="outline" onClick={() => setSuggestion(null)}>{t("form.delete")}</Button>
+            <Button type="button" size="sm" onClick={() => { onResult(suggestion); setSuggestion(null); }}>{t("import.button")}</Button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
