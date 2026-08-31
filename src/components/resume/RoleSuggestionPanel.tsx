@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Check, Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { suggestExperience } from "@/lib/resume-ai.functions";
 import { hasAiSession } from "@/lib/ai-auth";
@@ -16,6 +17,7 @@ export function RoleSuggestionPanel({ position, company, language, onApply }: Pr
   const [selected, setSelected] = useState<number[]>([]);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [authRequired, setAuthRequired] = useState(false);
   const suggest = useServerFn(suggestExperience);
 
   useEffect(() => {
@@ -24,7 +26,8 @@ export function RoleSuggestionPanel({ position, company, language, onApply }: Pr
     const timer = window.setTimeout(async () => {
       setLoading(true);
       try {
-        if (!(await hasAiSession())) return;
+        if (!(await hasAiSession())) { setAuthRequired(true); return; }
+        setAuthRequired(false);
         const result = await suggest({ data: { position, company, language } });
         if (!cancelled) { setSuggestions(result.suggestions); setSelected([]); }
       } catch { /* AI suggestions are optional; the user can still write freely. */ }
@@ -36,15 +39,15 @@ export function RoleSuggestionPanel({ position, company, language, onApply }: Pr
   const toggle = (index: number) =>
     setSelected((current) => (current.includes(index) ? current.filter((item) => item !== index) : [...current, index]));
 
-  if (!position.trim() || (!loading && suggestions.length === 0)) return null;
+  if (!position.trim() || (!loading && !authRequired && suggestions.length === 0)) return null;
 
   return (
     <div className="mb-3 rounded-xl border border-brand/25 bg-brand/5 p-3">
       <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-foreground">
         <Sparkles className="h-4 w-4 text-brand" />
-        {loading ? <><Loader2 className="h-4 w-4 animate-spin text-brand" /> KI-Vorschläge werden erstellt …</> : <><Sparkles className="h-4 w-4 text-brand" /> KI-Vorschläge für {position}{company ? ` · ${company}` : ""}</>}
+        {loading ? <><Loader2 className="h-4 w-4 animate-spin text-brand" /> KI-Vorschläge werden erstellt …</> : authRequired ? <><Sparkles className="h-4 w-4 text-brand" /> KI-Vorschläge für {position}</> : <><Sparkles className="h-4 w-4 text-brand" /> KI-Vorschläge für {position}{company ? ` · ${company}` : ""}</>}
       </div>
-      <p className="mb-2 text-xs text-muted-foreground">Wähle passende Punkte aus. Danach formuliert die KI daraus deinen finalen Text.</p>
+      {authRequired ? <p className="mb-2 text-sm text-muted-foreground">Melde dich an, damit die KI passende Aufgaben und Erfolge für diesen Beruf erstellt. <Link to="/auth" className="font-semibold text-brand underline-offset-2 hover:underline">Jetzt anmelden</Link></p> : <p className="mb-2 text-xs text-muted-foreground">Wähle passende Punkte aus. Danach formuliert die KI daraus deinen finalen Text.</p>}
       <div className="space-y-1.5">
         {suggestions.map((suggestion, index) => {
           const active = selected.includes(index);
