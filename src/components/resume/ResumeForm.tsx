@@ -13,6 +13,7 @@ import { SUPPORTED_LOCALES, localeFlags, localeNames, type Locale } from "@/lib/
 import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
 import { AIAssistButton } from "./AIAssistButton";
+import { RoleSuggestionPanel } from "./RoleSuggestionPanel";
 import { VoiceInputButton } from "./VoiceInputButton";
 import { PremiumUpsellDialog } from "./PremiumUpsellDialog";
 import { useEntitlements } from "@/lib/entitlements";
@@ -499,6 +500,11 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                   </div>
                   <div className="space-y-2">
                     <Label>{t("form.description")}</Label>
+                    <RoleSuggestionPanel
+                      position={item.position}
+                      company={item.company}
+                      onApply={(text) => updateWorkExperience(item.id, "description", text)}
+                    />
                     <div className="relative">
                       <Textarea
                         value={item.description}
