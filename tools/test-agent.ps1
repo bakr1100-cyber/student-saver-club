@@ -12,6 +12,7 @@ $success = $false
 for ($attempt = 1; $attempt -le $MaxAttempts; $attempt++) {
   "Test Agent attempt $attempt/$MaxAttempts - $(Get-Date -Format o)" | Set-Content -LiteralPath $report
   try {
+    & powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "test-agent-data.ps1") *>> $report
     if (-not (Test-Path -LiteralPath (Join-Path $repo "node_modules"))) { npm install --no-audit --no-fund *>> $report }
     npm run lint *>> $report
     npm run build *>> $report
