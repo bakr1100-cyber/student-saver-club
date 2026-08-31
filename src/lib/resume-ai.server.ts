@@ -2,7 +2,12 @@ import { generateText } from "ai";
 import { createLovableAiGatewayProvider } from "./ai-gateway.server";
 import type { CoverLetterPayload } from "./resume-ai.schemas";
 import { localeLanguageNames, type Locale } from "./i18n/locales";
-import { consumeAiQuota, type AiAction } from "./ai-quota.server";
+import {
+  AI_QUOTA_BYPASS_DURING_BUILD,
+  consumeAiQuota,
+  developmentAiQuota,
+  type AiAction,
+} from "./ai-quota.server";
 
 const MODEL = "google/gemini-3.7-flash";
 
@@ -150,6 +155,8 @@ export async function readAiUsage(
   supabase: Parameters<typeof consumeAiQuota>[0],
   userId: string,
 ) {
+  if (AI_QUOTA_BYPASS_DURING_BUILD) return developmentAiQuota();
+
   const today = new Date().toISOString().slice(0, 10);
   const [{ data: usage }, { data: entitlement }] = await Promise.all([
     supabase.from("ai_usage").select("calls, cost_units").eq("user_id", userId).eq("usage_date", today).maybeSingle(),

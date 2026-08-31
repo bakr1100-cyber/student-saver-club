@@ -1,9 +1,10 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { FileText } from "lucide-react";
 import { AuthPanel } from "@/components/auth/AuthPanel";
 import { useAuth } from "@/hooks/useAuth";
 import { useI18n } from "@/lib/i18n";
+import { finishAuthReturn, readAuthReturnPath } from "@/lib/auth-return";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -29,11 +30,11 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const { t } = useI18n();
   const { isAuthenticated, loading } = useAuth();
-  const navigate = useNavigate();
+  const returnPath = readAuthReturnPath();
 
   useEffect(() => {
-    if (!loading && isAuthenticated) void navigate({ to: "/editor" });
-  }, [isAuthenticated, loading, navigate]);
+    if (!loading && isAuthenticated) finishAuthReturn();
+  }, [isAuthenticated, loading]);
 
   return (
     <div className="flex min-h-screen flex-col bg-muted/30">
@@ -45,7 +46,7 @@ function AuthPage() {
       </header>
       <main className="flex flex-1 items-center justify-center p-4">
         <div className="w-full max-w-3xl overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-          <AuthPanel redirectPath="/editor" onAuthenticated={() => void navigate({ to: "/editor" })} />
+          <AuthPanel redirectPath={returnPath} onAuthenticated={finishAuthReturn} />
         </div>
       </main>
     </div>

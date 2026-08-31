@@ -4,6 +4,7 @@ export const nl = {
   "nav.pricing": "Prijzen",
   "nav.reviews": "Beoordelingen",
   "nav.signIn": "Inloggen",
+  "auth.signedIn": "Aangemeld",
   "nav.createResume": "CV maken",
   "nav.home": "Home",
   "nav.language": "Taal",

@@ -4,6 +4,7 @@ export const en = {
   "nav.pricing": "Pricing",
   "nav.reviews": "Reviews",
   "nav.signIn": "Sign In",
+  "auth.signedIn": "Signed in",
   "nav.createResume": "Create Resume",
   "nav.home": "Home",
   "nav.language": "Language",

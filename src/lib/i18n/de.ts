@@ -5,6 +5,7 @@ export const de = {
   "nav.pricing": "Preise",
   "nav.reviews": "Bewertungen",
   "nav.signIn": "Anmelden",
+  "auth.signedIn": "Angemeldet",
   "nav.createResume": "Lebenslauf erstellen",
   "nav.home": "Startseite",
   "nav.language": "Sprache",

@@ -4,6 +4,7 @@ export const ar = {
   "nav.pricing": "الأسعار",
   "nav.reviews": "التقييمات",
   "nav.signIn": "تسجيل الدخول",
+  "auth.signedIn": "تم تسجيل الدخول",
   "nav.createResume": "إنشاء سيرة ذاتية",
   "nav.home": "الرئيسية",
   "nav.language": "اللغة",

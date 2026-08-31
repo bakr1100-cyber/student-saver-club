@@ -20,6 +20,13 @@ export interface QuotaResult {
   remaining?: number;
 }
 
+/** Temporary product-development switch. Set to false before the public launch. */
+export const AI_QUOTA_BYPASS_DURING_BUILD = true;
+
+export function developmentAiQuota(): QuotaResult {
+  return { allowed: true, tier: "development", used: 0, limit: 999_999, remaining: 999_999 };
+}
+
 export class AiQuotaError extends Error {
   readonly reason: NonNullable<QuotaResult["reason"]>;
   readonly quota: QuotaResult;
@@ -46,6 +53,8 @@ export async function consumeAiQuota(
   supabase: SupabaseClient<any, "public", any>,
   action: AiAction,
 ): Promise<QuotaResult> {
+  if (AI_QUOTA_BYPASS_DURING_BUILD) return developmentAiQuota();
+
   const { data, error } = await supabase.rpc("consume_ai_quota", {
     _cost: aiCostUnits[action],
   });

@@ -5,6 +5,7 @@ import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { suggestExperience } from "@/lib/resume-ai.functions";
 import { hasAiSession } from "@/lib/ai-auth";
+import { rememberAuthReturnPath } from "@/lib/auth-return";
 
 interface Props {
   position: string;
@@ -18,28 +19,33 @@ export function RoleSuggestionPanel({ position, company, language, onApply }: Pr
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [authRequired, setAuthRequired] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [retryVersion, setRetryVersion] = useState(0);
   const suggest = useServerFn(suggestExperience);
 
   useEffect(() => {
     let cancelled = false;
-    if (position.trim().length < 2) { setSuggestions([]); return () => { cancelled = true; }; }
+    if (position.trim().length < 2) { setSuggestions([]); setError(null); return () => { cancelled = true; }; }
     const timer = window.setTimeout(async () => {
       setLoading(true);
+      setError(null);
       try {
         if (!(await hasAiSession())) { setAuthRequired(true); return; }
         setAuthRequired(false);
         const result = await suggest({ data: { position, company, language } });
         if (!cancelled) { setSuggestions(result.suggestions); setSelected([]); }
-      } catch { /* AI suggestions are optional; the user can still write freely. */ }
+      } catch {
+        if (!cancelled) setError("KI-Vorschläge konnten nicht geladen werden. Bitte versuche es erneut.");
+      }
       finally { if (!cancelled) setLoading(false); }
     }, 650);
     return () => { cancelled = true; window.clearTimeout(timer); };
-  }, [position, company, language, suggest]);
+  }, [position, company, language, retryVersion, suggest]);
 
   const toggle = (index: number) =>
     setSelected((current) => (current.includes(index) ? current.filter((item) => item !== index) : [...current, index]));
 
-  if (!position.trim() || (!loading && !authRequired && suggestions.length === 0)) return null;
+  if (!position.trim() || (!loading && !authRequired && !error && suggestions.length === 0)) return null;
 
   return (
     <div className="mb-3 rounded-xl border border-brand/25 bg-brand/5 p-3">
@@ -47,7 +53,7 @@ export function RoleSuggestionPanel({ position, company, language, onApply }: Pr
         <Sparkles className="h-4 w-4 text-brand" />
         {loading ? <><Loader2 className="h-4 w-4 animate-spin text-brand" /> KI-Vorschläge werden erstellt …</> : authRequired ? <><Sparkles className="h-4 w-4 text-brand" /> KI-Vorschläge für {position}</> : <><Sparkles className="h-4 w-4 text-brand" /> KI-Vorschläge für {position}{company ? ` · ${company}` : ""}</>}
       </div>
-      {authRequired ? <p className="mb-2 text-sm text-muted-foreground">Melde dich an, damit die KI passende Aufgaben und Erfolge für diesen Beruf erstellt. <Link to="/auth" className="font-semibold text-brand underline-offset-2 hover:underline">Jetzt anmelden</Link></p> : <p className="mb-2 text-xs text-muted-foreground">Wähle passende Punkte aus. Danach formuliert die KI daraus deinen finalen Text.</p>}
+      {authRequired ? <p className="mb-2 text-sm text-muted-foreground">Melde dich an, damit die KI passende Aufgaben und Erfolge für diesen Beruf erstellt. <Link to="/auth" onClick={() => rememberAuthReturnPath()} className="font-semibold text-brand underline-offset-2 hover:underline">Jetzt anmelden</Link></p> : error ? <div className="flex flex-wrap items-center justify-between gap-2"><p className="text-sm text-destructive">{error}</p><Button type="button" size="sm" variant="outline" onClick={() => setRetryVersion((value) => value + 1)}>Erneut versuchen</Button></div> : <p className="mb-2 text-xs text-muted-foreground">Wähle passende Punkte aus. Danach formuliert die KI daraus deinen finalen Text.</p>}
       <div className="space-y-1.5">
         {suggestions.map((suggestion, index) => {
           const active = selected.includes(index);

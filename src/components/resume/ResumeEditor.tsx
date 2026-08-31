@@ -20,6 +20,8 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { motion } from "motion/react";
 import { useResumeAutoSave } from "@/hooks/useResumeAutoSave";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
+import { rememberAuthReturnPath, WIZARD_STEP_KEY } from "@/lib/auth-return";
 
 const STORAGE_KEY = "resume-draft-v1";
 const LANGUAGE_INTRO_KEY = "resume-language-intro-v3";
@@ -52,6 +54,7 @@ const stepHeadlineKeys = {
 
 export function ResumeEditor() {
   const { t, locale, setLocale, dir } = useI18n();
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const [data, setData] = useState<ResumeData>(defaultResumeData);
   const [isLoaded, setIsLoaded] = useState(false);
   const [languageIntroStage, setLanguageIntroStage] = useState<"interface" | "resume" | null>(null);
@@ -73,6 +76,10 @@ export function ResumeEditor() {
         const parsed = JSON.parse(saved) as ResumeData;
         setData({ ...defaultResumeData, ...parsed });
       }
+      const savedStep = Number(localStorage.getItem(WIZARD_STEP_KEY));
+      if (Number.isInteger(savedStep) && savedStep >= 0 && savedStep < wizardSteps.length) {
+        setStepIndex(savedStep);
+      }
     } catch {
       // ignore parse errors
     }
@@ -83,6 +90,11 @@ export function ResumeEditor() {
     if (!isLoaded || typeof window === "undefined") return;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }, [data, isLoaded]);
+
+  useEffect(() => {
+    if (!isLoaded || typeof window === "undefined") return;
+    localStorage.setItem(WIZARD_STEP_KEY, String(stepIndex));
+  }, [isLoaded, stepIndex]);
 
   useEffect(() => {
     if (!isLoaded || typeof window === "undefined") return;
@@ -291,12 +303,19 @@ export function ResumeEditor() {
               )}
             </span>
             <LanguageSwitcher />
-            <Link
-              to="/auth"
-              className="inline-flex shrink-0 rounded-lg border border-border px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:border-brand hover:text-brand"
-            >
-              {t("nav.signIn")}
-            </Link>
+            {!authLoading && isAuthenticated ? (
+              <span className="inline-flex shrink-0 rounded-lg border border-brand/35 bg-brand/10 px-3 py-2 text-sm font-semibold text-brand">
+                {t("auth.signedIn")}
+              </span>
+            ) : (
+              <Link
+                to="/auth"
+                onClick={() => rememberAuthReturnPath()}
+                className="inline-flex shrink-0 rounded-lg border border-border px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:border-brand hover:text-brand"
+              >
+                {t("nav.signIn")}
+              </Link>
+            )}
             <ResumeImportDialog data={data} onImport={(next) => setData(next)} />
             <PDFExportButton data={data} />
 
