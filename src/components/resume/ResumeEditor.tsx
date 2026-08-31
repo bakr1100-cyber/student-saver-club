@@ -294,7 +294,7 @@ export function ResumeEditor() {
             <LanguageSwitcher />
             <Link
               to="/auth"
-              className="hidden rounded-lg border border-border px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:border-brand hover:text-brand sm:inline-flex"
+              className="inline-flex shrink-0 rounded-lg border border-border px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:border-brand hover:text-brand"
             >
               {t("nav.signIn")}
             </Link>
