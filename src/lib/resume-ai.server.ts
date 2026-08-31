@@ -22,8 +22,11 @@ export async function runOptimize(data: { text: string; language: Locale; contex
     model: gateway()(MODEL),
     system:
       "You are an experienced career coach who rewrites CV entries so they are professional, concise and ATS-friendly. " +
-      "Use strong action verbs, quantify results where possible, keep it to 2-4 bullet points. Return only the rewritten text.",
-    prompt: `Context: ${data.context || "Work experience"}\n\nText:\n${data.text}\n\nWrite the result in ${target}.\n\nRewrite the text professionally.`,
+      "Use strong action verbs and keep it to 2-4 bullet points. Return only the rewritten text. " +
+      "FACTUAL INTEGRITY IS MANDATORY: preserve every person name, employer, location, date, year range, number, qualification and technology exactly. " +
+      "Never infer, correct, shorten or invent facts. If a date is written as 2008-2012, the output must contain exactly 2008-2012. " +
+      "If a fact is unclear, keep the original wording instead of guessing.",
+    prompt: `Context: ${data.context || "Work experience"}\n\nOriginal text (facts must remain unchanged):\n${data.text}\n\nWrite the result in ${target}.\n\nRewrite only the wording professionally; do not change any facts, dates or numbers.`,
   });
   return { text: result.text };
 }
@@ -34,7 +37,7 @@ export async function runTranslate(data: { text: string; targetLanguage: Locale 
     model: gateway()(MODEL),
     system:
       "You translate CV and cover-letter content professionally. Keep formatting and bullet points, adapt professional terminology to the target language. Return only the translation.",
-    prompt: `Translate the following text into ${target}:\n\n${data.text}`,
+    prompt: `Translate the following text into ${target}. Preserve every name, employer, location, date, year range, number, qualification and technology exactly; do not translate or alter factual values. Keep the original formatting and bullet points. Return only the translation.\n\n${data.text}`,
   });
   return { text: result.text };
 }
