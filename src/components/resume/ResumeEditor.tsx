@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { ResumeForm } from "./ResumeForm";
 import { ResumePreview } from "./ResumePreview";
 import { PDFExportButton } from "./PDFExportButton";
-import { ShareLinkButton } from "./ShareLinkButton";
 
 import { ResumeScoreCard } from "./ResumeScoreCard";
 import { ResumeImportDialog } from "./ResumeImportDialog";
@@ -299,7 +298,6 @@ export function ResumeEditor() {
               {t("nav.signIn")}
             </Link>
             <ResumeImportDialog data={data} onImport={(next) => setData(next)} />
-            <ShareLinkButton data={data} className="hidden h-9 px-3 text-sm sm:inline-flex" />
             <PDFExportButton data={data} />
 
           </div>
