@@ -61,7 +61,7 @@ export const suggestExperience = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { guardAi, runExperienceSuggestions } = await import("./resume-ai.server");
     const quota = await guardAi(context.supabase, "optimize");
-    return { ...(await runExperienceSuggestions(data)), quota };
+    return { ...(await runExperienceSuggestions(data as Parameters<typeof runExperienceSuggestions>[0])), quota };
   });
 
 export const getAiUsage = createServerFn({ method: "GET" })
