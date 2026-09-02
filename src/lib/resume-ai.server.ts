@@ -132,7 +132,7 @@ ${data.text}`,
 
 export async function runExperienceSuggestions(data: {
   position: string;
-  company?: string;
+  company?: string | undefined;
   language: Locale;
 }) {
   const target = languageName(data.language);
