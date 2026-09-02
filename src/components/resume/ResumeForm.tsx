@@ -327,7 +327,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       id="fullName"
                       value={data.personalDetails.fullName}
                       onChange={(e) => updatePersonal("fullName", e.target.value)}
-                      placeholder={fieldExample.fullName}
+                      placeholder={fieldExample["fullName"]}
                     />
                   </div>
                   <div className="space-y-2">
@@ -345,7 +345,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       id="location"
                       value={data.personalDetails.location}
                       onChange={(e) => updatePersonal("location", e.target.value)}
-                      placeholder={fieldExample.location}
+                      placeholder={fieldExample["location"]}
                     />
                   </div>
                   <div className="space-y-2">
@@ -355,7 +355,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       type="email"
                       value={data.personalDetails.email}
                       onChange={(e) => updatePersonal("email", e.target.value)}
-                      placeholder={fieldExample.email}
+                      placeholder={fieldExample["email"]}
                     />
                   </div>
                   <div className="space-y-2">
@@ -364,7 +364,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       id="phone"
                       value={data.personalDetails.phone}
                       onChange={(e) => updatePersonal("phone", e.target.value)}
-                      placeholder={fieldExample.phone}
+                      placeholder={fieldExample["phone"]}
                     />
                   </div>
                   <div className="space-y-2">
@@ -373,7 +373,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       id="linkedin"
                       value={data.personalDetails.linkedin}
                       onChange={(e) => updatePersonal("linkedin", e.target.value)}
-                      placeholder={fieldExample.linkedin}
+                      placeholder={fieldExample["linkedin"]}
                     />
                   </div>
                   <div className="space-y-2">
@@ -382,7 +382,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       id="website"
                       value={data.personalDetails.website}
                       onChange={(e) => updatePersonal("website", e.target.value)}
-                      placeholder={fieldExample.website}
+                      placeholder={fieldExample["website"]}
                     />
                   </div>
                 </div>
@@ -457,7 +457,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       <Input
                         value={item.position}
                         onChange={(e) => updateWorkExperience(item.id, "position", e.target.value)}
-                        placeholder={fieldExample.position}
+                        placeholder={fieldExample["position"]}
                       />
                     </div>
                     <div className="space-y-2">
@@ -465,7 +465,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       <Input
                         value={item.company}
                         onChange={(e) => updateWorkExperience(item.id, "company", e.target.value)}
-                        placeholder={fieldExample.company}
+                        placeholder={fieldExample["company"]}
                       />
                     </div>
                     <div className="space-y-2">
@@ -473,7 +473,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       <Input
                         value={item.location}
                         onChange={(e) => updateWorkExperience(item.id, "location", e.target.value)}
-                        placeholder={fieldExample.workLocation}
+                        placeholder={fieldExample["workLocation"]}
                       />
                     </div>
                     <div className="space-y-2">
@@ -568,7 +568,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       <Input
                         value={item.degree}
                         onChange={(e) => updateEducation(item.id, "degree", e.target.value)}
-                        placeholder={fieldExample.degree}
+                        placeholder={fieldExample["degree"]}
                       />
                     </div>
                     <div className="space-y-2">
@@ -576,7 +576,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       <Input
                         value={item.institution}
                         onChange={(e) => updateEducation(item.id, "institution", e.target.value)}
-                        placeholder={fieldExample.institution}
+                        placeholder={fieldExample["institution"]}
                       />
                     </div>
                     <div className="space-y-2">
@@ -584,7 +584,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       <Input
                         value={item.location}
                         onChange={(e) => updateEducation(item.id, "location", e.target.value)}
-                        placeholder={fieldExample.educationLocation}
+                        placeholder={fieldExample["educationLocation"]}
                       />
                     </div>
                     <div className="space-y-2">
@@ -631,7 +631,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                     <Input
                       value={item.name}
                       onChange={(e) => updateSkill(item.id, "name", e.target.value)}
-                      placeholder={fieldExample.skill}
+                      placeholder={fieldExample["skill"]}
                       className="flex-1"
                     />
                     <Button variant="ghost" size="icon" onClick={() => removeSkill(item.id)}>
@@ -659,7 +659,7 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       <Input
                         value={item.name}
                         onChange={(e) => updateLanguage(item.id, "name", e.target.value)}
-                        placeholder={fieldExample.language}
+                        placeholder={fieldExample["language"]}
                         className="flex-1"
                       />
                       <Button variant="ghost" size="icon" onClick={() => removeLanguage(item.id)}>
