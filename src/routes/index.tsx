@@ -23,7 +23,7 @@ import { SUPPORTED_LOCALES, localeFlags, localeNames, type Locale } from "@/lib/
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { motion } from "motion/react";
 import { Reveal, Stagger, StaggerItem, HoverLift, AnimatedCounter } from "@/components/motion/Reveal";
-import heroImage from "@/assets/hero-professional.png";
+import { HeroSection } from "@/components/marketing/HeroSection";
 
 
 export const Route = createFileRoute("/")({
