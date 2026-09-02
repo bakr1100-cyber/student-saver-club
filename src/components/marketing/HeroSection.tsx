@@ -142,7 +142,7 @@ function ResumeMockup({ applicant, active }: { applicant: Applicant; active: boo
       />
 
       {/* UI badge layer */}
-      <div className="absolute left-[2%] top-[10%] z-20 rounded-full border border-emerald-400/40 bg-emerald-500/15 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-emerald-200 shadow-xl backdrop-blur-md sm:text-[11px]">
+      <div className="absolute -left-2 -top-3 z-20 rounded-full border border-emerald-400/40 bg-emerald-500/15 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-emerald-200 shadow-xl backdrop-blur-md sm:text-[11px]">
         <span className="mr-1.5 inline-flex align-middle">
           <CheckCircle2 className="h-3.5 w-3.5" />
         </span>
