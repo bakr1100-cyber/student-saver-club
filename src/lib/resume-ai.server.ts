@@ -165,8 +165,8 @@ export async function runExperienceSuggestions(data: {
 
 export async function runComposeExperience(data: {
   position: string;
-  company?: string;
-  location?: string;
+  company?: string | undefined;
+  location?: string | undefined;
   sourceText: string;
   selectedSuggestions: string[];
   language: Locale;
