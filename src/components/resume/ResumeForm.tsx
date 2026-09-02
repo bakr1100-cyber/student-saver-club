@@ -4,20 +4,25 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Plus, Trash2, Upload, Loader2, Sparkles } from "lucide-react";
+import { Plus, Trash2, Upload, Loader2, Sparkles, Pencil } from "lucide-react";
 import type { ResumeData, Education, WorkExperience, Skill, Language } from "@/lib/resume-types";
 import { useI18n } from "@/lib/i18n";
 import { SUPPORTED_LOCALES, localeFlags, localeNames, type Locale } from "@/lib/i18n/locales";
 import { cn } from "@/lib/utils";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AIAssistButton } from "./AIAssistButton";
-import { RoleSuggestionPanel } from "./RoleSuggestionPanel";
+import { EXPERIENCE_PENDING_KEY, ExperienceAssistantDialog } from "./ExperienceAssistantDialog";
 import { VoiceInputButton } from "./VoiceInputButton";
 import { PremiumUpsellDialog } from "./PremiumUpsellDialog";
 import { useEntitlements } from "@/lib/entitlements";
-
 
 import { useServerFn } from "@tanstack/react-start";
 import { generateCoverLetter } from "@/lib/resume-ai.functions";
@@ -33,11 +38,18 @@ interface ResumeFormProps {
   step?: string;
 }
 
-export const resumeStepIds = ["personal", "education", "experience", "skills", "summary", "cover-letter", "settings"] as const;
+export const resumeStepIds = [
+  "personal",
+  "education",
+  "experience",
+  "skills",
+  "summary",
+  "cover-letter",
+  "settings",
+] as const;
 export type ResumeStepId = (typeof resumeStepIds)[number];
 
 const stepIds = resumeStepIds;
-
 
 const stepLabelKeys = {
   personal: "tab.personal",
@@ -53,53 +65,116 @@ const levelKeys = ["native", "fluent", "advanced", "intermediate", "beginner"] a
 
 const fieldExamples: Record<Locale, Record<string, string>> = {
   de: {
-    fullName: "z. B. Sara Benali", location: "z. B. Köln, Deutschland", email: "z. B. sara.benali@email.de",
-    phone: "z. B. +49 170 1234567", linkedin: "z. B. linkedin.com/in/sara-benali", website: "z. B. sarabenali.de",
-    position: "z. B. Projektmanagerin", company: "z. B. Deloitte", workLocation: "z. B. Düsseldorf",
-    degree: "z. B. Bachelor Wirtschaftsinformatik", institution: "z. B. Universität zu Köln", educationLocation: "z. B. Köln",
-    skill: "z. B. Projektmanagement", language: "z. B. Deutsch",
+    fullName: "z. B. Sara Benali",
+    location: "z. B. Köln, Deutschland",
+    email: "z. B. sara.benali@email.de",
+    phone: "z. B. +49 170 1234567",
+    linkedin: "z. B. linkedin.com/in/sara-benali",
+    website: "z. B. sarabenali.de",
+    position: "z. B. Projektmanagerin",
+    company: "z. B. Deloitte",
+    workLocation: "z. B. Düsseldorf",
+    degree: "z. B. Bachelor Wirtschaftsinformatik",
+    institution: "z. B. Universität zu Köln",
+    educationLocation: "z. B. Köln",
+    skill: "z. B. Projektmanagement",
+    language: "z. B. Deutsch",
   },
   en: {
-    fullName: "e.g. Sara Benali", location: "e.g. London, United Kingdom", email: "e.g. sara.benali@email.com",
-    phone: "e.g. +44 7700 900123", linkedin: "e.g. linkedin.com/in/sara-benali", website: "e.g. sarabenali.com",
-    position: "e.g. Project Manager", company: "e.g. Deloitte", workLocation: "e.g. London",
-    degree: "e.g. BSc Business Information Systems", institution: "e.g. University of London", educationLocation: "e.g. London",
-    skill: "e.g. Project management", language: "e.g. English",
+    fullName: "e.g. Sara Benali",
+    location: "e.g. London, United Kingdom",
+    email: "e.g. sara.benali@email.com",
+    phone: "e.g. +44 7700 900123",
+    linkedin: "e.g. linkedin.com/in/sara-benali",
+    website: "e.g. sarabenali.com",
+    position: "e.g. Project Manager",
+    company: "e.g. Deloitte",
+    workLocation: "e.g. London",
+    degree: "e.g. BSc Business Information Systems",
+    institution: "e.g. University of London",
+    educationLocation: "e.g. London",
+    skill: "e.g. Project management",
+    language: "e.g. English",
   },
   fr: {
-    fullName: "ex. Sara Benali", location: "ex. Paris, France", email: "ex. sara.benali@email.fr",
-    phone: "ex. +33 6 12 34 56 78", linkedin: "ex. linkedin.com/in/sara-benali", website: "ex. sarabenali.fr",
-    position: "ex. Cheffe de projet", company: "ex. Deloitte", workLocation: "ex. Paris",
-    degree: "ex. Licence en informatique de gestion", institution: "ex. Université Paris Cité", educationLocation: "ex. Paris",
-    skill: "ex. Gestion de projet", language: "ex. Français",
+    fullName: "ex. Sara Benali",
+    location: "ex. Paris, France",
+    email: "ex. sara.benali@email.fr",
+    phone: "ex. +33 6 12 34 56 78",
+    linkedin: "ex. linkedin.com/in/sara-benali",
+    website: "ex. sarabenali.fr",
+    position: "ex. Cheffe de projet",
+    company: "ex. Deloitte",
+    workLocation: "ex. Paris",
+    degree: "ex. Licence en informatique de gestion",
+    institution: "ex. Université Paris Cité",
+    educationLocation: "ex. Paris",
+    skill: "ex. Gestion de projet",
+    language: "ex. Français",
   },
   ar: {
-    fullName: "مثال: سارة بنعلي", location: "مثال: الدار البيضاء، المغرب", email: "مثال: sara.benali@email.ma",
-    phone: "مثال: +212 6 12 34 56 78", linkedin: "مثال: linkedin.com/in/sara-benali", website: "مثال: sarabenali.ma",
-    position: "مثال: مديرة مشاريع", company: "مثال: Deloitte", workLocation: "مثال: الدار البيضاء",
-    degree: "مثال: إجازة في نظم المعلومات", institution: "مثال: جامعة الحسن الثاني", educationLocation: "مثال: الدار البيضاء",
-    skill: "مثال: إدارة المشاريع", language: "مثال: العربية",
+    fullName: "مثال: سارة بنعلي",
+    location: "مثال: الدار البيضاء، المغرب",
+    email: "مثال: sara.benali@email.ma",
+    phone: "مثال: +212 6 12 34 56 78",
+    linkedin: "مثال: linkedin.com/in/sara-benali",
+    website: "مثال: sarabenali.ma",
+    position: "مثال: مديرة مشاريع",
+    company: "مثال: Deloitte",
+    workLocation: "مثال: الدار البيضاء",
+    degree: "مثال: إجازة في نظم المعلومات",
+    institution: "مثال: جامعة الحسن الثاني",
+    educationLocation: "مثال: الدار البيضاء",
+    skill: "مثال: إدارة المشاريع",
+    language: "مثال: العربية",
   },
   es: {
-    fullName: "p. ej. Sara Benali", location: "p. ej. Madrid, España", email: "p. ej. sara.benali@email.es",
-    phone: "p. ej. +34 612 345 678", linkedin: "p. ej. linkedin.com/in/sara-benali", website: "p. ej. sarabenali.es",
-    position: "p. ej. Gestora de proyectos", company: "p. ej. Deloitte", workLocation: "p. ej. Madrid",
-    degree: "p. ej. Grado en Sistemas de Información", institution: "p. ej. Universidad Complutense", educationLocation: "p. ej. Madrid",
-    skill: "p. ej. Gestión de proyectos", language: "p. ej. Español",
+    fullName: "p. ej. Sara Benali",
+    location: "p. ej. Madrid, España",
+    email: "p. ej. sara.benali@email.es",
+    phone: "p. ej. +34 612 345 678",
+    linkedin: "p. ej. linkedin.com/in/sara-benali",
+    website: "p. ej. sarabenali.es",
+    position: "p. ej. Gestora de proyectos",
+    company: "p. ej. Deloitte",
+    workLocation: "p. ej. Madrid",
+    degree: "p. ej. Grado en Sistemas de Información",
+    institution: "p. ej. Universidad Complutense",
+    educationLocation: "p. ej. Madrid",
+    skill: "p. ej. Gestión de proyectos",
+    language: "p. ej. Español",
   },
   it: {
-    fullName: "es. Sara Benali", location: "es. Milano, Italia", email: "es. sara.benali@email.it",
-    phone: "es. +39 320 123 4567", linkedin: "es. linkedin.com/in/sara-benali", website: "es. sarabenali.it",
-    position: "es. Project manager", company: "es. Deloitte", workLocation: "es. Milano",
-    degree: "es. Laurea in Sistemi informativi", institution: "es. Università degli Studi di Milano", educationLocation: "es. Milano",
-    skill: "es. Gestione progetti", language: "es. Italiano",
+    fullName: "es. Sara Benali",
+    location: "es. Milano, Italia",
+    email: "es. sara.benali@email.it",
+    phone: "es. +39 320 123 4567",
+    linkedin: "es. linkedin.com/in/sara-benali",
+    website: "es. sarabenali.it",
+    position: "es. Project manager",
+    company: "es. Deloitte",
+    workLocation: "es. Milano",
+    degree: "es. Laurea in Sistemi informativi",
+    institution: "es. Università degli Studi di Milano",
+    educationLocation: "es. Milano",
+    skill: "es. Gestione progetti",
+    language: "es. Italiano",
   },
   nl: {
-    fullName: "bijv. Sara Benali", location: "bijv. Amsterdam, Nederland", email: "bijv. sara.benali@email.nl",
-    phone: "bijv. +31 6 12345678", linkedin: "bijv. linkedin.com/in/sara-benali", website: "bijv. sarabenali.nl",
-    position: "bijv. Projectmanager", company: "bijv. Deloitte", workLocation: "bijv. Amsterdam",
-    degree: "bijv. Bachelor Bedrijfsinformatica", institution: "bijv. Universiteit van Amsterdam", educationLocation: "bijv. Amsterdam",
-    skill: "bijv. Projectmanagement", language: "bijv. Nederlands",
+    fullName: "bijv. Sara Benali",
+    location: "bijv. Amsterdam, Nederland",
+    email: "bijv. sara.benali@email.nl",
+    phone: "bijv. +31 6 12345678",
+    linkedin: "bijv. linkedin.com/in/sara-benali",
+    website: "bijv. sarabenali.nl",
+    position: "bijv. Projectmanager",
+    company: "bijv. Deloitte",
+    workLocation: "bijv. Amsterdam",
+    degree: "bijv. Bachelor Bedrijfsinformatica",
+    institution: "bijv. Universiteit van Amsterdam",
+    educationLocation: "bijv. Amsterdam",
+    skill: "bijv. Projectmanagement",
+    language: "bijv. Nederlands",
   },
 };
 
@@ -120,6 +195,15 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
   const createCoverLetter = useServerFn(generateCoverLetter);
   const { premium } = useEntitlements();
   const [showUpsell, setShowUpsell] = useState(false);
+  const [experienceDialogOpen, setExperienceDialogOpen] = useState(false);
+  const [editingExperience, setEditingExperience] = useState<WorkExperience | null>(null);
+
+  useEffect(() => {
+    if (activeStep !== "experience" || typeof window === "undefined") return;
+    if (!sessionStorage.getItem(EXPERIENCE_PENDING_KEY)) return;
+    setEditingExperience(null);
+    setExperienceDialogOpen(true);
+  }, [activeStep]);
 
   const handleGenerateCoverLetter = async () => {
     if (!premium) {
@@ -171,7 +255,6 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
     }
   };
 
-
   const updatePersonal = (field: keyof ResumeData["personalDetails"], value: string) => {
     onChange((prev) => ({
       ...prev,
@@ -189,28 +272,33 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
     reader.readAsDataURL(file);
   };
 
-  const addWorkExperience = () => {
-    const item: WorkExperience = {
-      id: crypto.randomUUID(),
-      position: "",
-      company: "",
-      location: "",
-      startDate: "",
-      endDate: "",
-      description: "",
-    };
-    onChange((prev) => ({ ...prev, workExperience: [...prev.workExperience, item] }));
+  const openNewExperience = () => {
+    setEditingExperience(null);
+    setExperienceDialogOpen(true);
   };
 
-  const updateWorkExperience = (id: string, field: keyof WorkExperience, value: string) => {
-    onChange((prev) => ({
-      ...prev,
-      workExperience: prev.workExperience.map((item) => (item.id === id ? { ...item, [field]: value } : item)),
-    }));
+  const openExperience = (item: WorkExperience) => {
+    setEditingExperience(item);
+    setExperienceDialogOpen(true);
+  };
+
+  const saveWorkExperience = (experience: WorkExperience) => {
+    onChange((prev) => {
+      const exists = prev.workExperience.some((item) => item.id === experience.id);
+      return {
+        ...prev,
+        workExperience: exists
+          ? prev.workExperience.map((item) => (item.id === experience.id ? experience : item))
+          : [...prev.workExperience, experience],
+      };
+    });
   };
 
   const removeWorkExperience = (id: string) => {
-    onChange((prev) => ({ ...prev, workExperience: prev.workExperience.filter((item) => item.id !== id) }));
+    onChange((prev) => ({
+      ...prev,
+      workExperience: prev.workExperience.filter((item) => item.id !== id),
+    }));
   };
 
   const addEducation = () => {
@@ -229,7 +317,9 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
   const updateEducation = (id: string, field: keyof Education, value: string) => {
     onChange((prev) => ({
       ...prev,
-      education: prev.education.map((item) => (item.id === id ? { ...item, [field]: value } : item)),
+      education: prev.education.map((item) =>
+        item.id === id ? { ...item, [field]: value } : item,
+      ),
     }));
   };
 
@@ -261,7 +351,9 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
   const updateLanguage = (id: string, field: keyof Language, value: string) => {
     onChange((prev) => ({
       ...prev,
-      languages: prev.languages.map((item) => (item.id === id ? { ...item, [field]: value } : item)),
+      languages: prev.languages.map((item) =>
+        item.id === id ? { ...item, [field]: value } : item,
+      ),
     }));
   };
 
@@ -291,7 +383,6 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
         <div className="p-4 pb-8 lg:p-6">
           <TabsContent value="personal" className="mt-0 space-y-6">
             <Card>
-
               <CardHeader>
                 <CardTitle>{t("form.personalTitle")}</CardTitle>
               </CardHeader>
@@ -302,7 +393,11 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                     onClick={() => fileInputRef.current?.click()}
                   >
                     {data.personalDetails.photo ? (
-                      <img src={data.personalDetails.photo} alt="Profil" className="h-full w-full object-cover" />
+                      <img
+                        src={data.personalDetails.photo}
+                        alt="Profil"
+                        className="h-full w-full object-cover"
+                      />
                     ) : (
                       <Upload className="h-6 w-6 text-muted-foreground" />
                     )}
@@ -386,7 +481,6 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                     />
                   </div>
                 </div>
-
               </CardContent>
             </Card>
           </TabsContent>
@@ -404,7 +498,10 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                     onChange={(e) => updatePersonal("summary", e.target.value)}
                     placeholder={t("form.summaryPlaceholder")}
                     rows={8}
-                    className={cn("pb-10", isRTL(data.personalDetails.summary || "") && "text-right")}
+                    className={cn(
+                      "pb-10",
+                      isRTL(data.personalDetails.summary || "") && "text-right",
+                    )}
                     dir={isRTL(data.personalDetails.summary || "") ? "rtl" : "ltr"}
                   />
                   <VoiceInputButton
@@ -412,7 +509,9 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                     onTranscript={(text) =>
                       updatePersonal(
                         "summary",
-                        data.personalDetails.summary ? `${data.personalDetails.summary} ${text}` : text
+                        data.personalDetails.summary
+                          ? `${data.personalDetails.summary} ${text}`
+                          : text,
                       )
                     }
                   />
@@ -427,11 +526,10 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
             </Card>
           </TabsContent>
 
-
           <TabsContent value="experience" className="mt-0 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold">{t("tab.experience")}</h3>
-              <Button size="sm" onClick={addWorkExperience}>
+              <Button size="sm" onClick={openNewExperience}>
                 <Plus className="mr-1.5 h-4 w-4" /> {t("form.add")}
               </Button>
             </div>
@@ -443,100 +541,56 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
               </Card>
             )}
             {data.workExperience.map((item, index) => (
-              <Card key={item.id}>
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-base">{`${t("form.entry")} ${index + 1}`}</CardTitle>
-                  <Button variant="ghost" size="icon" onClick={() => removeWorkExperience(item.id)}>
-                    <Trash2 className="h-4 w-4 text-destructive" />
-                  </Button>
+              <Card key={item.id} className="overflow-hidden">
+                <CardHeader className="flex flex-row items-start justify-between gap-4 pb-3">
+                  <div>
+                    <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-brand">{`${t("form.entry")} ${index + 1}`}</p>
+                    <CardTitle className="text-lg">{item.position || t("form.position")}</CardTitle>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {[
+                        item.company,
+                        item.location,
+                        [item.startDate, item.endDate].filter(Boolean).join(" – "),
+                      ]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </p>
+                  </div>
+                  <div className="flex gap-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      aria-label="Berufserfahrung bearbeiten"
+                      onClick={() => openExperience(item)}
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      aria-label="Berufserfahrung löschen"
+                      onClick={() => removeWorkExperience(item.id)}
+                    >
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </div>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label>{t("form.position")}</Label>
-                      <Input
-                        value={item.position}
-                        onChange={(e) => updateWorkExperience(item.id, "position", e.target.value)}
-                        placeholder={fieldExample["position"]}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>{t("form.company")}</Label>
-                      <Input
-                        value={item.company}
-                        onChange={(e) => updateWorkExperience(item.id, "company", e.target.value)}
-                        placeholder={fieldExample["company"]}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>{t("form.location")}</Label>
-                      <Input
-                        value={item.location}
-                        onChange={(e) => updateWorkExperience(item.id, "location", e.target.value)}
-                        placeholder={fieldExample["workLocation"]}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>{t("form.period")}</Label>
-                      <div className="grid grid-cols-2 gap-2">
-                        <div className="space-y-1">
-                          <Label className="text-xs text-muted-foreground">{t("form.startDate")}</Label>
-                          <Input
-                            type="month"
-                            value={item.startDate}
-                            onChange={(e) => updateWorkExperience(item.id, "startDate", e.target.value)}
-                          />
-                        </div>
-                        <div className="space-y-1">
-                          <Label className="text-xs text-muted-foreground">{t("form.endDate")}</Label>
-                          <Input
-                            type="month"
-                            value={item.endDate}
-                            onChange={(e) => updateWorkExperience(item.id, "endDate", e.target.value)}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>{t("form.description")}</Label>
-                    <RoleSuggestionPanel
-                      position={item.position}
-                      company={item.company}
-                      language={data.settings.language}
-                      onApply={(text) => updateWorkExperience(item.id, "description", text)}
-                    />
-                    <div className="relative">
-                      <Textarea
-                        value={item.description}
-                        onChange={(e) => updateWorkExperience(item.id, "description", e.target.value)}
-                        placeholder={t("form.experienceDescPlaceholder")}
-                        rows={4}
-                        className={cn("pb-10", isRTL(item.description) && "text-right")}
-                        dir={isRTL(item.description) ? "rtl" : "ltr"}
-                      />
-                      <VoiceInputButton
-                        className="absolute right-10 bottom-2"
-                        onTranscript={(text) =>
-                          updateWorkExperience(
-                            item.id,
-                            "description",
-                            item.description ? `${item.description} ${text}` : text
-                          )
-                        }
-                      />
-                      <AIAssistButton
-                        text={item.description}
-                        language={data.settings.language}
-                        context={`${t("tab.experience")}: ${item.position} – ${item.company}`}
-                        onResult={(text) => updateWorkExperience(item.id, "description", text)}
-                      />
-
-                    </div>
-                  </div>
-                </CardContent>
+                {item.description && (
+                  <CardContent>
+                    <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">
+                      {item.description}
+                    </p>
+                  </CardContent>
+                )}
               </Card>
             ))}
+            <ExperienceAssistantDialog
+              open={experienceDialogOpen}
+              onOpenChange={setExperienceDialogOpen}
+              experience={editingExperience}
+              language={data.settings.language}
+              onSave={saveWorkExperience}
+            />
           </TabsContent>
 
           <TabsContent value="education" className="mt-0 space-y-4">
@@ -591,7 +645,9 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                       <Label>{t("form.period")}</Label>
                       <div className="grid grid-cols-2 gap-2">
                         <div className="space-y-1">
-                          <Label className="text-xs text-muted-foreground">{t("form.startDate")}</Label>
+                          <Label className="text-xs text-muted-foreground">
+                            {t("form.startDate")}
+                          </Label>
                           <Input
                             type="month"
                             value={item.startDate}
@@ -599,7 +655,9 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                           />
                         </div>
                         <div className="space-y-1">
-                          <Label className="text-xs text-muted-foreground">{t("form.endDate")}</Label>
+                          <Label className="text-xs text-muted-foreground">
+                            {t("form.endDate")}
+                          </Label>
                           <Input
                             type="month"
                             value={item.endDate}
@@ -682,7 +740,6 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                     </div>
                   </div>
                 ))}
-
               </CardContent>
             </Card>
           </TabsContent>
@@ -718,7 +775,11 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                     rows={5}
                   />
                 </div>
-                <Button className="w-full" onClick={handleGenerateCoverLetter} disabled={isGenerating}>
+                <Button
+                  className="w-full"
+                  onClick={handleGenerateCoverLetter}
+                  disabled={isGenerating}
+                >
                   {isGenerating ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" /> {t("cover.generating")}
@@ -745,7 +806,6 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
           </TabsContent>
 
           <TabsContent value="settings" className="mt-0 space-y-6">
-
             <Card>
               <CardHeader>
                 <CardTitle>{t("form.outputSettings")}</CardTitle>
@@ -756,7 +816,10 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
                   <Select
                     value={data.settings.language}
                     onValueChange={(v) =>
-                      onChange((prev) => ({ ...prev, settings: { ...prev.settings, language: v as Locale } }))
+                      onChange((prev) => ({
+                        ...prev,
+                        settings: { ...prev.settings, language: v as Locale },
+                      }))
                     }
                   >
                     <SelectTrigger>
@@ -793,6 +856,5 @@ export function ResumeForm({ data, onChange, step: controlledStep }: ResumeFormP
       </Tabs>
       <PremiumUpsellDialog open={showUpsell} onOpenChange={setShowUpsell} feature="cover-letter" />
     </div>
-
   );
 }

@@ -29,13 +29,13 @@ export const CoverLetterInput = z.object({
         position: z.string(),
         company: z.string(),
         description: z.string(),
-      })
+      }),
     ),
     education: z.array(
       z.object({
         degree: z.string(),
         institution: z.string(),
-      })
+      }),
     ),
   }),
   company: z.string().min(1),
@@ -53,10 +53,18 @@ export const ParseResumeInput = z.object({
 });
 
 export const ExperienceSuggestionsInput = z.object({
-  position: z.string().min(2),
-  company: z.string().optional(),
+  position: z.string().trim().min(2).max(120),
+  company: z.string().trim().max(160).optional(),
+  language: z.enum(SUPPORTED_LOCALES),
+});
+
+export const ComposeExperienceInput = z.object({
+  position: z.string().trim().min(2).max(120),
+  company: z.string().trim().max(160).optional(),
+  location: z.string().trim().max(160).optional(),
+  sourceText: z.string().trim().min(1).max(4_000),
+  selectedSuggestions: z.array(z.string().trim().min(1).max(300)).max(8).default([]),
   language: z.enum(SUPPORTED_LOCALES),
 });
 
 export type CoverLetterPayload = z.infer<typeof CoverLetterInput>;
-

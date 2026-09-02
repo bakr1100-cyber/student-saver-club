@@ -21,7 +21,11 @@ function languageName(locale: Locale) {
   return localeLanguageNames[locale] ?? "German";
 }
 
-export async function runOptimize(data: { text: string; language: Locale; context?: string | undefined }) {
+export async function runOptimize(data: {
+  text: string;
+  language: Locale;
+  context?: string | undefined;
+}) {
   const target = languageName(data.language);
   const result = await generateText({
     model: gateway()(MODEL),
@@ -52,7 +56,9 @@ export async function runCoverLetter(data: CoverLetterPayload) {
   const experience = data.resume.workExperience
     .map((w) => `- ${w.position} at ${w.company}: ${w.description}`)
     .join("\n");
-  const education = data.resume.education.map((e) => `- ${e.degree} at ${e.institution}`).join("\n");
+  const education = data.resume.education
+    .map((e) => `- ${e.degree} at ${e.institution}`)
+    .join("\n");
 
   const prompt = `Write a professional cover letter entirely in ${target} for the position "${
     data.resume.settings.targetPosition || "the advertised position"
@@ -82,8 +88,7 @@ export async function runTranscribe(data: { audioBase64: string; mimeType: strin
         content: [
           {
             type: "text",
-            text:
-              "Transcribe the following audio recording verbatim. The language may be German, French, English, Spanish, Italian, Dutch or Moroccan Arabic (Darija). Return only the transcribed text.",
+            text: "Transcribe the following audio recording verbatim. The language may be German, French, English, Spanish, Italian, Dutch or Moroccan Arabic (Darija). Return only the transcribed text.",
           },
           { type: "file", data: data.audioBase64, mediaType: data.mimeType },
         ],
@@ -112,7 +117,11 @@ CV text:
 ${data.text}`,
   });
 
-  const raw = result.text.trim().replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
+  const raw = result.text
+    .trim()
+    .replace(/^```(?:json)?/i, "")
+    .replace(/```$/, "")
+    .trim();
   try {
     JSON.parse(raw);
   } catch {
@@ -121,45 +130,99 @@ ${data.text}`,
   return { json: raw };
 }
 
-export async function runExperienceSuggestions(data: { position: string; company?: string; language: Locale }) {
+export async function runExperienceSuggestions(data: {
+  position: string;
+  company?: string;
+  language: Locale;
+}) {
   const target = languageName(data.language);
   const result = await generateText({
     model: gateway()(MODEL),
     system:
       "You are a career coach helping a CV writer. Generate realistic, role-specific bullet point ideas. " +
-      "Return valid JSON only in the shape {\"suggestions\":[\"...\"]}. Return exactly 4 concise suggestions in the requested language. " +
+      'Return valid JSON only in the shape {"suggestions":["..."]}. Return exactly 6 concise suggestions in the requested language. ' +
       "Do not invent the candidate's employers, dates, metrics or achievements; phrase ideas so the user can confirm and adapt them.",
-    prompt: `Role: ${data.position}\nCompany (optional context): ${data.company || "not provided"}\nLanguage: ${target}\n\nGenerate four distinct CV bullet-point ideas covering typical responsibilities, tools or outcomes for this role.`,
+    prompt: `Role: ${data.position}\nCompany (optional context): ${data.company || "not provided"}\nLanguage: ${target}\n\nGenerate six distinct CV bullet-point ideas covering typical responsibilities, tools or outcomes for this role.`,
   });
-  const raw = result.text.trim().replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
+  const raw = result.text
+    .trim()
+    .replace(/^```(?:json)?/i, "")
+    .replace(/```$/, "")
+    .trim();
   try {
     const parsed = JSON.parse(raw) as { suggestions?: unknown };
-    if (!Array.isArray(parsed.suggestions) || parsed.suggestions.length < 1) throw new Error("invalid suggestions");
-    return { suggestions: parsed.suggestions.filter((item): item is string => typeof item === "string").slice(0, 4) };
+    if (!Array.isArray(parsed.suggestions) || parsed.suggestions.length < 1)
+      throw new Error("invalid suggestions");
+    return {
+      suggestions: parsed.suggestions
+        .filter((item): item is string => typeof item === "string")
+        .slice(0, 6),
+    };
   } catch {
     throw new Error("Experience suggestions failed");
   }
 }
 
+export async function runComposeExperience(data: {
+  position: string;
+  company?: string;
+  location?: string;
+  sourceText: string;
+  selectedSuggestions: string[];
+  language: Locale;
+}) {
+  const target = languageName(data.language);
+  const evidence = [
+    data.position,
+    data.company,
+    data.location,
+    data.sourceText,
+    ...data.selectedSuggestions,
+  ]
+    .filter(Boolean)
+    .join("\n");
+  const knownNumbers = new Set(evidence.match(/\p{N}+(?:[.,]\p{N}+)?%?/gu) ?? []);
+  const containsNewNumber = (text: string) =>
+    (text.match(/\p{N}+(?:[.,]\p{N}+)?%?/gu) ?? []).some((token) => !knownNumbers.has(token));
+
+  const createDescription = async (strictRetry = false) => {
+    const result = await generateText({
+      model: gateway()(MODEL),
+      system:
+        "You are an experienced CV writer. Turn only the candidate's confirmed notes into concise, ATS-friendly bullet points. " +
+        "Use strong action verbs, avoid repetition, and return only 3-5 bullet points. Never invent dates, employers, locations, tools, numbers, metrics or achievements. " +
+        "Suggestions were explicitly selected by the user and may be incorporated, but no factual detail may be added beyond the supplied evidence." +
+        (strictRetry
+          ? " A previous answer failed fact validation. Do not introduce any number or factual named entity that is absent from the evidence."
+          : ""),
+      prompt: `Target language: ${target}\nRole: ${data.position}\nCompany: ${data.company || "not provided"}\nLocation: ${data.location || "not provided"}\n\nCandidate's editable notes:\n${data.sourceText}\n\nConfirmed suggestion ideas:\n${data.selectedSuggestions.join("\n") || "none"}\n\nCreate one coherent final CV description. Preserve all supplied facts exactly.`,
+    });
+    return result.text.trim();
+  };
+
+  let text = await createDescription();
+  if (containsNewNumber(text)) text = await createDescription(true);
+  if (containsNewNumber(text)) throw new Error("AI_FACT_VALIDATION_FAILED");
+  return { text };
+}
 
 // --- quota / abuse protection -------------------------------------------------
 
-export async function guardAi(
-  supabase: Parameters<typeof consumeAiQuota>[0],
-  action: AiAction,
-) {
+export async function guardAi(supabase: Parameters<typeof consumeAiQuota>[0], action: AiAction) {
   return consumeAiQuota(supabase, action);
 }
 
-export async function readAiUsage(
-  supabase: Parameters<typeof consumeAiQuota>[0],
-  userId: string,
-) {
+export async function readAiUsage(supabase: Parameters<typeof consumeAiQuota>[0], userId: string) {
   if (AI_QUOTA_BYPASS_DURING_BUILD) return developmentAiQuota();
 
   const today = new Date().toISOString().slice(0, 10);
   const [{ data: usage }, { data: entitlement }] = await Promise.all([
-    supabase.from("ai_usage").select("calls, cost_units").eq("user_id", userId).eq("usage_date", today).maybeSingle(),
+    supabase
+      .from("ai_usage")
+      .select("calls, cost_units")
+      .eq("user_id", userId)
+      .eq("usage_date", today)
+      .maybeSingle(),
     supabase.from("user_entitlements").select("tier").eq("user_id", userId).maybeSingle(),
   ]);
   const tier = (entitlement?.tier as string | undefined) ?? "free";

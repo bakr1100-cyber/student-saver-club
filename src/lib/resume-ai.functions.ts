@@ -7,6 +7,7 @@ import {
   TranscribeInput,
   TranslateInput,
   ExperienceSuggestionsInput,
+  ComposeExperienceInput,
 } from "./resume-ai.schemas";
 
 export const optimizeText = createServerFn({ method: "POST" })
@@ -62,6 +63,15 @@ export const suggestExperience = createServerFn({ method: "POST" })
     const { guardAi, runExperienceSuggestions } = await import("./resume-ai.server");
     const quota = await guardAi(context.supabase, "optimize");
     return { ...(await runExperienceSuggestions(data as Parameters<typeof runExperienceSuggestions>[0])), quota };
+  });
+
+export const composeExperienceDescription = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => ComposeExperienceInput.parse(input))
+  .handler(async ({ data, context }) => {
+    const { guardAi, runComposeExperience } = await import("./resume-ai.server");
+    const quota = await guardAi(context.supabase, "optimize");
+    return { ...(await runComposeExperience(data)), quota };
   });
 
 export const getAiUsage = createServerFn({ method: "GET" })
